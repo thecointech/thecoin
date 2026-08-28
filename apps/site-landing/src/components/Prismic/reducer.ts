@@ -1,6 +1,6 @@
 import { createClient } from '@prismicio/client'
 import { SagaReducer } from '@thecointech/redux'
-import { IActions, PrismicState } from './types'
+import { IActions, PrismicState, StaticPageDocument, StaticPageType } from './types'
 import { call } from "@redux-saga/core/effects";
 import { log } from '@thecointech/logging'
 import type { ApplicationRootState } from 'types'
@@ -18,6 +18,7 @@ const DOCUMENTS_KEY: keyof ApplicationRootState = "documents";
 
 const getOptions = (locale: string) => ({ lang : `${locale}-ca` })
 const getByUID = (id: string, locale: string) => client.getByUID('article', id, getOptions(locale));
+const getStaticPage = (type: StaticPageType, locale: Locale) => client.getSingle(type, getOptions(locale));
 async function fetchData(locale: string) {
   try {
     const articles = await client.getAllByType('article', getOptions(locale))
@@ -37,13 +38,15 @@ async function fetchData(locale: string) {
 const initialState: PrismicState= {
   en: {
     fullyLoaded: false,
-    faqs: new Map<string, FaqDocument>(),
-    articles: new Map<string, ArticleDocument>(),
+    faqs: new Map(),
+    articles: new Map(),
+    pages: new Map(),
   },
   fr: {
     fullyLoaded: false,
-    faqs: new Map<string, FaqDocument>(),
-    articles: new Map<string, ArticleDocument>(),
+    faqs: new Map(),
+    articles: new Map(),
+    pages: new Map(),
   },
   loading: 0,
   client,
@@ -53,8 +56,32 @@ type PreviewTokenState = {
   previewToken?: string;
 }
 
-export class Prismic extends SagaReducer<IActions, PrismicState&PreviewTokenState>(DOCUMENTS_KEY, initialState, ["fetchAllDocs", "fetchDoc"]) implements IActions
+export class Prismic extends SagaReducer<IActions, PrismicState&PreviewTokenState>(DOCUMENTS_KEY, initialState, ["fetchAllDocs", "fetchDoc", "fetchStaticPage"]) implements IActions
 {
+  *fetchStaticPage(type: StaticPageType, locale: Locale): Generator<any> {
+    // First, do we already have this document cached?
+    const cache = this.state[locale].pages;
+    if (cache.has(type))
+      return;
+
+    log.trace(`Fetching Static Prismic Page: ${type}`);
+    yield this.storeValues((draft, state) => draft.loading = state.loading + 1);
+    try {
+      const result = (yield call(getStaticPage, type, locale)) as StaticPageDocument;
+      log.trace(`Fetched: ${!!result}`);
+      if (result) {
+        yield this.storeValues({
+          [locale]: {
+            pages: new Map(cache).set(type, result)
+          }
+        })
+      }
+    }
+    finally {
+      yield this.storeValues((draft, state) => draft.loading = state.loading - 1);
+    }
+  }
+
   *fetchDoc(uid: string, locale: Locale): Generator<any> {
     // First, do we already have this document cached?
     const cache = this.state[locale].articles;
@@ -96,6 +123,7 @@ export class Prismic extends SagaReducer<IActions, PrismicState&PreviewTokenStat
           fullyLoaded: true,
           faqs: new Map(docs.faqs),
           articles: new Map(docs.articles),
+          pages: new Map(docs.pages),
         }
         results
           .filter(item => item.type === 'faq')
@@ -113,7 +141,7 @@ export class Prismic extends SagaReducer<IActions, PrismicState&PreviewTokenStat
     }
   };
 
-  setDocument(document: ArticleDocument): void {
+  setDocument(document: ArticleDocument | StaticPageDocument): void {
     const locale = document.lang.split('-')[0] as Locale;
     if (locale !== 'en' && locale !== 'fr') {
       throw new Error(`Invalid locale: ${locale}`);
@@ -121,13 +149,20 @@ export class Prismic extends SagaReducer<IActions, PrismicState&PreviewTokenStat
 
     // Use function form to avoid Immer MapSet issue
     // Create a completely new Map outside of Immer's tracking
-    const newArticles = new Map(this.state[locale].articles).set(document.uid, document);
-    this.draftState = {
-      ...this.state,
-      [locale]: {
-        ...this.state[locale],
-        articles: newArticles,
-      }
-    }
+    this.draftState = document.type === 'about'
+      ? {
+          ...this.state,
+          [locale]: {
+            ...this.state[locale],
+            pages: new Map(this.state[locale].pages).set(document.type, document),
+          }
+        }
+      : {
+          ...this.state,
+          [locale]: {
+            ...this.state[locale],
+            articles: new Map(this.state[locale].articles).set(document.uid, document),
+          }
+        }
   }
 }

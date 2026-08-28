@@ -1,3 +1,4 @@
+export * from './About/About';
 export * from './Article/Article';
 export * from './Article/recommendations';
 export * from './Related/Related';

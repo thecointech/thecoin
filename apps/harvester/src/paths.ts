@@ -2,9 +2,19 @@ import electron from 'electron';
 import { existsSync, mkdirSync } from 'fs';
 import path from 'path';
 
-export const rootFolder = process.env.HARVESTER_PROFILE_FOLDER
-  ? path.resolve(process.env.HARVESTER_PROFILE_FOLDER)
-  : electron.app?.getPath('userData') ?? path.resolve('./.cache/' + process.env.CONFIG_NAME);
+function getRootFolder() {
+  if (process.env.HARVESTER_PROFILE_FOLDER) {
+    // Dbg profiles set this to control usage
+    return path.resolve(process.env.HARVESTER_PROFILE_FOLDER)
+  }
+  const rootPath = (
+    electron.app?.getPath('userData') ??
+    path.resolve('./.cache/')
+  );
+  return path.join(rootPath, process.env.CONVIG_ENV ?? 'development')
+}
+
+export const rootFolder = getRootFolder();
 
 let rootFolderExists = false;
 try {

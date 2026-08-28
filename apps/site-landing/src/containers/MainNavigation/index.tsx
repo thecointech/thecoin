@@ -29,6 +29,11 @@ const menuItems = defineMessages({
     description: 'site.MainNavigation.blog: Blog Link',
     icon: "newspaper"
   },
+  about: {
+    defaultMessage: 'About',
+    description: 'site.MainNavigation.about: About Link',
+    icon: "info"
+  },
   // help: {
   //   defaultMessage: 'FAQs',
   //   description: 'site.MainNavigation.faq: Help Link',

@@ -7,6 +7,7 @@ import { WeDoMore } from 'containers/WeDoMore';
 import { Compare } from 'containers/BenefitsSimulator';
 import { HelpDocs } from 'containers/HelpDocs';
 import { blogRoutes } from 'containers/Blog';
+import { About } from 'containers/About';
 import { TOS } from 'containers/TOS';
 import { Privacy } from 'containers/Privacy';
 import { ApplyBeta } from '../ApplyBeta';
@@ -25,6 +26,7 @@ export const routes = [
       { path: 'compare', element: <Compare /> },
       { path: 'help', element: <HelpDocs /> },
       { path: 'blog', children: blogRoutes },
+      { path: 'about', element: <About /> },
       { path: 'faq/:category?', element: <HelpDocs /> },
       { path: 'tos', element: <TOS /> },
       { path: 'applyBeta', element: <ApplyBeta /> },

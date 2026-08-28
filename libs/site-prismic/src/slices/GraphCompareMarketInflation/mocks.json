@@ -1,0 +1,14 @@
+[
+	{
+		"__TYPE__": "SharedSliceContent",
+		"variation": "default",
+		"primary": {
+			"startingdate": {
+				"__TYPE__": "FieldContent",
+				"type": "Date",
+				"value": "2013-07-16"
+			}
+		},
+		"items": []
+	}
+]

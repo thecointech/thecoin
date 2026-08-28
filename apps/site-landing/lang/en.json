@@ -254,6 +254,10 @@
     "defaultMessage": "No fees is easy. Earning on $0 is hard. Here's how we make something out of nothing.",
     "description": "site.homepage.wealthier.startnow.description: The description for the star now for the homepage wealthier"
   },
+  "Y7JSzc": {
+    "defaultMessage": "About",
+    "description": "site.MainNavigation.about: About Link"
+  },
   "Ycz6kB": {
     "defaultMessage": "This graph shows how The Coin account values will probably grow after"
   },

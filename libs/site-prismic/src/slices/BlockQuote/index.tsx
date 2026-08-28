@@ -36,7 +36,7 @@ const BlockQuote: FC<BlockQuoteProps> = ({ slice }) => {
       </div>
 
       {/* Attribution and Source */}
-      {(isFilled.keyText(slice.primary.attribution) || isFilled.link(slice.primary.quotesource)) && (
+      {slice.variation === "default" && (isFilled.keyText(slice.primary.attribution) || isFilled.link(slice.primary.quotesource)) && (
         <footer className={styles.attribution}>
           {/* Attribution - Key Text Field */}
           {isFilled.keyText(slice.primary.attribution) && (
@@ -57,6 +57,11 @@ const BlockQuote: FC<BlockQuoteProps> = ({ slice }) => {
             </span>
           )}
         </footer>
+      )}
+      {slice.variation === "noAttribution" && slice.primary.subtext && (
+        <div className={styles.subText}>
+          {slice.primary.subtext}
+        </div>
       )}
     </blockquote>
   );
