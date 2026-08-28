@@ -211,6 +211,14 @@
     "defaultMessage": "Go back",
     "description": "site.blog.backLink: Link to go back from article"
   },
+  "Rtv6UF": {
+    "defaultMessage": "Download Harvester",
+    "description": "site.download.title: title for the download page"
+  },
+  "TXXDIW": {
+    "defaultMessage": "Linux",
+    "description": "site.download.linux: Linux download button label"
+  },
   "Th2OVj": {
     "defaultMessage": "Read More",
     "description": "site.blog.articleLink: Link to access article page in blog"
@@ -249,6 +257,10 @@
   "Wd2tkY": {
     "defaultMessage": "This is our edge",
     "description": "site.homepage.wealthier.startnow.link: The link for the star now for the homepage wealthier"
+  },
+  "WmOpkw": {
+    "defaultMessage": "Windows",
+    "description": "site.download.windows: Windows download button label"
   },
   "Y+q0Hs": {
     "defaultMessage": "No fees is easy. Earning on $0 is hard. Here's how we make something out of nothing.",
@@ -316,6 +328,10 @@
   "feSg9K": {
     "defaultMessage": "Your Age"
   },
+  "gAcTes": {
+    "defaultMessage": "macOS",
+    "description": "site.download.mac: macOS download button label"
+  },
   "h7Uwzm": {
     "defaultMessage": "The value of the initial deposit when opening an account",
     "description": "sim form StartingValue tooltip "
@@ -354,6 +370,10 @@
   "msagVQ": {
     "defaultMessage": "Any weekly spending that cannot{br}be put on a credit card, eg babysitter",
     "description": "Simulator Tooltip: Weekly Cash"
+  },
+  "nQ3m1N": {
+    "defaultMessage": "Download the latest version of the Harvester for your platform.",
+    "description": "site.download.blurb: page introduction text"
   },
   "nm9dX4": {
     "defaultMessage": "Once-a-year expenses that can be put on a credit card, eg vactions",
