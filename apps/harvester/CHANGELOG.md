@@ -3,6 +3,42 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.6.7](https://github.com/thecointech/thecoin/compare/v0.6.7-test.2...v0.6.7) (2026-08-28)
+
+**Note:** Version bump only for package harvester
+
+
+
+
+
+## [0.6.7-test.2](https://github.com/thecointech/thecoin/compare/v0.6.7-test.1...v0.6.7-test.2) (2026-08-28)
+
+**Note:** Version bump only for package harvester
+
+
+
+
+
+## [0.6.7-test.1](https://github.com/thecointech/thecoin/compare/v0.6.7-test.0...v0.6.7-test.1) (2026-08-28)
+
+**Note:** Version bump only for package harvester
+
+
+
+
+
+## [0.6.7-test.0](https://github.com/thecointech/thecoin/compare/v0.6.6...v0.6.7-test.0) (2026-08-20)
+
+
+### Bug Fixes
+
+* allow SxS installs in windows ([1a826fa](https://github.com/thecointech/thecoin/commit/1a826fa815764ac471cd5edfb0862b0c3d2c1454))
+* strip live secrets from harvester ([5c8fe44](https://github.com/thecointech/thecoin/commit/5c8fe446d738030e22a3e0ab7172cff8da5b61f0))
+
+
+
+
+
 ## [0.6.6](https://github.com/thecointech/thecoin/compare/v0.6.6-beta.0...v0.6.6) (2026-08-06)
 
 **Note:** Version bump only for package harvester

@@ -7,7 +7,6 @@ import currency from 'currency.js';
 import { log } from '@thecointech/logging';
 import { notify } from '@/notify';
 import type { UberTransferAction } from '@thecointech/types';
-import { getCreditDetails } from '../config';
 
 export const PayVisaKey = "PayVisa";
 const PayVisaAmountKey = "PayVisaAmount";
