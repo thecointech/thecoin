@@ -18,6 +18,24 @@ export type EventSection = {
   events: (AnyEvent|EventSection)[];
 }
 
+export type QuestionValue = {
+  question: string,
+  header?: string,
+}
+
+export type QuestionConfirm = {
+  confirm: string,
+  header?: string,
+}
+
+export type QuestionOptions = {
+  options: string[]
+} & QuestionValue
+
+export type QuestionOptions2D = {
+  options2d: NamedOptions[]
+} & QuestionValue
+
 export type NamedOptions = {
   name: string;
   options: string[]
@@ -27,12 +45,24 @@ export type NamedResponse = {
   option:string; // Guaranteed to be a member of NamedOptions.options
 }
 
+export interface CancellablePromise<T> extends Promise<T> {
+  cancel: () => void;
+}
+
+export function nonCancellable<T>(promise: Promise<T>): CancellablePromise<T> {
+  const cp = promise as CancellablePromise<T>;
+  cp.cancel = () => {};
+  return cp;
+}
+
 export interface IAskUser {
   // FOR TESTING (move somewhere nice when not panicked)
   doNotCompleteETransfer(): boolean;
 
-  forValue(question: string, options?: string[]): Promise<string>;
-  selectOption(question: string, options: NamedOptions[]): Promise<NamedResponse>;
+  forValue(basic: QuestionValue): CancellablePromise<string>;
+  forConfirm(basic: QuestionConfirm): CancellablePromise<boolean>;
+  selectOption(basic: QuestionOptions): CancellablePromise<string>;
+  selectOption2D(basic: QuestionOptions2D): CancellablePromise<NamedResponse>;
 
   forUsername(): Promise<string>;
   forPassword(): Promise<string>;

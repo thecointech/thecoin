@@ -2,6 +2,16 @@ import { getMainWindow } from "@/mainWindow";
 import { actions } from "@/scraper_actions";
 import { NamedOptions, NamedResponse } from "@thecointech/scraper-agent";
 import { randomUUID } from "crypto";
+import type { BrowserWindow } from "electron";
+
+type SenderArgs = Parameters<typeof BrowserWindow.prototype.webContents.send>;
+
+type Sender = (...args: SenderArgs) => void;
+
+const defaultSender: Sender = (...args) => {
+  const mainWindow = getMainWindow();
+  mainWindow?.webContents.send(...args);
+};
 
 type BaseQuestionType = {
   sessionId: string;
@@ -51,11 +61,10 @@ export class AskUserReact implements Disposable {
   sessionID = randomUUID();
   responses: Record<string, DeferredPromise<any>> = {};
   static __instances: Record<string, AskUserReact> = {};
+  private sender: Sender;
 
-  protected constructor() {
-    // this.depositAddress = depositAddress ?? "--unused--";
-    // this.addDeferredResponse(QuestionId.Username);
-    // this.addDeferredResponse(QuestionId.Password);
+  protected constructor(sender: Sender = defaultSender) {
+    this.sender = sender;
     AskUserReact.__instances[this.sessionID] = this;
   }
 
@@ -70,12 +79,11 @@ export class AskUserReact implements Disposable {
   }
 
   clearQuestion(questionId?: string) {
-    const mainWindow = getMainWindow();
     const packet: ClearQuestionPacket = {
       sessionId: this.sessionID,
       questionId,
     };
-    mainWindow?.webContents.send(actions.onClearQuestion, packet);
+    this.sender(actions.onClearQuestion, packet);
 
     if (questionId) {
       const response = this.responses[questionId];
@@ -126,10 +134,9 @@ export class AskUserReact implements Disposable {
   }
 
   sendQuestion<T = string>(packet: DistributiveOmit<AnyQuestionPacket, "sessionId" | "questionId">): Promise<T> {
-    const mainWindow = getMainWindow();
     const questionId = randomUUID();
     const responsePromise = this.addDeferredResponse<T>(questionId);
-    mainWindow!.webContents.send(actions.onAskQuestion, {
+    this.sender(actions.onAskQuestion, {
       ...packet,
       sessionId: this.sessionID,
       questionId
@@ -137,8 +144,8 @@ export class AskUserReact implements Disposable {
     return responsePromise;
   }
 
-  static newSession() {
-    const instance = new AskUserReact();
+  static newSession(sender?: Sender) {
+    const instance = new AskUserReact(sender);
     return instance;
   }
   static getSession(id: string) {

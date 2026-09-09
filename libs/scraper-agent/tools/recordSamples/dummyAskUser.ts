@@ -1,4 +1,5 @@
-import type { IAskUser, NamedOptions, NamedResponse } from "../../src/types";
+import type { IAskUser, NamedOptions, NamedResponse, CancellablePromise, QuestionValue, QuestionConfirm, QuestionOptions, QuestionOptions2D } from "../../src/types";
+import { nonCancellable } from "../../src/types";
 import type { BankConfig } from "../config";
 import fs from "node:fs";
 
@@ -32,18 +33,27 @@ export class DummyAskUser implements IAskUser {
   }
   // The following could be moved from Dummy to Mocked,
   // although it'd be nice to have automated responses
-  selectOption(question: string, options: NamedOptions[]): Promise<NamedResponse> {
+  selectOption(basic: QuestionOptions): CancellablePromise<string> {
+    const { options } = basic;
+    const option = this.getAnswer("select");
+    return nonCancellable(Promise.resolve(options[option]));
+  }
+  selectOption2D(basic: QuestionOptions2D): CancellablePromise<NamedResponse> {
+    const { options2d } = basic;
     const { group, option } = this.getAnswer("option");
-    return Promise.resolve({
-      name: options[group].name,
-      option: options[group].options[option]
-    });
+    return nonCancellable(Promise.resolve({
+      name: options2d[group].name,
+      option: options2d[group].options[option]
+    }));
   }
   expectedETransferRecipient(): Promise<string> {
     return Promise.resolve(this.getAnswer("recipient"));
   }
-  forValue(question: string): Promise<string> {
-    return Promise.resolve(this.getAnswer("value"));
+  forValue(basic: QuestionValue): CancellablePromise<string> {
+    return nonCancellable(Promise.resolve(this.getAnswer("value")));
+  }
+  forConfirm(basic: QuestionConfirm): CancellablePromise<boolean> {
+    return nonCancellable(Promise.resolve(this.getAnswer("confirm")));
   }
 
   getAnswer(type: string): any {

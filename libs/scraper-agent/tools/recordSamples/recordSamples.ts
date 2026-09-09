@@ -22,25 +22,27 @@ const page = agent.page;
 
 let recordMore = true;
 while (recordMore) {
-  const choice = await askUser.selectOption("Select Choice (q to quit): ", [
-    {
-      name: "Screenshot",
-      options: ["Screenshot" ]
-    },
-    {
-      name: "Dump Links",
-      options: ["DumpLinks" ]
-    },
-    {
-      name: "Highlight Inputs",
-      options: ["HighlightInputs" ]
-    },
-    {
-      name: "Quit",
-      options: ["Quit" ]
-    }
-  ]
-  );
+  const choice = await askUser.selectOption2D({
+    question: "Select Choice (q to quit): ",
+    options2d:  [
+      {
+        name: "Screenshot",
+        options: ["Screenshot" ]
+      },
+      {
+        name: "Dump Links",
+        options: ["DumpLinks" ]
+      },
+      {
+        name: "Highlight Inputs",
+        options: ["HighlightInputs" ]
+      },
+      {
+        name: "Quit",
+        options: ["Quit" ]
+      }
+    ]
+  });
   let delay = 0;
 
   switch (choice.name) {

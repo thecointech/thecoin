@@ -150,12 +150,12 @@ async function mockGetting2faCode(input: IAskUser) {
   // 1 out of 3 times, pretend we have to select a destinations
   let doSelect = (overrideSelect ?? Math.random() < 1/3);
   if (doSelect) {
-    await input.selectOption("Select where to send your 2FA code", [
+    await input.selectOption2D({ question: "Select where to send your 2FA code", options2d: [
       { name: "Phone", options: ["(123) 456-7890", "(098) 765-4321"] },
       { name: "Email", options: ["mocked_user@example.com", "mocked_user2@example.com"] },
-    ]);
+    ]});
   }
-  const code = await input.forValue("Enter your 2FA Code");
+  const code = await input.forValue({ question: "Enter your 2FA Code" });
   return code;
 }
 
