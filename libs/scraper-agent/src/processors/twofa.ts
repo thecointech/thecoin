@@ -1,7 +1,7 @@
 import { log } from "@thecointech/logging";
 import { clickElement } from "../interactions";
 import { processorFn } from "./types";
-import type { ElementResponse } from "../types";
+import { QuestionCancelError, type ElementResponse } from "../types";
 import type { PhoneNumberElements } from "@thecointech/vqa";
 import type { Agent } from "../agent";
 import { apis } from "../apis";
@@ -157,7 +157,15 @@ async function waitContinueCondition(agent: Agent, message: string) {
   const winner = await Promise.race([
     navigationPromise.then(() => "navigate" as const).catch(e => { log.error(e, "Failed to wait for navigation"); return error }),
     pageIntentPromise.then(() => "intent" as const).catch(e => { log.error(e, "Failed to wait for page intent change"); return error }),
-    continueDialog.then(v => v ? "continue" as const : "cancelled" as const).catch(() => error)
+    continueDialog
+      .then(v => v ? "continue" as const : "cancelled" as const)
+      .catch(e => {
+        if (e instanceof QuestionCancelError) {
+          return "cancelled" as const;
+        }
+        log.error(e, "Unknown Error in continueDialog");
+        return error;
+      })
   ]);
 
   // Cancel non-finishers.
@@ -168,7 +176,8 @@ async function waitContinueCondition(agent: Agent, message: string) {
       throw new Error("2FA approval cancelled");
     case "navigate":
     case "intent":
-      // Close the dialog.  This triggers a throw, but is caught in the race and becomes no-op here.
+      // Close the dialog.  This triggers a throw, but the race has already finished.
+      // The continueDialog catches and returns 'error', but the value is never read
       continueDialog.cancel();
       return "continue";
     case "continue":

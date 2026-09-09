@@ -182,11 +182,13 @@ async function mock2faApproveInApp(input: IAskUser) {
   });
 
   // Simluate 10s of waiting for user to approve in app
-  setTimeout(() => {
+  const t = setTimeout(() => {
     manualContinue.cancel();
   }, 10000);
   try {
-    return await manualContinue;
+    const r = await manualContinue;
+    clearTimeout(t);
+    return r;
   } catch (e) {
     if (e instanceof QuestionCancelError) {
       // This is expected, just return

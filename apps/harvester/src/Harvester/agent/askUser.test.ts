@@ -1,5 +1,6 @@
 import { jest } from '@jest/globals';
 import { actions } from '@/scraper_actions';
+import { QuestionCancelError } from '@thecointech/scraper-agent';
 
 jest.unstable_mockModule('electron', () => ({
   BrowserWindow: {
@@ -62,7 +63,7 @@ describe('AskUserReact', () => {
       })
     );
 
-    await expect(promise).rejects.toBe('Question cleared');
+    await expect(promise).rejects.toBeInstanceOf(QuestionCancelError);
   });
 
   it('clears all questions when ending the session', async () => {
@@ -72,8 +73,11 @@ describe('AskUserReact', () => {
 
     session[Symbol.dispose]();
 
-    await expect(promise1).rejects.toBe('Question cleared');
-    await expect(promise2).rejects.toBe('Question cleared');
+    const [result1, result2] = await Promise.allSettled([promise1, promise2]);
+    expect(result1.status).toBe('rejected');
+    expect((result1 as PromiseRejectedResult).reason).toBeInstanceOf(QuestionCancelError);
+    expect(result2.status).toBe('rejected');
+    expect((result2 as PromiseRejectedResult).reason).toBeInstanceOf(QuestionCancelError);
     expect(AskUserReact.getSession(session.sessionID)).toBeUndefined();
     expect(sendMock).toHaveBeenLastCalledWith(
       actions.onClearQuestion,

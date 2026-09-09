@@ -27,7 +27,7 @@ export class MockAskUser implements IAskUser {
     return nonCancellable(Promise.resolve(this.callback("value", basic.question)));
   }
   forConfirm(basic: QuestionConfirm): CancellablePromise<boolean> {
-    return nonCancellable(Promise.resolve(true));
+    return nonCancellable(Promise.resolve(this.callback("confirm", basic.question)))
   }
   // The following could be moved from Dummy to Mocked,
   // although it'd be nice to have automated responses

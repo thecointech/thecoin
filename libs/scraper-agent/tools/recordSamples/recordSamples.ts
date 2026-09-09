@@ -23,7 +23,7 @@ const page = agent.page;
 let recordMore = true;
 while (recordMore) {
   const choice = await askUser.selectOption2D({
-    question: "Select Choice (q to quit): ",
+    question: "Select Choice: ",
     options2d:  [
       {
         name: "Screenshot",
