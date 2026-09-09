@@ -24,7 +24,7 @@ describe('AskUserReact', () => {
 
   it('sends a question and resolves on response', async () => {
     const session = AskUserReact.newSession(sendMock);
-    const promise = session.forValue('What is your name?');
+    const promise = session.sendQuestion({ question: 'What is your name?' });
 
     expect(sendMock).toHaveBeenCalledTimes(1);
     expect(sendMock).toHaveBeenCalledWith(
@@ -48,7 +48,7 @@ describe('AskUserReact', () => {
 
   it('clears a question and rejects the pending promise', async () => {
     const session = AskUserReact.newSession(sendMock);
-    const promise = session.forValue('What is your name?');
+    const promise = session.sendQuestion({ question: 'What is your name?' });
     const { questionId } = sendMock.mock.calls[0][1] as { questionId: string };
 
     session.clearQuestion(questionId);
@@ -67,8 +67,8 @@ describe('AskUserReact', () => {
 
   it('clears all questions when ending the session', async () => {
     const session = AskUserReact.newSession(sendMock);
-    const promise1 = session.forValue('Question 1');
-    const promise2 = session.forValue('Question 2');
+    const promise1 = session.sendQuestion({ question: 'Question 1' });
+    const promise2 = session.sendQuestion({ question: 'Question 2' });
 
     session[Symbol.dispose]();
 

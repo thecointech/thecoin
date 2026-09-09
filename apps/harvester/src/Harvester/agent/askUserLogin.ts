@@ -1,5 +1,5 @@
 import { AskUserReact } from "./askUser";
-import type { IAskUser } from "@thecointech/scraper-agent";
+import type { CancellablePromise, IAskUser, NamedResponse, QuestionConfirm, QuestionOptions, QuestionOptions2D, QuestionValue } from "@thecointech/scraper-agent";
 
 type Login = {
   username: string,
@@ -16,7 +16,6 @@ export class AskUserLogin extends AskUserReact implements IAskUser {
     this.login = login;
     this.depositAddress = depositAddress;
   }
-
   // To prevent sending a gazillion ETransfers during dev/testing
   doNotCompleteETransfer(): boolean {
     // Do not complete in any development build
@@ -29,6 +28,22 @@ export class AskUserLogin extends AskUserReact implements IAskUser {
       process.env.CONFIG_NAME !== 'prodbeta'
     );
   }
+
+    forValue(basic: QuestionValue): CancellablePromise<string> {
+      return this.sendQuestion<string>(basic);
+    }
+
+    forConfirm(basic: QuestionConfirm): CancellablePromise<boolean> {
+      return this.sendQuestion<boolean>(basic);
+    }
+
+    selectOption(basic: QuestionOptions): CancellablePromise<string> {
+      return this.sendQuestion<string>(basic);
+    }
+
+    selectOption2D(basic: QuestionOptions2D): CancellablePromise<NamedResponse> {
+      return this.sendQuestion<NamedResponse>(basic);
+    }
 
   expectedETransferRecipient(): Promise<string> {
     if (!this.depositAddress) {

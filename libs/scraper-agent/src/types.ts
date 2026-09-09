@@ -36,6 +36,8 @@ export type QuestionOptions2D = {
   options2d: NamedOptions[]
 } & QuestionValue
 
+export type AnyQuestion = QuestionValue | QuestionConfirm | QuestionOptions | QuestionOptions2D;
+
 export type NamedOptions = {
   name: string;
   options: string[]
