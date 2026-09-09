@@ -24,9 +24,8 @@ export type QuestionValue = {
 }
 
 export type QuestionConfirm = {
-  confirm: string,
-  header?: string,
-}
+  confirmBtn: string,
+} & QuestionValue
 
 export type QuestionOptions = {
   options: string[]
@@ -45,6 +44,13 @@ export type NamedOptions = {
 export type NamedResponse = {
   name: string;
   option:string; // Guaranteed to be a member of NamedOptions.options
+}
+
+// Thrown when a user calls "question.cancel()"
+export class QuestionCancelError extends Error {
+  constructor() {
+    super("Question cancelled");
+  }
 }
 
 export interface CancellablePromise<T> extends Promise<T> {

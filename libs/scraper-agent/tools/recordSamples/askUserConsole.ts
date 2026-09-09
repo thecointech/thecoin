@@ -46,7 +46,7 @@ export class AskUserConsole implements IAskUser {
   }
 
   forConfirm(basic: QuestionConfirm): CancellablePromise<boolean> {
-    return this.cancellable(`${basic.confirm} (y/n): `, (answer) => answer.toLowerCase().startsWith("y"));
+    return this.cancellable(`${basic.question}: ${basic.confirmBtn} (y/n): `, (answer) => answer.toLowerCase().startsWith("y"));
   }
 
   selectOption(basic: QuestionOptions): CancellablePromise<string> {

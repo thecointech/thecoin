@@ -1,6 +1,6 @@
 import { getMainWindow } from "@/mainWindow";
 import { actions } from "@/scraper_actions";
-import { AnyQuestion, CancellablePromise, NamedResponse, QuestionConfirm, QuestionOptions, QuestionOptions2D, QuestionValue } from "@thecointech/scraper-agent";
+import { AnyQuestion, CancellablePromise, NamedResponse, QuestionCancelError, QuestionConfirm, QuestionOptions, QuestionOptions2D, QuestionValue } from "@thecointech/scraper-agent";
 import { randomUUID } from "crypto";
 import type { BrowserWindow } from "electron";
 
@@ -76,13 +76,13 @@ export class AskUserReact implements Disposable {
     if (questionId) {
       const response = this.responses[questionId];
       if (response) {
-        response.reject("Question cleared");
+        response.reject(new QuestionCancelError());
         delete this.responses[questionId];
       }
     } else {
       for (const id in this.responses) {
         const response = this.responses[id];
-        response.reject("Question cleared");
+        response.reject(new QuestionCancelError());
         delete this.responses[id];
       }
     }

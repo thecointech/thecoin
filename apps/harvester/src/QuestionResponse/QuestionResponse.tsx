@@ -74,7 +74,7 @@ const QuestionContent = ({ question, answer, setAnswer, onReply }: QuestionConte
   else if ("options2d" in question) {
     return <QuestionOptions2D question={question} answer={answer as NamedResponse|undefined} setAnswer={setAnswer} onReply={onReply} />
   }
-  else if ("confirm" in question) {
+  else if ("confirmBtn" in question) {
     return <QuestionConfirm question={question} onReply={onReply} />
   }
   else {
@@ -142,10 +142,10 @@ const QuestionConfirm = ({ question, onReply }: QuestionConfirmProps) => {
   const onCancel = () => onReply(false)
   return (
     <div className={styles.confirm}>
-      <div>{question.confirm}</div>
+      <div>{question.question}</div>
       <div className={styles.buttons}>
         <Button onClick={onCancel} content='Cancel' />
-        <Button primary onClick={onConfirm} content='Confirm' />
+        <Button primary onClick={onConfirm} content={question.confirmBtn} />
       </div>
     </div>
   )

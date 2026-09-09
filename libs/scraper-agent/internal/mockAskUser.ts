@@ -23,6 +23,12 @@ export class MockAskUser implements IAskUser {
   doNotCompleteETransfer(): boolean {
     return true;
   }
+  forValue(basic: QuestionValue): CancellablePromise<string> {
+    return nonCancellable(Promise.resolve(this.callback("value", basic.question)));
+  }
+  forConfirm(basic: QuestionConfirm): CancellablePromise<boolean> {
+    return nonCancellable(Promise.resolve(true));
+  }
   // The following could be moved from Dummy to Mocked,
   // although it'd be nice to have automated responses
   selectOption(basic: QuestionOptions): CancellablePromise<string> {
@@ -40,12 +46,6 @@ export class MockAskUser implements IAskUser {
   }
   expectedETransferRecipient(): Promise<string> {
     return Promise.resolve(this.callback("recipient"));
-  }
-  forValue(basic: QuestionValue): CancellablePromise<string> {
-    return nonCancellable(Promise.resolve(this.callback("value", basic.question)));
-  }
-  forConfirm(basic: QuestionConfirm): CancellablePromise<boolean> {
-    return nonCancellable(Promise.resolve(this.callback("confirm", basic.confirm)));
   }
 }
 
