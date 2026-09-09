@@ -1,8 +1,8 @@
-import React, { useRef } from 'react';
-import { StoryObj, Meta, StoryFn } from '@storybook/react-webpack5';
+import React, { useEffect } from 'react';
+import { StoryObj, Meta } from '@storybook/react-webpack5';
 import { QuestionResponse } from './QuestionResponse';
-import { withAskQuestion } from './scraper-mock';
-import "semantic-ui-css/semantic.min.css"
+import { withAskQuestion, triggerClearQuestion } from './scraper-mock';
+import "semantic-ui-css/semantic.min.css";
 
 
 const QuestionResponseWithSize = () => {
@@ -28,6 +28,7 @@ export const Default: Story = {
   args: {
     question: {
       questionId: 'test',
+      header: 'The app has a question for you',
       question: 'What is your name?',
     }
   },
@@ -46,7 +47,7 @@ export const Options2DSelect: Story = {
   args: {
     question: {
       questionId: 'test',
-      question: 'Select an Option',
+      header: 'Select an Option',
       options2d: [
         { name: 'Option 1', options: ['Option 1', 'Option 2'] },
         { name: 'Option 2', options: ['Option 1', 'Option 2'] },
@@ -62,5 +63,26 @@ export const Confirm: Story = {
       confirm: 'Do you want to click yes?',
     }
   },
+};
+
+const AutoClearWrapper = () => {
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      triggerClearQuestion({});
+    }, 5000);
+    return () => clearTimeout(timer);
+  }, []);
+  return <QuestionResponseWithSize />;
+};
+
+export const AutoClearAfter5Seconds: Story = {
+  args: {
+    question: {
+      questionId: 'test',
+      header: 'Approve the login request in your mobile app',
+      confirm: 'This dialog should disappear after 5 seconds',
+    }
+  },
+  render: () => <AutoClearWrapper />,
 };
 

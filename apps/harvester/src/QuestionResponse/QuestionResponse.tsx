@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type { AnyQuestionPacket, ConfirmPacket, Option2DPacket, OptionPacket, QuestionPacket } from "@/Harvester/agent/askUser";
+import type { AnyQuestionPacket, ClearQuestionPacket, ConfirmPacket, Option2DPacket, OptionPacket, QuestionPacket } from "@/Harvester/agent/askUser";
 import { Button, Input, Select } from "semantic-ui-react";
 import { NamedResponse } from "@thecointech/scraper-agent/types";
 import { Modal } from "semantic-ui-react";
@@ -23,6 +23,17 @@ export const QuestionResponse = ({ mountNode }: QuestionResponseProps) => {
     return release;
   }, []);
 
+  useEffect(() => {
+    const release = window.scraper.onClearQuestion((packet: ClearQuestionPacket) => {
+      setQuestions(questions => questions.filter(q =>
+        q.sessionId !== packet.sessionId ||
+        (packet.questionId !== undefined && q.questionId !== packet.questionId)
+      ));
+      setAnswer(undefined);
+    })
+    return release;
+  }, []);
+
   if (questions.length === 0) return null;
   const question = questions[0];
 
@@ -40,6 +51,7 @@ export const QuestionResponse = ({ mountNode }: QuestionResponseProps) => {
 
   return (
     <Modal open closeOnDimmerClick={false} mountNode={mountNode}>
+      {question.header && <Modal.Header className={styles.header}>{question.header}</Modal.Header>}
       <Modal.Content>
         <div className={styles.qaContainer}>
           <QuestionContent question={question} answer={answer} setAnswer={setAnswer} onReply={onReply} />

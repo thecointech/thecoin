@@ -35,7 +35,7 @@ async function guard<T>(cb: () => Promise<T>) {
   }
 }
 
-const api: Omit<ScraperBridgeApi, "onAskQuestion"|"onBackgroundTaskProgress"|"onAgentProgress"> = {
+const api: Omit<ScraperBridgeApi, "onAskQuestion"|"onClearQuestion"|"onBackgroundTaskProgress"|"onAgentProgress"> = {
   hasInstalledBrowser: () => guard(async () => {
     const p = await getLocalBrowserPath();
     return !!p;

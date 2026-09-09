@@ -6,6 +6,7 @@ import { randomUUID } from "crypto";
 type BaseQuestionType = {
   sessionId: string;
   questionId: string;
+  header?: string;
 }
 
 export type ConfirmPacket = {
@@ -32,6 +33,10 @@ export type ResponsePacket = ({
   }
 }) & BaseQuestionType;
 
+export type ClearQuestionPacket = {
+  questionId?: string;
+} & Omit<BaseQuestionType, "questionId">;
+
 export type AnyQuestionPacket = QuestionPacket | ConfirmPacket | OptionPacket | Option2DPacket;
 
 type DeferredPromise<T> = {
@@ -39,6 +44,8 @@ type DeferredPromise<T> = {
   resolve: (value: T) => void;
   reject: (reason?: any) => void;
 }
+
+type DistributiveOmit<T, K extends keyof any> = T extends any ? Omit<T, K> : never;
 
 export class AskUserReact implements Disposable {
   sessionID = randomUUID();
@@ -62,6 +69,29 @@ export class AskUserReact implements Disposable {
     return deferred.promise;
   }
 
+  clearQuestion(questionId?: string) {
+    const mainWindow = getMainWindow();
+    const packet: ClearQuestionPacket = {
+      sessionId: this.sessionID,
+      questionId,
+    };
+    mainWindow?.webContents.send(actions.onClearQuestion, packet);
+
+    if (questionId) {
+      const response = this.responses[questionId];
+      if (response) {
+        response.reject("Question cleared");
+        delete this.responses[questionId];
+      }
+    } else {
+      for (const id in this.responses) {
+        const response = this.responses[id];
+        response.reject("Question cleared");
+        delete this.responses[id];
+      }
+    }
+  }
+
   static onResponse(packet: ResponsePacket) {
     const askUser = this.getSession(packet.sessionId);
     if (!askUser) {
@@ -75,14 +105,7 @@ export class AskUserReact implements Disposable {
   }
 
   clearUnresolved() {
-    for (const questionId in this.responses) {
-      const response = this.responses[questionId];
-      let isResolved = false;
-      response.promise.then(() => isResolved = true);
-      if (!isResolved) {
-        response.reject("Session expired");
-      }
-    }
+    this.clearQuestion();
   }
 
 
@@ -102,7 +125,7 @@ export class AskUserReact implements Disposable {
     return this.sendQuestion<boolean>({confirm});
   }
 
-  sendQuestion<T = string>(packet: Omit<AnyQuestionPacket, "sessionId" | "questionId">): Promise<T> {
+  sendQuestion<T = string>(packet: DistributiveOmit<AnyQuestionPacket, "sessionId" | "questionId">): Promise<T> {
     const mainWindow = getMainWindow();
     const questionId = randomUUID();
     const responsePromise = this.addDeferredResponse<T>(questionId);

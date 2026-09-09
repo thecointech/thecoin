@@ -4,6 +4,7 @@
     "lib": ["es2023"],
     "baseUrl": "./",
     "allowImportingTsExtensions": true,
+    "jsx": "react-jsx"
   },
-  "include": ["**/*.test.*", "**/*.d.ts"],
+  "include": ["**/*.test.*", "**/*.d.ts", "**/*.stories.*"],
 }
