@@ -88,13 +88,24 @@ type QuestionBaseProps = {
 type QuestionAnswerableProps = QuestionBaseProps & {
   setAnswer: (answer: string|NamedResponse) => void;
 }
+const QuestionText = ({ text }: { text?: string }) => (
+  <div className={styles.questionText}>
+    {text?.split('\n').map((line, i, arr) => (
+      <span key={i}>
+        {line}
+        {i < arr.length - 1 && <br />}
+      </span>
+    ))}
+  </div>
+);
+
 type QuestionOptionsProps = QuestionAnswerableProps & {
   question: OptionPacket;
   answer: string|undefined;
 }
 const QuestionOptions = ({ question, answer, onReply, setAnswer }: QuestionOptionsProps) => (
   <>
-    <div>{question.question}</div>
+    <QuestionText text={question.question} />
     <div className={styles.options}>
       <Select
         className={styles.select}
@@ -112,7 +123,7 @@ type QuestionOptions2DProps = QuestionAnswerableProps & {
 }
 const QuestionOptions2D = ({ question, answer, setAnswer, onReply }: QuestionOptions2DProps) => (
   <div className={styles.options2d}>
-    <div>{question.question}</div>
+    <QuestionText text={question.question} />
     <div className={styles.table}>
       {question.options2d.map((row, idx) => (
         <div key={idx} className={styles.row}>
@@ -142,7 +153,7 @@ const QuestionConfirm = ({ question, onReply }: QuestionConfirmProps) => {
   const onCancel = () => onReply(false)
   return (
     <div className={styles.confirm}>
-      <div>{question.question}</div>
+      <QuestionText text={question.question} />
       <div className={styles.buttons}>
         <Button onClick={onCancel} content='Cancel' />
         <Button primary onClick={onConfirm} content={question.confirmBtn} />
@@ -157,7 +168,7 @@ type QuestionInputProps = QuestionAnswerableProps & {
 }
 const QuestionInput = ({ question, answer, setAnswer, onReply }: QuestionInputProps) => (
   <>
-    <div>{question.question}</div>
+    <QuestionText text={question.question} />
     <Input value={answer ?? ''} onChange={e => setAnswer(e.target.value)} />
     <SubmitRow answer={answer} onReply={onReply} />
   </>

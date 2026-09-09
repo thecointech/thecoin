@@ -131,8 +131,8 @@ async function waitContinueCondition(agent: Agent, message: string) {
 
   const continueDialog = agent.input.forConfirm({
     header: "Approve in App",
-    question: `${message}\n\nThis page should automatically refresh.  If it does not, click Continue`,
-    confirmBtn: "Continue"
+    question: `${message}\n\nOnce approved, this page should automatically refresh.  If it does not, click Override & Continue`,
+    confirmBtn: "Override & Continue"
   });
 
   const waitTimeout = 300_000;
@@ -168,7 +168,7 @@ async function waitContinueCondition(agent: Agent, message: string) {
       throw new Error("2FA approval cancelled");
     case "navigate":
     case "intent":
-      // Close the dialog.  This triggers a throw, but the catch is a no-op in the race above.
+      // Close the dialog.  This triggers a throw, but is caught in the race and becomes no-op here.
       continueDialog.cancel();
       return "continue";
     case "continue":

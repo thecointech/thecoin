@@ -54,6 +54,7 @@ export class QuestionCancelError extends Error {
 }
 
 export interface CancellablePromise<T> extends Promise<T> {
+  // Cancels the question, and throws the awaited CancellablePromise with a QuestionCancelError
   cancel: () => void;
 }
 
