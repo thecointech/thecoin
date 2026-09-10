@@ -119,10 +119,7 @@ async function enterCode(agent: Agent, message: string) {
 
 async function approveInApp(agent: Agent, message: string) {
   log.info("Waiting for 2FA approval");
-  const result = await waitContinueCondition(agent, message);
-  if (result == "error") {
-    throw new Error("2FA errored out.");
-  }
+  await waitContinueCondition(agent, message);
   log.info("2FA approved");
 }
 
@@ -183,7 +180,10 @@ async function waitContinueCondition(agent: Agent, message: string) {
     case "continue":
       return "continue";
     case "error":
-      return "error";
+      // A waiter failed; ensure the dialog is closed.
+      continueDialog.cancel();
+      // We can't continue in an unknown state.
+      throw new Error("2FA processing encountered an error");
   }
 }
 
