@@ -1,7 +1,7 @@
 import { log } from "@thecointech/logging";
 import { clickElement } from "../interactions";
-import type { ElementResponse } from "../types";
 import { processorFn } from "./types";
+import { QuestionCancelError, type ElementResponse } from "../types";
 import type { PhoneNumberElements } from "@thecointech/vqa";
 import type { Agent } from "../agent";
 import { apis } from "../apis";
@@ -17,11 +17,11 @@ async function complete2FA(agent: Agent) {
   agent.onProgress(10);
   switch (action.action) {
     case "SelectDestination":
-      return await selectDestinationAndEnterCode(agent);
+      return await selectDestinationAndEnterCode(agent, action.message);
     case "InputCode":
-      return await enterCode(agent);
+      return await enterCode(agent, action.message);
     case "ApproveInApp":
-      return await approveInApp(agent);
+      return await approveInApp(agent, action.message);
     case "Error":
       await agent.maybeThrow(new Error("2FA Error happened and we can't recover"));
       break;
@@ -30,14 +30,14 @@ async function complete2FA(agent: Agent) {
   }
 }
 
-export async function selectDestinationAndEnterCode(agent: Agent) {
-  await selectDestination(agent);
-  await enterCode(agent);
+export async function selectDestinationAndEnterCode(agent: Agent, message: string) {
+  await selectDestination(agent, message);
+  await enterCode(agent, "Enter the 2FA code: ");
 }
 
-export async function selectDestination(agent: Agent) {
+export async function selectDestination(agent: Agent, message: string) {
   const allOptions = await getDestinationOptions(agent);
-  const dest = await askUserForDestination(agent, allOptions);
+  const dest = await askUserForDestination(agent, message, allOptions);
   const clickedOption = await agent.page.completeInteraction(dest,
     (found) => clickElement(agent.page.page, found),
     { hints: { eventName: "destination", tagName: "button" } }
@@ -81,9 +81,9 @@ export async function updateFromPage(agent: Agent, response: PhoneNumberElements
   return element;
 }
 
-async function enterCode(agent: Agent) {
+async function enterCode(agent: Agent, message: string) {
 
-  let code = await agent.input.forValue("Enter the 2FA code: ");
+  let code = await agent.input.forValue({ header: "Enter 2FA Code", question: message });
 
   for (let i = 0; i < 5; i++) {
 
@@ -111,43 +111,80 @@ async function enterCode(agent: Agent) {
     const intentApi = await apis().getIntentApi();
     const { data: error } = await intentApi.pageError(await agent.page.getImage());
     if (error.error_message_detected && error.error_message) {
-      code = await agent.input.forValue(error.error_message);
+      code = await agent.input.forValue({ header: "Error", question: error.error_message });
     }
   }
   await agent.maybeThrow(new Error("Failed to enter 2FA code"));
 }
 
-async function approveInApp(agent: Agent) {
+async function approveInApp(agent: Agent, message: string) {
   log.info("Waiting for 2FA approval");
-  // TODO: Query the page for the actual 2FA message
-  try {
-    const waitTimeout = 300_000;
-    const maxTime = Date.now() + waitTimeout;
-    // Open a promise on waiting for navigation to complete, give it 5 minutes
-    const navigationPromise = agent.page.page.waitForNavigation({ waitUntil: "networkidle2", timeout: waitTimeout });
-    // Also open a promise checking the page intent.  If it changes from 2FA then we are done
-    const pageIntentPromise = new Promise<void>(resolve => {
-      let updateInterval = setInterval(async () => {
-        try {
-          if (Date.now() > maxTime || await agent.page.getPageIntent() != "Login") {
-            clearInterval(updateInterval);
-            resolve();
-          }
-        }
-        catch(e) {
-          clearInterval(updateInterval);
-          throw e;
-        }
-      }, 5000);
-    });
-    await Promise.race([navigationPromise, pageIntentPromise]);
-  }
-  catch (e) {
-    log.error(e, "Failed to wait for 2FA approval");
-    throw e;
-  }
+  await waitContinueCondition(agent, message);
   log.info("2FA approved");
-  return agent.input.forValue("Press enter once the code has been approved: ");
+}
+
+async function waitContinueCondition(agent: Agent, message: string) {
+  const finished = new AbortController();
+
+  const continueDialog = agent.input.forConfirm({
+    header: "Approve in App",
+    question: `${message}\n\nOnce approved, this page should automatically refresh.  If it does not, click Override & Continue`,
+    confirmBtn: "Override & Continue"
+  });
+
+  const waitTimeout = 300_000;
+  // Open a promise on waiting for navigation to complete, give it 5 minutes
+  const navigationPromise = agent.page.page.waitForNavigation({ waitUntil: "networkidle2", timeout: waitTimeout, signal: finished.signal });
+  // Also open a promise checking the page intent.  If it changes from 2FA then we are done
+  const pageIntentPromise = new Promise<void>((resolve, reject) => {
+    let updateInterval = setInterval(async () => {
+      try {
+        if (finished.signal.aborted || await agent.page.getPageIntent() === "AccountsSummary") {
+          clearInterval(updateInterval);
+          resolve();
+        }
+      }
+      catch(e) {
+        clearInterval(updateInterval);
+        reject(e);
+      }
+    }, 5000);
+  });
+  const error = "error" as const;
+  const winner = await Promise.race([
+    navigationPromise.then(() => "navigate" as const).catch(e => { log.error(e, "Failed to wait for navigation"); return error }),
+    pageIntentPromise.then(() => "intent" as const).catch(e => { log.error(e, "Failed to wait for page intent change"); return error }),
+    continueDialog
+      .then(v => v ? "continue" as const : "cancelled" as const)
+      .catch(e => {
+        if (e instanceof QuestionCancelError) {
+          return "cancelled" as const;
+        }
+        log.error(e, "Unknown Error in continueDialog");
+        return error;
+      })
+  ]);
+
+  // Cancel non-finishers.
+  finished.abort();
+
+  switch (winner) {
+    case "cancelled":
+      throw new Error("2FA approval cancelled");
+    case "navigate":
+    case "intent":
+      // Close the dialog.  This triggers a throw, but the race has already finished.
+      // The continueDialog catches and returns 'error', but the value is never read
+      continueDialog.cancel();
+      return "continue";
+    case "continue":
+      return "continue";
+    case "error":
+      // A waiter failed; ensure the dialog is closed.
+      continueDialog.cancel();
+      // We can't continue in an unknown state.
+      throw new Error("2FA processing encountered an error");
+  }
 }
 
 async function clickRemember(agent: Agent) {
@@ -179,12 +216,16 @@ async function clickSubmit(agent: Agent) {
 }
 
 type NamedResponses = { name: string; options: ElementResponse[]; };
-async function askUserForDestination(agent: Agent, destinations: NamedResponses[]) {
+async function askUserForDestination(agent: Agent, message: string, destinations: NamedResponses[]) {
   const queryOptions = destinations.map(d => ({
     name: d.name,
     options: d.options.map(o => o.content)
   }));
-  const {name, option} = await agent.input.selectOption("Select where to send the code: ", queryOptions);
+  const {name, option} = await agent.input.selectOption2D({
+    header: "Select 2FA destination",
+    question: message,
+    options2d: queryOptions
+  });
   return destinations
     .find(d => d.name === name)!
     .options.find(o => o.content === option)!;

@@ -6,12 +6,21 @@
   justify-content: flex-end;
   padding-top: 1em;
 }
-
+:global(.ui.modal.ui.modal) {
+  .header {
+    padding: 0.75rem;
+    padding-left: 1.5rem;
+  }
+}
 .qaContainer {
   display: flex;
   flex-direction: column;
   max-width: 400px;
   margin: auto;
+
+  .questionText {
+    margin-bottom: 0.5rem;
+  }
 
   .options {
     display: flex;

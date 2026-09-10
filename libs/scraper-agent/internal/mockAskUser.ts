@@ -1,4 +1,4 @@
-import { IAskUser, NamedOptions, NamedResponse } from "../src/types";
+import { IAskUser, NamedOptions, NamedResponse, CancellablePromise, nonCancellable, QuestionValue, QuestionConfirm, QuestionOptions, QuestionOptions2D } from "../src/types";
 import fs from "node:fs";
 
 export class MockAskUser implements IAskUser {
@@ -23,25 +23,34 @@ export class MockAskUser implements IAskUser {
   doNotCompleteETransfer(): boolean {
     return true;
   }
+  forValue(basic: QuestionValue): CancellablePromise<string> {
+    return nonCancellable(Promise.resolve(this.callback("value", basic.question)));
+  }
+  forConfirm(basic: QuestionConfirm): CancellablePromise<boolean> {
+    return nonCancellable(Promise.resolve(this.callback("confirm", basic.question)))
+  }
   // The following could be moved from Dummy to Mocked,
   // although it'd be nice to have automated responses
-  selectOption(question: string, options: NamedOptions[]): Promise<NamedResponse> {
-    const { group, option } = this.callback("option", question, options);
-    return Promise.resolve({
-      name: options[group].name,
-      option: options[group].options[option]
-    });
+  selectOption(basic: QuestionOptions): CancellablePromise<string> {
+    const { options } = basic;
+    const option = this.callback("select", basic.question, options);
+    return nonCancellable(Promise.resolve(options[option]));
+  }
+  selectOption2D(basic: QuestionOptions2D): CancellablePromise<NamedResponse> {
+    const { options2d } = basic;
+    const { group, option } = this.callback("option", basic.question, options2d);
+    return nonCancellable(Promise.resolve({
+      name: options2d[group].name,
+      option: options2d[group].options[option]
+    }));
   }
   expectedETransferRecipient(): Promise<string> {
     return Promise.resolve(this.callback("recipient"));
   }
-  forValue(question: string): Promise<string> {
-    return Promise.resolve(this.callback("value", question));
-  }
 }
 
-export type QuestionType = "option" | "recipient" | "value";
-export type AnswerCallback = (type: QuestionType, question?: string, options?: NamedOptions[]) => any;
+export type QuestionType = "option" | "select" | "confirm" | "recipient" | "value";
+export type AnswerCallback = (type: QuestionType, question?: string, options?: string[] | NamedOptions[]) => any;
 // Default is to read the answer from a file
 export const getAnswerFromFileIfExists = (matchedFolder: string, step: number) : AnswerCallback => {
   const answerFile = `${matchedFolder}/${step}-answers.json`;

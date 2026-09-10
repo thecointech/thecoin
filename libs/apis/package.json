@@ -49,6 +49,9 @@
       "broker": [
         "./build/broker/live.d.ts"
       ],
+      "broker/mocked": [
+        "./mocks/broker/index.ts"
+      ],
       "pricing": [
         "./build/pricing/live.d.ts"
       ],

@@ -1,8 +1,8 @@
-import React, { useRef } from 'react';
-import { StoryObj, Meta, StoryFn } from '@storybook/react-webpack5';
+import React, { useEffect } from 'react';
+import { StoryObj, Meta } from '@storybook/react-webpack5';
 import { QuestionResponse } from './QuestionResponse';
-import { withAskQuestion } from './scraper-mock';
-import "semantic-ui-css/semantic.min.css"
+import { withAskQuestion, triggerClearQuestion } from './scraper-mock';
+import "semantic-ui-css/semantic.min.css";
 
 
 const QuestionResponseWithSize = () => {
@@ -28,7 +28,8 @@ export const Default: Story = {
   args: {
     question: {
       questionId: 'test',
-      question: 'What is your name?',
+      header: "Enter 2FA Code",
+      question: "Enter the security code we just texted to the number ending in 7890. The code will expire within 5 minutes.",
     }
   },
 }
@@ -36,7 +37,8 @@ export const OptionsSelect: Story = {
   args: {
     question: {
       questionId: 'test',
-      question: 'Select an Option',
+      header: 'Select an Option',
+      question: 'The Choices',
       options: ['Option 1', 'Option 2'],
     }
   },
@@ -46,7 +48,8 @@ export const Options2DSelect: Story = {
   args: {
     question: {
       questionId: 'test',
-      question: 'Select an Option',
+      header: "Select Destination",
+      question: "Select where to send your 2FA code",
       options2d: [
         { name: 'Option 1', options: ['Option 1', 'Option 2'] },
         { name: 'Option 2', options: ['Option 1', 'Option 2'] },
@@ -59,8 +62,33 @@ export const Confirm: Story = {
   args: {
     question: {
       questionId: 'test',
-      confirm: 'Do you want to click yes?',
+      question: "Do you want to click yes?",
+      confirmBtn: 'Yes!',
     }
   },
+};
+
+const AutoClearWrapper = () => {
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      triggerClearQuestion({});
+    }, 5000);
+    return () => clearTimeout(timer);
+  }, []);
+  return <QuestionResponseWithSize />;
+};
+
+const message = "For added security, you need to verify this login by authenticating in your banking app. In-app authentication is a more secure way to verify your identity when you log in.";
+const question = `${message}\n\nOnce approved, this page should automatically refresh.  If it does not, click Override & Continue`
+export const AutoClearAfter5Seconds: Story = {
+  args: {
+    question: {
+      questionId: 'test',
+      header: "Approve in App",
+      question,
+      confirmBtn: "Override & Continue",
+    }
+  },
+  render: () => <AutoClearWrapper />,
 };
 

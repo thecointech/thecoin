@@ -1,6 +1,7 @@
 import readline from 'readline/promises';
 import type { BankConfig } from "../config";
-import type { IAskUser, NamedOptions, NamedResponse } from "../../src/types";
+import type { IAskUser, NamedResponse, CancellablePromise, QuestionValue, QuestionConfirm, QuestionOptions, QuestionOptions2D } from "../../src/types";
+import { nonCancellable, QuestionCancelError } from "../../src/types";
 
 
 // Simple console input for data the user needs to provide
@@ -40,33 +41,21 @@ export class AskUserConsole implements IAskUser {
     return this.config.to_recipient!;
   }
 
-  async forValue(question: string, options?: string[]): Promise<string> {
-    return options
-      ? this.selectString(question, options)
-      : this.rlp.question(`${question}: `);
+  forValue(basic: QuestionValue): CancellablePromise<string> {
+    return this.cancellable(`${basic.question}: `, (value) => value);
   }
 
-  async selectOption(question: string, options: NamedOptions[]): Promise<NamedResponse> {
-    this.rlp.write(`\n${question}\n`);
-    // const entries = Object.entries(options);
-    const flatEntries = options.flatMap(o => o.options.map((v) => [o.name, v] as const));
-    for (let i = 0; i < flatEntries.length; i++) {
-      const [key, value] = flatEntries[i];
-      this.rlp.write(`[${i}] ${key}: ${value}\n`);
-    }
-    const option = await this.forValue("Select an option");
-    return {
-      name: flatEntries[parseInt(option)][0],
-      option: flatEntries[parseInt(option)][1]
-    };
+  forConfirm(basic: QuestionConfirm): CancellablePromise<boolean> {
+    return this.cancellable(`${basic.question}: ${basic.confirmBtn} (y/n): `, (answer) => answer.toLowerCase().startsWith("y"));
   }
 
-  async selectString(question: string, options: string[]): Promise<string> {
+  selectOption(basic: QuestionOptions): CancellablePromise<string> {
+    const { question, options } = basic;
     if (this.config.questions?.[question]) {
       // Ensure this answer is an option
       const answer = this.config.questions[question];
       if (options.find(o => o == answer)) {
-        return answer;
+        return nonCancellable(Promise.resolve(answer));
       }
     }
 
@@ -74,11 +63,61 @@ export class AskUserConsole implements IAskUser {
     for (let i = 0; i < options.length; i++) {
       this.rlp.write(`[${i}] ${options[i]}\n`);
     }
-    const option = await this.forValue("Select an option");
-    return options[parseInt(option)];
+    return this.cancellable(
+      "Select an option: ",
+      (option) => options[parseInt(option)],
+      (option) => {
+        const idx = parseInt(option);
+        return !isNaN(idx) && idx >= 0 && idx < options.length;
+      }
+    );
+  }
+
+  selectOption2D(basic: QuestionOptions2D): CancellablePromise<NamedResponse> {
+    const { question, options2d } = basic;
+    const flatEntries = options2d.flatMap(o => o.options.map((v) => [o.name, v] as const));
+    this.rlp.write(`\n${question}\n`);
+    for (let i = 0; i < flatEntries.length; i++) {
+      const [key, value] = flatEntries[i];
+      this.rlp.write(`[${i}] ${key}: ${value}\n`);
+    }
+    return this.cancellable(
+      "Select an option: ",
+      (option) => ({
+        name: flatEntries[parseInt(option)][0],
+        option: flatEntries[parseInt(option)][1]
+      }),
+      (option) => {
+        const idx = parseInt(option);
+        return !isNaN(idx) && idx >= 0 && idx < flatEntries.length;
+      }
+    );
   }
 
   [Symbol.dispose]() {
     this.rlp.close();
+  }
+
+  cancellable<T>(question: string, then: (value: string) => T, validate?: (value: string) => boolean): CancellablePromise<T> {
+    const aborter = new AbortController();
+    const ask = (): Promise<T> =>
+      this.rlp.question(question, { signal: aborter.signal })
+        .catch(e => {
+          if (e instanceof Error && e.name === 'AbortError') {
+            throw new QuestionCancelError();
+          }
+          throw e;
+        })
+        .then(value => {
+          if (validate && !validate(value)) {
+            this.rlp.write("Invalid selection.\n");
+            return ask();
+          }
+          return then(value);
+        });
+    const cp = ask();
+    const cp2 = cp as CancellablePromise<T>;
+    cp2.cancel = () => aborter.abort();
+    return cp2;
   }
 }

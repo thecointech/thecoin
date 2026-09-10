@@ -3,7 +3,7 @@ import type { EventManager } from "../src/eventManager";
 import type { PageHandler } from "../src/pageHandler";
 import type { NamedProcessor } from "../src/processors";
 import { SectionType, sections } from "../src/processors/types";
-import type { IAskUser, SectionName, EventSection, IAgentCallbacks } from "../src/types";
+import { type IAskUser, type SectionName, type EventSection, type IAgentCallbacks, QuestionCancelError } from "../src/types";
 import { sleep } from "@thecointech/async/sleep";
 import { AccountResponse } from "@thecointech/vqa";
 
@@ -142,20 +142,58 @@ export class Agent implements AgentClass {
   }
 }
 
-// Allow overriding to force select or not
-// (this is to compensate for not getting
-// around to setting up Storybook here)
-let overrideSelect: boolean | undefined = undefined;
 async function mockGetting2faCode(input: IAskUser) {
   // 1 out of 3 times, pretend we have to select a destinations
-  let doSelect = (overrideSelect ?? Math.random() < 1/3);
-  if (doSelect) {
-    await input.selectOption("Select where to send your 2FA code", [
-      { name: "Phone", options: ["(123) 456-7890", "(098) 765-4321"] },
-      { name: "Email", options: ["mocked_user@example.com", "mocked_user2@example.com"] },
-    ]);
+  const method = Math.floor(Math.random() * 3);
+  switch (method) {
+    case 0: return await mock2faEnter(input)
+    case 1: return await mock2faSelect(input);
+    case 2: return await mock2faApproveInApp(input);
   }
-  const code = await input.forValue("Enter your 2FA Code");
+}
+
+async function mock2faEnter(input: IAskUser) {
+  const code = await input.forValue({
+    header: "Enter 2FA Code",
+    question: "Enter the security code we just texted to the number ending in 7890. The code will expire within 5 minutes.",
+  });
   return code;
 }
 
+async function mock2faSelect(input: IAskUser) {
+  await input.selectOption2D({
+    header: "Select Destination",
+    question: "Select where to send your 2FA code",
+    options2d: [
+      { name: "Phone", options: ["(123) 456-7890", "(098) 765-4321"] },
+      { name: "Email", options: ["mocked_user@example.com", "mocked_user2@example.com"] },
+    ],
+  });
+  return await mock2faEnter(input);
+}
+
+async function mock2faApproveInApp(input: IAskUser) {
+  const message = "For added security, you need to verify this login by authenticating in your banking app. In-app authentication is a more secure way to verify your identity when you log in.";
+  const question = `${message}\n\nOnce approved, this page should automatically refresh.  If it does not, click Override & Continue`
+  const manualContinue = input.forConfirm({
+    header: "Approve in App",
+    question,
+    confirmBtn: "Override & Continue",
+  });
+
+  // Simluate 10s of waiting for user to approve in app
+  const t = setTimeout(() => {
+    manualContinue.cancel();
+  }, 10000);
+  try {
+    const r = await manualContinue;
+    clearTimeout(t);
+    return r;
+  } catch (e) {
+    if (e instanceof QuestionCancelError) {
+      // This is expected, just return
+      return;
+    }
+    throw e;
+  }
+}

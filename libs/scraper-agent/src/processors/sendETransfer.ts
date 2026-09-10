@@ -423,7 +423,7 @@ async function selectToRecipient(agent: Agent, element: SearchElement) {
   if (element.data.options?.length) {
     const found = element.data.options.find(o => o == recipient);
     if (!found) {
-      recipient = await agent.input.forValue("Select your coin account", element.data.options);
+      recipient = await agent.input.selectOption({ question: "Select your coin account", options: element.data.options });
     }
   }
 

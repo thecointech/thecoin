@@ -3,7 +3,7 @@ import type { ValueResult, ValueType} from "@thecointech/scraper-types";
 import type { CreditDetails } from './Harvester/types';
 import type { CoinAccount, CoinAccountDetails, StoredData, HarvestAction } from '@thecointech/store-harvester';
 import type { BackgroundTaskCallback } from './BackgroundTask/types';
-import type { OptionPacket, QuestionPacket, ResponsePacket } from './Harvester/agent/askUser';
+import type { ClearQuestionPacket, OptionPacket, QuestionPacket, ResponsePacket } from './Harvester/agent/askUser';
 import type { AutoConfigParams } from './Harvester/agent';
 import type { BankConnectMap } from './Harvester/events';
 import type { WebsiteEndpoints } from './openExternal';
@@ -40,6 +40,7 @@ export type ScraperBridgeApi = {
   twofaRefresh: (actionName: RendererBankType) => Promise<Result<boolean>>,
 
   onAskQuestion: (callback: (question: QuestionPacket|OptionPacket) => void) => () => void;
+  onClearQuestion: (callback: (packet: ClearQuestionPacket) => void) => () => void;
   replyQuestion: (response: ResponsePacket) => Promise<Result<boolean>>;
 
   // Declare a `readFile` function that will return a promise. This promise
@@ -109,6 +110,7 @@ export const actions = {
   twofaRefresh: 'scraper:twofaRefresh',
 
   onAskQuestion: 'scraper:onAskQuestion',
+  onClearQuestion: 'scraper:onClearQuestion',
   replyQuestion: 'scraper:replyQuestion',
 
   warmup: 'scraper:warmup',

@@ -38,6 +38,11 @@ const api : ScraperBridgeApi = {
     const r = ipcRenderer.on(actions.onAskQuestion, _cb)
     return () => r.off(actions.onAskQuestion, _cb)
   },
+  onClearQuestion: (callback) => {
+    const _cb = (_event: any, value: any) => callback(value)
+    const r = ipcRenderer.on(actions.onClearQuestion, _cb)
+    return () => r.off(actions.onClearQuestion, _cb)
+  },
   replyQuestion: (packet) => ipcRenderer.invoke(actions.replyQuestion, packet),
 
   warmup: (url) => ipcRenderer.invoke(actions.warmup, url),

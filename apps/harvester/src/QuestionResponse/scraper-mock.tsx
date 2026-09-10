@@ -2,17 +2,24 @@ import React from 'react';
 import type { StoryContext } from '@storybook/react';
 
 // A simple map to hold all registered callbacks
-const callbacks: Set<Function> = new Set();
+const askQuestionCallbacks: Set<Function> = new Set();
+const clearQuestionCallbacks: Set<Function> = new Set();
+
+const mockSessionId = 'storybook-session';
 
 // The mocked structure of your exposed Electron API
 export const scraperMock = {
     // Mimics the ipcRenderer.on structure
     onAskQuestion: (callback: (value: any) => void) => {
         // 1. Register the callback
-        callbacks.add(callback);
+        askQuestionCallbacks.add(callback);
 
         // 2. Return an "unsubscriber" function
-        return () => callbacks.delete(callback);
+        return () => askQuestionCallbacks.delete(callback);
+    },
+    onClearQuestion: (callback: (value: any) => void) => {
+        clearQuestionCallbacks.add(callback);
+        return () => clearQuestionCallbacks.delete(callback);
     },
     replyQuestion: (question: any) => {
         console.log("replyQuestion", question)
@@ -22,7 +29,16 @@ export const scraperMock = {
     // 3. This is the new, exposed function used to TRIGGER the event
     //    It is not part of the production Electron API, only the mock.
     triggerAskQuestion: (question: any) => {
-        callbacks.forEach(cb => cb(question));
+        askQuestionCallbacks.forEach(cb => cb({
+            sessionId: mockSessionId,
+            ...question,
+        }));
+    },
+    triggerClearQuestion: (packet: any) => {
+        clearQuestionCallbacks.forEach(cb => cb({
+            sessionId: mockSessionId,
+            ...packet,
+        }));
     }
 };
 
@@ -33,6 +49,7 @@ if (typeof window !== 'undefined') {
 }
 
 export const triggerAskQuestion = scraperMock.triggerAskQuestion;
+export const triggerClearQuestion = scraperMock.triggerClearQuestion;
 
 export const withAskQuestion = (StoryFn: React.ElementType, context: StoryContext) => {
   const { question } = context.args;

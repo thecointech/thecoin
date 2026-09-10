@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type { AnyQuestionPacket, ConfirmPacket, Option2DPacket, OptionPacket, QuestionPacket } from "@/Harvester/agent/askUser";
+import type { AnyQuestionPacket, ClearQuestionPacket, ConfirmPacket, Option2DPacket, OptionPacket, QuestionPacket } from "@/Harvester/agent/askUser";
 import { Button, Input, Select } from "semantic-ui-react";
 import { NamedResponse } from "@thecointech/scraper-agent/types";
 import { Modal } from "semantic-ui-react";
@@ -23,6 +23,17 @@ export const QuestionResponse = ({ mountNode }: QuestionResponseProps) => {
     return release;
   }, []);
 
+  useEffect(() => {
+    const release = window.scraper.onClearQuestion((packet: ClearQuestionPacket) => {
+      setQuestions(questions => questions.filter(q =>
+        q.sessionId !== packet.sessionId ||
+        (packet.questionId !== undefined && q.questionId !== packet.questionId)
+      ));
+      setAnswer(undefined);
+    })
+    return release;
+  }, []);
+
   if (questions.length === 0) return null;
   const question = questions[0];
 
@@ -40,6 +51,7 @@ export const QuestionResponse = ({ mountNode }: QuestionResponseProps) => {
 
   return (
     <Modal open closeOnDimmerClick={false} mountNode={mountNode}>
+      {question.header && <Modal.Header className={styles.header}>{question.header}</Modal.Header>}
       <Modal.Content>
         <div className={styles.qaContainer}>
           <QuestionContent question={question} answer={answer} setAnswer={setAnswer} onReply={onReply} />
@@ -62,7 +74,7 @@ const QuestionContent = ({ question, answer, setAnswer, onReply }: QuestionConte
   else if ("options2d" in question) {
     return <QuestionOptions2D question={question} answer={answer as NamedResponse|undefined} setAnswer={setAnswer} onReply={onReply} />
   }
-  else if ("confirm" in question) {
+  else if ("confirmBtn" in question) {
     return <QuestionConfirm question={question} onReply={onReply} />
   }
   else {
@@ -76,13 +88,24 @@ type QuestionBaseProps = {
 type QuestionAnswerableProps = QuestionBaseProps & {
   setAnswer: (answer: string|NamedResponse) => void;
 }
+const QuestionText = ({ text }: { text?: string }) => (
+  <div className={styles.questionText}>
+    {text?.split('\n').map((line, i, arr) => (
+      <span key={i}>
+        {line}
+        {i < arr.length - 1 && <br />}
+      </span>
+    ))}
+  </div>
+);
+
 type QuestionOptionsProps = QuestionAnswerableProps & {
   question: OptionPacket;
   answer: string|undefined;
 }
 const QuestionOptions = ({ question, answer, onReply, setAnswer }: QuestionOptionsProps) => (
   <>
-    <div>{question.question}</div>
+    <QuestionText text={question.question} />
     <div className={styles.options}>
       <Select
         className={styles.select}
@@ -100,7 +123,7 @@ type QuestionOptions2DProps = QuestionAnswerableProps & {
 }
 const QuestionOptions2D = ({ question, answer, setAnswer, onReply }: QuestionOptions2DProps) => (
   <div className={styles.options2d}>
-    <div>{question.question}</div>
+    <QuestionText text={question.question} />
     <div className={styles.table}>
       {question.options2d.map((row, idx) => (
         <div key={idx} className={styles.row}>
@@ -130,10 +153,10 @@ const QuestionConfirm = ({ question, onReply }: QuestionConfirmProps) => {
   const onCancel = () => onReply(false)
   return (
     <div className={styles.confirm}>
-      <div>{question.confirm}</div>
+      <QuestionText text={question.question} />
       <div className={styles.buttons}>
         <Button onClick={onCancel} content='Cancel' />
-        <Button primary onClick={onConfirm} content='Confirm' />
+        <Button primary onClick={onConfirm} content={question.confirmBtn} />
       </div>
     </div>
   )
@@ -145,7 +168,7 @@ type QuestionInputProps = QuestionAnswerableProps & {
 }
 const QuestionInput = ({ question, answer, setAnswer, onReply }: QuestionInputProps) => (
   <>
-    <div>{question.question}</div>
+    <QuestionText text={question.question} />
     <Input value={answer ?? ''} onChange={e => setAnswer(e.target.value)} />
     <SubmitRow answer={answer} onReply={onReply} />
   </>

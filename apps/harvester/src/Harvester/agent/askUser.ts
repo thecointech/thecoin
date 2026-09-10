@@ -1,36 +1,41 @@
 import { getMainWindow } from "@/mainWindow";
 import { actions } from "@/scraper_actions";
-import { NamedOptions, NamedResponse } from "@thecointech/scraper-agent";
+import { AnyQuestion, CancellablePromise, NamedResponse, QuestionCancelError, QuestionConfirm, QuestionOptions, QuestionOptions2D, QuestionValue } from "@thecointech/scraper-agent";
 import { randomUUID } from "crypto";
+import type { BrowserWindow } from "electron";
+
+type SenderArgs = Parameters<typeof BrowserWindow.prototype.webContents.send>;
+type Sender = (...args: SenderArgs) => void;
+
+const defaultSender: Sender = (...args) => {
+  const mainWindow = getMainWindow();
+  mainWindow?.webContents.send(...args);
+};
+
+function makeCancellable<T>(promise: Promise<T>, cancel: () => void): CancellablePromise<T> {
+  const cp = promise as CancellablePromise<T>;
+  cp.cancel = cancel;
+  return cp;
+}
 
 type BaseQuestionType = {
   sessionId: string;
   questionId: string;
 }
 
-export type ConfirmPacket = {
-  confirm: string;
-} & BaseQuestionType;
+export type ConfirmPacket = QuestionConfirm & BaseQuestionType;
+export type QuestionPacket = QuestionValue & BaseQuestionType;
+export type OptionPacket = QuestionOptions & BaseQuestionType;
+export type Option2DPacket = QuestionOptions2D & BaseQuestionType;
 
-export type QuestionPacket = {
-  question: string;
-} & BaseQuestionType;
-
-export type OptionPacket = {
-  options: string[];
-} & QuestionPacket
-
-export type Option2DPacket = {
-  question: string;
-  options2d: NamedOptions[];
-} & BaseQuestionType;
-export type ResponsePacket = ({
+export type ResponsePacket = {
   // Value is either the response for a question or a SelectOption
-  value: string | boolean | {
-    name: string;
-    option: string
-  }
-}) & BaseQuestionType;
+  value: string | boolean | NamedResponse;
+} & BaseQuestionType;
+
+export type ClearQuestionPacket = {
+  questionId?: string;
+} & Omit<BaseQuestionType, "questionId">;
 
 export type AnyQuestionPacket = QuestionPacket | ConfirmPacket | OptionPacket | Option2DPacket;
 
@@ -44,11 +49,10 @@ export class AskUserReact implements Disposable {
   sessionID = randomUUID();
   responses: Record<string, DeferredPromise<any>> = {};
   static __instances: Record<string, AskUserReact> = {};
+  private sender: Sender;
 
-  protected constructor() {
-    // this.depositAddress = depositAddress ?? "--unused--";
-    // this.addDeferredResponse(QuestionId.Username);
-    // this.addDeferredResponse(QuestionId.Password);
+  protected constructor(sender: Sender = defaultSender) {
+    this.sender = sender;
     AskUserReact.__instances[this.sessionID] = this;
   }
 
@@ -60,6 +64,28 @@ export class AskUserReact implements Disposable {
     })
     this.responses[questionId] = deferred as DeferredPromise<T>;
     return deferred.promise;
+  }
+
+  clearQuestion(questionId?: string) {
+    const packet: ClearQuestionPacket = {
+      sessionId: this.sessionID,
+      questionId,
+    };
+    this.sender(actions.onClearQuestion, packet);
+
+    if (questionId) {
+      const response = this.responses[questionId];
+      if (response) {
+        response.reject(new QuestionCancelError());
+        delete this.responses[questionId];
+      }
+    } else {
+      for (const id in this.responses) {
+        const response = this.responses[id];
+        response.reject(new QuestionCancelError());
+        delete this.responses[id];
+      }
+    }
   }
 
   static onResponse(packet: ResponsePacket) {
@@ -75,47 +101,24 @@ export class AskUserReact implements Disposable {
   }
 
   clearUnresolved() {
-    for (const questionId in this.responses) {
-      const response = this.responses[questionId];
-      let isResolved = false;
-      response.promise.then(() => isResolved = true);
-      if (!isResolved) {
-        response.reject("Session expired");
-      }
-    }
+    this.clearQuestion();
   }
 
-
-  forValue(question: string, options?: string[]): Promise<string> {
-    const packet = { question };
-    if (options) {
-      (packet as OptionPacket).options = options;
-    }
-    return this.sendQuestion(packet)
-  }
-
-  selectOption(question: string, options2d: NamedOptions[]): Promise<NamedResponse> {
-    return this.sendQuestion<NamedResponse>({ question, options2d });
-  }
-
-  forConfirm(confirm: string): Promise<boolean> {
-    return this.sendQuestion<boolean>({confirm});
-  }
-
-  sendQuestion<T = string>(packet: Omit<AnyQuestionPacket, "sessionId" | "questionId">): Promise<T> {
-    const mainWindow = getMainWindow();
+  sendQuestion<T = string>(packet: AnyQuestion): CancellablePromise<T> {
     const questionId = randomUUID();
     const responsePromise = this.addDeferredResponse<T>(questionId);
-    mainWindow!.webContents.send(actions.onAskQuestion, {
+    this.sender(actions.onAskQuestion, {
       ...packet,
       sessionId: this.sessionID,
       questionId
     });
-    return responsePromise;
+    return makeCancellable(responsePromise, () => {
+      this.clearQuestion(questionId);
+    });
   }
 
-  static newSession() {
-    const instance = new AskUserReact();
+  static newSession(sender?: Sender) {
+    const instance = new AskUserReact(sender);
     return instance;
   }
   static getSession(id: string) {
