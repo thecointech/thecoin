@@ -20,12 +20,13 @@ const weeksInBillingPeriod = 4;
 const weeksInGracePeriod = 3;
 const weeklySpending = 350;
 
+const FirstBillingPeriodFinished = DemoAccountScheduleStart.plus({ weeks: weeksInBillingPeriod });
+
 // Due amount is constant each period
 const dueAmount = weeklySpending * weeksInBillingPeriod;
 
 export type DemoCheckpoint = {
   date: DateTime;
-  harvesterBalance: currency;
   visa: ReturnType<typeof getEmulatedVisaData>;
   pendingPayment?: {
     amount: currency;
@@ -35,7 +36,7 @@ export type DemoCheckpoint = {
 
 export function getDemoCheckpoint(atDate: DateTime): DemoCheckpoint {
   const visa = getEmulatedVisaData(atDate);
-  const pendingPayment = atDate < visa.dueDate
+  const pendingPayment = atDate < visa.dueDate && atDate >= FirstBillingPeriodFinished
     ? {
         amount: visa.dueAmount,
         date: visa.dueDate,
@@ -44,7 +45,6 @@ export function getDemoCheckpoint(atDate: DateTime): DemoCheckpoint {
 
   return {
     date: atDate,
-    harvesterBalance: visa.balance,
     visa,
     pendingPayment,
   };
@@ -55,10 +55,33 @@ export function getEmulatedVisaData(atDate: DateTime, lastTxDate?: DateTime) {
   const date = atDate.startOf('day');
   const weeksBetween = date.diff(DemoAccountScheduleStart, 'weeks').weeks;
 
-  const baseDue = dueAmount + Math.floor(weeksBetween) * weeklySpending;
-  // Now add weeklySpending / 2 2x each week, Mon & Thur
+  // Prior to start, no balance.
+  if (weeksBetween < 0) {
+    return {
+      balance: currency(0),
+      dueDate: DemoAccountScheduleStart,
+      dueAmount: currency(0),
+      history: [],
+    };
+  }
+
+  // Spend 175 2x each week
+  const totalSpending = Math.floor(weeksBetween) * weeklySpending;
   const weekRatio = 1 + Math.floor(0.6 + (weeksBetween % 1));
   const thisWeeksSpending = weekRatio * (weeklySpending / 2);
+
+  // first month, spending ramps up, no bills due.
+  if (weeksBetween < weeksInBillingPeriod) {
+    return {
+      balance: currency(totalSpending + thisWeeksSpending),
+      dueDate: DemoAccountScheduleStart,
+      dueAmount: currency(0),
+      history: [],
+    };
+  }
+
+  // For later periods, calculate the total spent - the total repaid.
+  const baseDue = dueAmount + totalSpending;
   const repayments = (1 + weeksBetween) / weeksInBillingPeriod
   const balance = baseDue + thisWeeksSpending - (Math.floor(repayments) * dueAmount);
 

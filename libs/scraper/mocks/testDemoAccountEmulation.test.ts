@@ -39,13 +39,48 @@ it ('matches visa steps from initDemoAccount', () => {
 
 })
 
+describe('startup', () => {
+    it.each([
+        ['2023-01-01', 0],
+        ['2023-01-02', 175],
+        ['2023-01-04', 175],
+        ['2023-01-05', 350],
+        ['2023-01-08', 350],
+        ['2023-01-09', 525],
+        ['2023-01-29', 1400],
+    ])('accumulates spending on Monday and Thursday at %s', (date, expectedBalance) => {
+        const checkpoint = getDemoCheckpoint(DateTime.fromISO(date));
+
+        expect(checkpoint.visa.balance.value).toBe(expectedBalance);
+        expect(checkpoint.visa.dueAmount.value).toBe(0);
+        expect(checkpoint.pendingPayment).toBeUndefined();
+    });
+
+    it('opens the first bill after four weeks', () => {
+        const checkpoint = getDemoCheckpoint(DateTime.fromISO('2023-01-30'));
+
+        expect(checkpoint.visa.balance.value).toBe(1575);
+        expect(checkpoint.visa.dueAmount.value).toBe(1400);
+        expect(checkpoint.visa.dueDate.toISODate()).toBe('2023-02-20');
+        expect(checkpoint.pendingPayment?.amount.value).toBe(1400);
+        expect(checkpoint.pendingPayment?.date.toISODate()).toBe('2023-02-20');
+    });
+
+    it('produces the initial deposit from the pre-start checkpoint', () => {
+        const prior = getDemoCheckpoint(DateTime.fromISO('2023-01-01'));
+        const firstRun = getDemoCheckpoint(DateTime.fromISO('2023-01-02'));
+
+        expect(firstRun.visa.balance.subtract(prior.visa.balance).value).toBe(175);
+    });
+});
+
 describe('getDemoCheckpoint', () => {
     it('includes a payment pending before its due date', () => {
         const date = DateTime.fromISO('2024-03-17T12:00:00');
         const checkpoint = getDemoCheckpoint(date);
 
         expect(checkpoint.date).toBe(date);
-        expect(checkpoint.harvesterBalance.value).toBe(2450);
+        expect(checkpoint.visa.balance.value).toBe(2450);
         expect(checkpoint.pendingPayment?.amount.value).toBe(1400);
         expect(checkpoint.pendingPayment?.date.toISODate()).toBe('2024-03-18');
         expect(checkpoint.visa.dueDate.toISODate()).toBe('2024-03-18');
@@ -54,7 +89,7 @@ describe('getDemoCheckpoint', () => {
     it('reflects a settled payment on its due date', () => {
         const checkpoint = getDemoCheckpoint(DateTime.fromISO('2024-03-18T12:00:00'));
 
-        expect(checkpoint.harvesterBalance.value).toBe(1225);
+        expect(checkpoint.visa.balance.value).toBe(1225);
         expect(checkpoint.pendingPayment).toBeUndefined();
         expect(checkpoint.visa.history[0].date.toISODate()).toBe('2024-03-18');
         expect(checkpoint.visa.history[0].values[0].value).toBe(1400);
@@ -63,7 +98,7 @@ describe('getDemoCheckpoint', () => {
     it('includes the next payment when the billing period advances', () => {
         const checkpoint = getDemoCheckpoint(DateTime.fromISO('2024-03-25T12:00:00'));
 
-        expect(checkpoint.harvesterBalance.value).toBe(1575);
+        expect(checkpoint.visa.balance.value).toBe(1575);
         expect(checkpoint.pendingPayment?.amount.value).toBe(1400);
         expect(checkpoint.pendingPayment?.date.toISODate()).toBe('2024-04-15');
     });
@@ -74,8 +109,8 @@ describe('getDemoCheckpoint', () => {
         const settledPayment = prior.pendingPayment && !checkpoint.pendingPayment
             ? prior.pendingPayment.amount
             : 0;
-        const toDeposit = checkpoint.harvesterBalance
-            .subtract(prior.harvesterBalance)
+        const toDeposit = checkpoint.visa.balance
+            .subtract(prior.visa.balance)
             .add(settledPayment);
 
         expect(toDeposit.value).toBe(175);
