@@ -12438,7 +12438,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@thecointech/tx-blockchain@npm:^0.6.7, @thecointech/tx-blockchain@workspace:libs/tx-blockchain":
+"@thecointech/tx-blockchain@npm:^0.6.7, @thecointech/tx-blockchain@workspace:^, @thecointech/tx-blockchain@workspace:libs/tx-blockchain":
   version: 0.0.0-use.local
   resolution: "@thecointech/tx-blockchain@workspace:libs/tx-blockchain"
   dependencies:
@@ -26020,6 +26020,7 @@ __metadata:
     "@thecointech/shared": "npm:^0.6.7"
     "@thecointech/signers": "npm:^0.6.7"
     "@thecointech/store-harvester": "workspace:*"
+    "@thecointech/tx-blockchain": "workspace:^"
     "@thecointech/utilities": "npm:^0.6.7"
     "@timfish/forge-externals-plugin": "https://github.com/FrozenKiwi/forge-externals-plugin-monorepo"
     "@types/node-notifier": "npm:^8.0.2"
