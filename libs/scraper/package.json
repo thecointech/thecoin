@@ -55,6 +55,7 @@
       "prodtest": "./mocks/index.ts",
       "default": "./build/index.js"
     },
+    "./testDemoAccountEmulation": "./mocks/testDemoAccountEmulation.ts",
     "./puppeteer": "./build/puppeteer-init/index.js",
     "./record": "./build/record/index.js",
     "./testutils": "./internal/testutils.ts",
@@ -74,6 +75,9 @@
       ],
       "gotoPage": [
         "internal/gotoPage.ts"
+      ],
+      "testDemoAccountEmulation": [
+        "mocks/testDemoAccountEmulation.ts"
       ],
       "*": [
         "build/*.d.ts"

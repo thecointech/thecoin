@@ -21,7 +21,7 @@ export function getData(start: Date) {
 
   const data = [
     {
-      id: "Asset Value",
+      id: "S&P 500",
       data: snpValues.map((value, i) => ({
         x: dates[i],
         y: (value / snpValues[0]) * 100,
