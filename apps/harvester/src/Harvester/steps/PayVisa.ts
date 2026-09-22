@@ -9,7 +9,7 @@ import { notify } from '@/notify';
 import type { UberTransferAction } from '@thecointech/types';
 
 export const PayVisaKey = "PayVisa";
-const PayVisaAmountKey = "PayVisaAmount";
+export const PayVisaAmountKey = "PayVisaAmount";
 
 export class PayVisa implements ProcessingStage {
 

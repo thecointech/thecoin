@@ -4,8 +4,9 @@ import { getCurrentState } from './state';
 import { getAccountData } from './fetchData';
 import type { HarvestData, UserData } from './types';
 import type { HarvesterReplayCallbacks } from './replay/replayCallbacks';
-import { ContractCore } from '@thecointech/contract-core';
+import { ContractCore, type TheCoin } from '@thecointech/contract-core';
 import { useSigner } from './signer';
+
 
 export async function initialize(callback: HarvesterReplayCallbacks) {
 
@@ -40,6 +41,7 @@ export async function initialize(callback: HarvesterReplayCallbacks) {
   const { chq, visa } = await getAccountData(callback, lastTxDate);
   const tcCore = await ContractCore.get();
   const coin = await tcCore.balanceOf(address);
+
   let state: HarvestData = {
     chq,
     visa,
@@ -47,8 +49,20 @@ export async function initialize(callback: HarvesterReplayCallbacks) {
     date: DateTime.now(),
 
     delta: [],
-    state: lastRun?.state ?? {},
+    state: await getState(address, lastRun, tcCore),
   }
 
   return { stages, state, user };
+}
+
+async function getState(
+  address: string,
+  lastRun: HarvestData|undefined,
+  tcCore: TheCoin,
+): Promise<HarvestData['state']> {
+  if (process.env.CONFIG_NAME === 'prodtest' && address.toLowerCase() === process.env.WALLET_TestDemoAccount_ADDRESS?.toLowerCase()) {
+    const { reconcileDemoStateIfNeeded } = await import('./initialize.prodtest');
+    return reconcileDemoStateIfNeeded(lastRun, address, tcCore);
+  }
+  return lastRun?.state ?? {};
 }

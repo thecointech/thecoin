@@ -72,6 +72,7 @@
     "@thecointech/shared": "^0.6.7",
     "@thecointech/signers": "^0.6.7",
     "@thecointech/store-harvester": "workspace:*",
+    "@thecointech/tx-blockchain": "workspace:^",
     "@thecointech/utilities": "^0.6.7",
     "crontab": "^1.4.2",
     "currency.js": "^2.0.4",

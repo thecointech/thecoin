@@ -1,5 +1,5 @@
 import { getSigner } from "@thecointech/signers";
-import { DateTime, Duration } from "luxon";
+import { DateTime } from "luxon";
 import { GetPluginsApi, GetBillPaymentsApi, GetStatusApi } from '@thecointech/apis/broker';
 import { ContractCore } from '@thecointech/contract-core';
 import { ContractConverter } from '@thecointech/contract-plugin-converter';
@@ -13,10 +13,9 @@ import { SendFakeDeposit, emailCacheFile } from '@thecointech/email-fake-deposit
 import { writeFileSync } from "fs";
 import { loadAndMergeHistory } from '@thecointech/tx-blockchain';
 import type { AddressLike } from "ethers";
+import { getDemoCheckpoint, DemoAccountScheduleStart } from '@thecointech/scraper/testDemoAccountEmulation';
 
 // Always delete any existing emails
-//execSync("yarn dev:live", { stdio: "inherit", cwd: "../libs/email-fake-deposit" });
-// the above line takes for ages, so do it manually
 if (process.env.CONFIG_NAME == "devlive") {
   writeFileSync(emailCacheFile, "[]");
 }
@@ -31,8 +30,7 @@ const monthsToRun = 100;
 /////////////////////////////////////////////
 
 // Init/Demo account
-// Starting from Jan 1 2022
-// Send a deposit email to
+// Starting from Jan 2 2023
 const tcCore = await ContractCore.get();
 const signer = await getSigner("TestDemoAccount");
 const testAddress = await signer.getAddress();
@@ -40,63 +38,52 @@ if (testAddress != process.env.WALLET_TestDemoAccount_ADDRESS) {
   throw new Error("Invalid demo account address!");
 }
 const brokerAddress = process.env.WALLET_BrokerCAD_ADDRESS!;
-const startDate = DateTime.fromObject({
-  year: 2023,
-  month: 1,
-  day: 2,
-  hour: 9,
-  minute: 35
-})
 
 // Get date of last transaction
 const initBlock = parseInt(process.env.INITIAL_COIN_BLOCK ?? "0", 10);
 const tx = await loadAndMergeHistory(initBlock, tcCore, testAddress);
 // We start from the last deposit transaction
 const deposits = tx.filter(tx => tx.change > 0);
-const lastTxDate = deposits[deposits.length - 1]?.date ?? startDate.minus({hour: 2});
+const lastTxDate = deposits.at(-1)?.date ?? DemoAccountScheduleStart.minus({ day: 1 });
 console.log(`Last tx: ${lastTxDate.toLocaleString(DateTime.DATETIME_SHORT)}`);
 
-const pausedDate = lastTxDate.plus({ hour: 1});
 const endDate = DateTime.min(
-  pausedDate.plus({month: monthsToRun}),
+  lastTxDate.plus({month: monthsToRun}),
   DateTime.now()
 );
-const visaStep = Duration.fromObject({week: 4});
-const visaDuePeriod = Duration.fromObject({week: 3});
-const weeklySpending = 350;
-const harvestRunsOnDay = [
-  1, // Monday
-  4, // Thursday
-]
-const harvestSends = (weeklySpending / harvestRunsOnDay.length);
-const billTotal = weeklySpending * visaStep.as("weeks");
 
 const mockPayee = {
   payee: "mocked visa card",
   accountNumber: "1234567890",
 }
 
-// This script fabricates historical data by monkey-patching DateTime.now
-// (see below), so our TimeSource just needs to defer to whatever DateTime.now
-// currently resolves to at call time, rather than the real clock/server.
-const fakeableNow: TimeSource = () => DateTime.now().toMillis();
+const atDemoRunTime = (date: DateTime) => date.set({
+  hour: 9,
+  minute: 35,
+  second: 0,
+  millisecond: 0,
+});
+
+const timeSourceAt = (date: DateTime): TimeSource =>
+  () => date.toMillis();
 
 // First, assign plugins
 const plugins = await tcCore.getUsersPlugins(testAddress);
 console.log(`Got ${plugins.length} plugins`)
 if (plugins.length == 0) {
-  const oldNow = DateTime.now
 
   console.log("Assigning plugins to account...");
 
   const assignPlugin = async (plugin: AddressLike, minutesBack: number) => {
     const api = GetPluginsApi();
-    DateTime.now = () => startDate.minus({minute: minutesBack})
+    const signedAt = atDemoRunTime(DemoAccountScheduleStart)
+      .minus({ minutes: minutesBack });
+
     const request = await buildAssignPluginRequest(
       signer,
       plugin,
       ALL_PERMISSIONS,
-      fakeableNow,
+      timeSourceAt(signedAt),
     );
     await api.assignPlugin({
       ...request,
@@ -109,16 +96,12 @@ if (plugins.length == 0) {
 
   await assignPlugin(converter, 10);
   await assignPlugin(shockAbsorber, 5);
-
-  DateTime.now = oldNow
-  // process.exit(0);
 }
 
 const payBillApi = GetBillPaymentsApi();
 
-let currDate = startDate;
-let nextPayDate = startDate.plus(visaStep);
-DateTime.now = () => currDate
+let currDate = lastTxDate;
+let priorCheckpoint = getDemoCheckpoint(currDate);
 
 let numSent = 0;
 try {
@@ -129,51 +112,49 @@ try {
     //   break;
     // }
 
-    // If we run harvester on this day?
-    if (harvestRunsOnDay.includes(currDate.weekday)) {
+    const checkpoint = getDemoCheckpoint(currDate);
+    const settledPayment = priorCheckpoint.pendingPayment && !checkpoint.pendingPayment
+      ? priorCheckpoint.pendingPayment.amount
+      : 0;
+    const toDeposit = checkpoint.visa.balance
+      .subtract(priorCheckpoint.visa.balance)
+      .add(settledPayment);
 
-      if (currDate >= pausedDate) {
-        // Send the transfer slightly earlier than the current date
-        // This ensures it is processed first in the tx-processor,
-        // which is important because deposits need to be present
-        // before the bill is processed if the bill is processed
-        // immediately (which in the past, it is)
-        const r = await SendFakeDeposit(testAddress, harvestSends, currDate.minus({minutes: 1}));
-        if (!r) {
-          console.error("Failed to send mail");
-          break;
-        }
-        console.log(`Ran Harvester for ${currDate.weekdayShort} ${currDate.toLocaleString(DateTime.DATETIME_SHORT)}`);
-        numSent++;
+    if (toDeposit.value > 0) {
+      // Send the transfer slightly earlier than the current date
+      // This ensures it is processed first in the tx-processor,
+      // which is important because deposits need to be present
+      // before the bill is processed if the bill is processed
+      // immediately (which in the past, it is)
+      const depositDate = atDemoRunTime(currDate).minus({minute: 1});
+      const r = await SendFakeDeposit(testAddress, toDeposit.value, depositDate);
+      if (!r) {
+        console.error("Failed to send mail");
+        break;
       }
-
-      // If it's time to pay our visa bills?
-      if (nextPayDate <= currDate) {
-
-        if (currDate >= pausedDate) {
-
-          const dueDate = nextPayDate.plus(visaDuePeriod);
-          const billPayment = await BuildUberAction(
-            mockPayee,
-            signer,
-            brokerAddress,
-            new Decimal(billTotal),
-            CurrencyCode.CAD,
-            dueDate,
-            fakeableNow,
-          )
-          await payBillApi.uberBillPayment(billPayment);
-
-          const signedAt = DateTime.fromMillis(billPayment.transfer.signedMillis).toLocaleString(DateTime.DATETIME_SHORT);
-          const dueAt = DateTime.fromMillis(billPayment.transfer.transferMillis).toLocaleString(DateTime.DATETIME_SHORT);
-          console.log(`Sent BillPayment: Signed ${signedAt} - Due ${dueAt}`);
-
-        }
-
-        nextPayDate = nextPayDate.plus(visaStep);
-      }
+      console.log(`Sent deposit for ${toDeposit} for ${currDate.weekdayShort} ${currDate.toLocaleString(DateTime.DATETIME_SHORT)}`);
+      numSent++;
     }
 
+    const priorPaymentDate = priorCheckpoint.pendingPayment?.date ?? priorCheckpoint.visa.dueDate;
+    if (checkpoint.pendingPayment && checkpoint.pendingPayment.date > priorPaymentDate) {
+      const billPayment = await BuildUberAction(
+        mockPayee,
+        signer,
+        brokerAddress,
+        new Decimal(checkpoint.pendingPayment.amount.value),
+        CurrencyCode.CAD,
+        checkpoint.pendingPayment.date,
+        timeSourceAt(atDemoRunTime(currDate)),
+      )
+      await payBillApi.uberBillPayment(billPayment);
+
+      const signedAt = DateTime.fromMillis(billPayment.transfer.signedMillis).toLocaleString(DateTime.DATETIME_SHORT);
+      const dueAt = DateTime.fromMillis(billPayment.transfer.transferMillis).toLocaleString(DateTime.DATETIME_SHORT);
+      console.log(`Sent BillPayment: Signed ${signedAt} - Due ${dueAt}`);
+    }
+
+    priorCheckpoint = checkpoint;
     currDate = currDate.plus({day: 1});
   }
 }
