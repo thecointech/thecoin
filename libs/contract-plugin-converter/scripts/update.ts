@@ -5,6 +5,12 @@ import '@openzeppelin/hardhat-upgrades';
 import { ContractConverter } from '../src';
 import { getSigner } from '@thecointech/signers';
 
+//
+// IMPORTANT:
+//   This script will fail without INFURA_PROJECT_ID env variable.
+//   A proper fix involves upgrading to HHv3 (not a priority now)
+//
+
 const owner = await getSigner("Owner");
 const existing = await ContractConverter.get();
 

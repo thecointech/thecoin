@@ -55,15 +55,39 @@ contract UberConverter is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
     setFeed(oracle);
   }
 
+  function pendingAmount(address from, address to, uint msTime) external view returns (uint) {
+    return pending[from].transfers[to][msTime];
+  }
+
+  function pendingTotal(address from) external view returns (uint) {
+    return pending[from].total;
+  }
+
   // ------------------------------------------------------------------------
   // TESTING FUNCTIONS - REMOVE PRIOR TO PROD PUBLISH
   // ------------------------------------------------------------------------
   function seedPending(address from, address to, uint amount, uint msTransferAt, uint msSignedAt) public onlyOwner{
     // This can only run on testing blockchains.
-    require(block.chainid == 0x13881 || block.chainid == 31337, "testing only");
+    require(
+      block.chainid == 80002 || block.chainid == 31337,
+      "testing only"
+    );
     pending[from].transfers[to][msTransferAt] = pending[from].transfers[to][msTransferAt] + amount;
     pending[from].total = pending[from].total + amount;
     emit ValueChanged(from, msSignedAt, "pending[user].total", int(pending[from].total));
+  }
+
+  function cancelPending(address from, address to, uint msTime, uint amount) external onlyOwner {
+    require(
+      block.chainid == 80002 || block.chainid == 31337,
+      "testing only"
+    );
+    require(msTime > msNow(), "Cannot cancel a transfer that is due");
+    uint stored = pending[from].transfers[to][msTime];
+    require(stored >= amount, "Amount exceeds pending balance");
+    pending[from].transfers[to][msTime] = stored - amount;
+    pending[from].total -= amount;
+    emit ValueChanged(from, msTime, "pending[user].total", int(pending[from].total));
   }
 
   // ------------------------------------------------------------------------
