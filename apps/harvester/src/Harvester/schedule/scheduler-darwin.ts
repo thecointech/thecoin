@@ -10,6 +10,17 @@ const HomeDir = homedir();
 const PlistDir = `${HomeDir}/Library/LaunchAgents`;
 const PlistPath = `${PlistDir}/${TaskName}.plist`;
 
+//
+// Check task is loaded/last run exit code
+// launchctl list com.thecoin.harvester
+//
+// view logs
+// tail -n 200 ~/Library/Logs/com.thecoin.harvester.log
+//
+// control task
+// launchctl start com.thecoin.harvester       # run it now
+// launchctl unload ~/Library/LaunchAgents/com.thecoin.harvester.plist   # unload
+// launchctl load ~/Library/LaunchAgents/com.thecoin.harvester.plist     # reload
 
 export async function setSchedule(schedule: HarvestSchedule) {
   log.info(`Creating schedule: ${JSON.stringify(schedule)}`);

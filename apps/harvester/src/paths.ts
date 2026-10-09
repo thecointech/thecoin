@@ -1,20 +1,23 @@
-import electron from 'electron';
+import { app } from 'electron';
 import { existsSync, mkdirSync } from 'fs';
 import path from 'path';
 
-function getRootFolder() {
+// We tweak the user data dir to get a clean sandbox in each configuration
+export const rootFolder = (() => {
   if (process.env.HARVESTER_PROFILE_FOLDER) {
     // Dbg profiles set this to control usage
     return path.resolve(process.env.HARVESTER_PROFILE_FOLDER)
   }
   const rootPath = (
-    electron.app?.getPath('userData') ??
+    app?.getPath('userData') ??
     path.resolve('./.cache/')
   );
   return path.join(rootPath, process.env.CONFIG_ENV ?? 'development')
-}
+})()
 
-export const rootFolder = getRootFolder();
+if (app) {
+  app.setPath('userData', rootFolder);
+}
 
 let rootFolderExists = false;
 try {
@@ -31,5 +34,6 @@ if (!rootFolderExists) {
     throw new Error(`Cannot initialize Harvester: root folder creation failed at ${rootFolder}`);
   }
 }
-export const outFolder = path.join(rootFolder, 'output');
+
 export const logsFolder = path.join(rootFolder, 'logs');
+
