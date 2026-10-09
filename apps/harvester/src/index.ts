@@ -1,5 +1,8 @@
 // index.ts — keep this file tiny
 import { app, dialog } from 'electron';
+import { initLogging } from './logging';
+import { hasArgument } from './arguments';
+import { initScraper } from './initScraper';
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 // Keeping this in this small file allows it to exit quickly when installing,
@@ -11,7 +14,26 @@ if (require('electron-squirrel-startup')) {
 
 // Start the actual application.
 try {
-  await import("./main");
+ 
+  initLogging();
+  initScraper();
+
+  if (hasArgument("--harvest")) {
+    const { harvest } = await import('./Harvester');
+    const r = await harvest();
+    app.quit();
+    process.exit(r === "error" ? 1 : 0);
+  }
+
+  // Testing arguments
+  else if (hasArgument("--notify") || hasArgument("--ask-input")) {
+    const { runCli } = await import('./cli');
+    await runCli();
+  }
+
+  else {
+    await import("./main");
+  }
 } catch (err: any) {
   const message = err?.stack ?? err?.message ?? String(err);
 

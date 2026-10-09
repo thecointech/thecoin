@@ -34,10 +34,18 @@ export async function getMainConfig(deployedAt) {
   if (VqaSslCertPublic) {
     const VqaApiKey = await getSecret("VqaApiKey");
     const InfuraProjectId = await getSecret("InfuraProjectId");
+    
     mainPlugins['__COMPILER_REPLACE_SECRETS__'] = JSON.stringify({
       VqaApiKey,
       InfuraProjectId,
       VqaSslCertPublic,
+      // prodtest is not a public build, so we can
+      // safely compile in the additional secrets it needs
+      ...(process.env.CONFIG_NAME === 'prodtest' ? {
+        PolygonscanApiKey: await getSecret("PolygonscanApiKey"),
+        MailjetApiKey: await getSecret("MailjetApiKey"),
+        MailjetApiSecret: await getSecret("MailjetApiSecret"),
+      } : {}),
     });
   }
 
