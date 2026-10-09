@@ -19,11 +19,11 @@ console.log('Pending amount:', pending);
 const pendingTotal = await converter.pendingTotal(from);
 console.log('Pending total:', pendingTotal);
 
-if (pendingTotal > amount) {
-  const toCancel = pendingTotal - amount;
+if (pending >= amount) {
+  const toCancel = pending - amount;
   const tx = await converter.cancelPending(from, to, msTime, toCancel);
   await tx.wait();
   console.log(`cancel ${toCancel} Pending mined:`, tx.hash);
 } else {
-  console.log(`Pending amount ${pendingTotal} in valid range`);
+  console.log(`Pending amount ${pending} in valid range`);
 }

@@ -87,7 +87,7 @@ contract UberConverter is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
     require(stored >= amount, "Amount exceeds pending balance");
     pending[from].transfers[to][msTime] = stored - amount;
     pending[from].total -= amount;
-    emit ValueChanged(from, msTime, "pending[user].total", int(pending[from].total));
+    emit ValueChanged(from, msNow(), "pending[user].total", int(pending[from].total));
   }
 
   // ------------------------------------------------------------------------
