@@ -30,6 +30,7 @@ export const init_node = (name: string, level?: number) => {
   const logger = bunyan.createLogger({
     name,
     streams: getStreams(name, level),
+    serializers: bunyan.stdSerializers,
   });
 
   return createLoggerProxy(logger, () => endStreams(logger));

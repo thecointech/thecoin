@@ -38,8 +38,13 @@ export const ethRpcPolicy = wrap(
 );
 
 // Add event logging to individual policies
-ethRpcRetryPolicy.onRetry(({ attempt, delay }) => {
-  log.warn(`Retrying Ethereum RPC call (attempt ${attempt}) after ${delay}ms delay`);
+ethRpcRetryPolicy.onRetry(retry => {
+  log.warn({
+    // If an exception is attached, it appears under `error` property
+    err: (retry as any).error,
+    attempt: retry.attempt,
+    delay: retry.delay,
+  }, "Retrying Ethereum RPC call (attempt {attempt}) after {delay}ms delay");
 });
 
 ethRpcRetryPolicy.onGiveUp(failure => {
@@ -58,12 +63,20 @@ const retriableCodes = new Set([
   'NETWORK_ERROR','SERVER_ERROR','TIMEOUT','ECONNRESET','ECONNREFUSED','ETIMEDOUT','EHOSTUNREACH','429','RATE_LIMITED',
 ]);
 
-function isRetriableEthError(err: unknown): boolean {
-  const code = (err as any)?.code ?? (err as any)?.statusCode ?? (err as any)?.status;
-  if (typeof code === 'number') return code === 429 || code >= 500;
-  if (typeof code === 'string') return retriableCodes.has(code.toUpperCase());
-  const msg = String((err as any)?.message ?? '').toUpperCase();
-  return ['NETWORK','TIMEOUT','CONN','EHOSTUNREACH','RATE LIMIT'].some(k => msg.includes(k));
+export function isRetriableEthError(err: unknown): boolean {
+  const error = err as any;
+  const codes = [
+    error?.code,
+    error?.statusCode,
+    error?.status,
+    error?.error?.code,
+    error?.info?.error?.code,
+  ];
+  if (codes.some(code => typeof code === 'number' && (code === -32603 || code === 429 || code >= 500))) return true;
+  if (codes.some(code => typeof code === 'string' && retriableCodes.has(code.toUpperCase()))) return true;
+  const messages = [error?.message, error?.error?.message, error?.info?.error?.message]
+    .map(message => String(message ?? '').toUpperCase());
+  return messages.some(message => ['NETWORK','TIMEOUT','CONN','EHOSTUNREACH','RATE LIMIT'].some(k => message.includes(k)));
 }
 
 /**
