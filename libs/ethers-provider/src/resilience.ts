@@ -65,14 +65,24 @@ const retriableCodes = new Set([
 
 export function isRetriableEthError(err: unknown): boolean {
   const error = err as any;
-  const codes = [
-    error?.code,
+  const httpStatus = [
     error?.statusCode,
     error?.status,
+  ]
+  const codes = [
+    error?.code,
     error?.error?.code,
     error?.info?.error?.code,
   ];
-  if (codes.some(code => typeof code === 'number' && (code === -32603 || code === 429 || code >= 500))) return true;
+  if (
+    codes.some(code => code === -32603) ||
+    httpStatus.some(code =>
+      typeof code === "number" &&
+      (code === 429 || code >= 500 && code <= 599)
+    )
+  ) {
+    return true;
+  }
   if (codes.some(code => typeof code === 'string' && retriableCodes.has(code.toUpperCase()))) return true;
   const messages = [error?.message, error?.error?.message, error?.info?.error?.message]
     .map(message => String(message ?? '').toUpperCase());

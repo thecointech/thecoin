@@ -14,6 +14,13 @@ it('recognizes coalesced JSON-RPC internal errors as retriable', () => {
     error: { code: -32603, message: 'Internal error' },
     payload: { method: 'eth_getBalance' },
   })).toBe(true);
+  expect(isRetriableEthError({ code: 500 })).toBe(false);
+  expect(isRetriableEthError({ code: 429 })).toBe(false);
+  expect(isRetriableEthError({ code: -32000 })).toBe(false);
+  expect(isRetriableEthError({ status: 500 })).toBe(true);
+  expect(isRetriableEthError({ statusCode: 429 })).toBe(true);
+  expect(isRetriableEthError({ status: 499 })).toBe(false);
+  expect(isRetriableEthError({ status: 600 })).toBe(false);
 });
 
 describe('Ethereum Provider Resilience Testing', () => {
