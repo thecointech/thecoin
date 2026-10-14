@@ -33,8 +33,12 @@ export const gaeApiPolicy = wrap(
 );
 
 // Add event logging to individual policies
-apiRetryPolicy.onRetry(({ attempt, delay }) => {
-  log.warn(`Retrying GAE API (attempt ${attempt}) after ${delay}ms delay`);
+apiRetryPolicy.onRetry((retry) => {
+  log.warn({
+    err: (retry as any).error,
+    attempt: retry.attempt,
+    delay: retry.delay,
+  }, "GAE API error: will retry attempt {attempt} after {delay}ms delay");
 });
 
 apiRetryPolicy.onGiveUp(failure => {

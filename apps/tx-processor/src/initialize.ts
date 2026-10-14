@@ -37,11 +37,24 @@ export async function initialize() {
   }
   log.debug("Contract connected");
 
-  await verifyEtherReserves(signer);
-  await verifyCoinReserves(signer, contract);
+  await verifyReserves(signer, contract);
 
   log.debug('Init complete');
   return contract;
+}
+
+async function verifyReserves(signer: Signer, contract: TheCoin) {
+  const [ether, coin] = await Promise.allSettled([
+    verifyEtherReserves(signer),
+    verifyCoinReserves(signer, contract),
+  ]);
+
+  if (ether.status === "rejected") {
+    log.error({ err: ether.reason }, "Failed to verify ether reserves");
+  }
+  if (coin.status === "rejected") {
+    log.error({ err: coin.reason }, "Failed to verify coin reserves");
+  }
 }
 
 // Verify we have enough gas to run processing
@@ -61,7 +74,7 @@ async function verifyCoinReserves(signer: Signer, contract: TheCoin) {
   const now = new Date();
   const rate = await fetchRate(now);
   if (!rate?.sell || !rate?.fxRate) {
-    log.fatal("tx-processor couldn't fetch current rate");
+    log.error("tx-processor couldn't fetch current rate");
     return;
   }
   const balanceCad = toHuman(

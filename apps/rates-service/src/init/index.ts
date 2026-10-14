@@ -3,7 +3,6 @@ import { log } from '@thecointech/logging';
 import { init as initdb } from '@thecointech/firestore';
 import { init as initSecrets } from '@thecointech/secrets';
 import { initLatest } from '../internals/rates/latest';
-import { update } from '../internals/rates/UpdateDb';
 import { seed } from './seed';
 import { LoggerContext } from '@thecointech/logging';
 
@@ -28,8 +27,6 @@ export async function init() {
   } else {
     // warm up our cache of latest data.
     await initLatest();
-    // Ensure that we have valid rates
-    await update();
   }
 
   log.trace('Initialization complete');

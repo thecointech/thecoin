@@ -3,11 +3,25 @@ import { describe } from "@thecointech/jestutils";
 import { ifSecret } from "@thecointech/secrets/jestutils";
 import { getProvider } from "./node/remote";
 import { mockWarn, mockError } from "@thecointech/logging/mock";
-import { ethRpcCircuitBreaker } from "./resilience";
+import { ethRpcCircuitBreaker, isRetriableEthError } from "./resilience";
 import { CircuitState } from "cockatiel";
 
 jest.setTimeout(5 * 60 * 1000);
 
+it('recognizes coalesced JSON-RPC internal errors as retriable', () => {
+  expect(isRetriableEthError({
+    code: 'UNKNOWN_ERROR',
+    error: { code: -32603, message: 'Internal error' },
+    payload: { method: 'eth_getBalance' },
+  })).toBe(true);
+  expect(isRetriableEthError({ code: 500 })).toBe(false);
+  expect(isRetriableEthError({ code: 429 })).toBe(false);
+  expect(isRetriableEthError({ code: -32000 })).toBe(false);
+  expect(isRetriableEthError({ status: 500 })).toBe(true);
+  expect(isRetriableEthError({ statusCode: 429 })).toBe(true);
+  expect(isRetriableEthError({ status: 499 })).toBe(false);
+  expect(isRetriableEthError({ status: 600 })).toBe(false);
+});
 
 describe('Ethereum Provider Resilience Testing', () => {
   beforeEach(() => {
@@ -32,6 +46,10 @@ describe('Ethereum Provider Resilience Testing', () => {
       expect(typeof blockNumber).toBe('number');
       expect(override.getCallCount()).toBe(3); // 2 failures + 1 success
       expect(mockWarn).toHaveBeenCalledTimes(2);
+      expect(mockWarn).toHaveBeenCalledWith(
+        expect.objectContaining({ err: expect.objectContaining({ code: 'NETWORK_ERROR' }) }),
+        expect.stringContaining('Retrying Ethereum RPC call'),
+      );
       expect(mockError).toHaveBeenCalledTimes(0);
     } finally {
       override.dispose();
