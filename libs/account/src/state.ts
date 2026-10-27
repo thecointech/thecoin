@@ -47,7 +47,6 @@ export const DefaultAccountValues = {
   balance: -1,
   history: [],
   plugins: [],
-  idx: null,
 
   address: '0x0',
   name: "DEFAULT ACCOUNT NAME",

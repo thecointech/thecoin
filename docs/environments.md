@@ -14,7 +14,7 @@ Environments:
  - dev:live - local machine env
     *env: NODE_ENV=development, SETTINGS: live*
     All projects assumed to be live and running on localhost.  Requires
-    firestore emulator, ethereum emulator, ceramic daemon running.
+    firestore emulator, ethereum emulator running.
     Systems tests take place in this mode, as well as stress-testing etc.
     * semi-permanent data persistence
     * inter-service calls, no mocking
