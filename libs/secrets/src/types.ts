@@ -15,8 +15,6 @@ export enum SecretKey {
   PinataApiKey = "PinataApiKey",
   PinataApiSecret = "PinataApiSecret",
 
-  CeramicSeed = "CeramicSeed",
-
   GithubPackageToken = "GithubPackageToken",
 
   RbcApiCredentials = "RbcApiCredentials",
@@ -25,13 +23,11 @@ export enum SecretKey {
   SignerTheCoinPwd = "SignerTheCoinPwd",
   SignerTCManagerPwd = "SignerTCManagerPwd",
   SignerMinterPwd = "SignerMinterPwd",
-  SignerNFTMinterPwd = "SignerNFTMinterPwd",
   SignerPolicePwd = "SignerPolicePwd",
   SignerBrokerCADPwd = "SignerBrokerCADPwd",
   SignerBrokerTransferAssistantPwd = "SignerBrokerTransferAssistantPwd",
   SignerOracleUpdaterPwd = "SignerOracleUpdaterPwd",
   SignerOracleOwnerPwd = "SignerOracleOwnerPwd",
-  SignerCeramicValidatorPwd = "SignerCeramicValidatorPwd",
   // The following are for testing ownly
   SignerClient1Pwd = "SignerClient1Pwd",
   SignerClient2Pwd = "SignerClient2Pwd",

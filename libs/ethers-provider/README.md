@@ -1,3 +1,3 @@
-# `contract-base`
+# `ethers-provider`
 
-Shared code for NFT & Core contracts.
+Common ethers provider for unified abilities and access across node/web & dev/prod

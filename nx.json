@@ -23,7 +23,6 @@
       ],
       "outputs": [
         "{workspaceRoot}/apis/broker/ts",
-        "{workspaceRoot}/apis/nft/ts",
         "{workspaceRoot}/apis/rates/ts",
         "{workspaceRoot}/apis/vqa/ts"
       ],
