@@ -52,9 +52,6 @@ export const FooterShared: React.FC<Props> = ({ children, background, id }) => (
           >
             <img src={facebook} alt="" />
           </a>
-          {/* <a href="https://twitter.com/The_Green_NFT/" target="_blank" rel="noopener noreferrer">
-            <img src={twitter} />
-          </a> */}
           <a
             aria-label="Instagram"
             href="https://www.instagram.com/thecoincollaborative/"
