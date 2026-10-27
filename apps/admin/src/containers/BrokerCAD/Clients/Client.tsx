@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { AccountDetails } from '@thecointech/account';
 import { AccountMap } from '@thecointech/redux-accounts';
 import { useFxRates } from '@thecointech/shared/containers/FxRate';
-import { getHistory, ComposeClient } from '@thecointech/idx';
 import { Header, Input, List } from 'semantic-ui-react';
 import { ClientTransaction } from './ClientTransaction';
 import { UserData } from './data';
@@ -11,31 +10,31 @@ import { toCAD } from './toCAD';
 import { buildUniqueId } from '@thecointech/utilities/Verify';
 import { verifyMessage } from 'ethers';
 import { AddressMatches } from '@thecointech/utilities/Address';
+import { log } from '@thecointech/logging';
 
 export type Props = UserData;
 export const Client = (props: Props) => {
 
-  const [allDetails, setAllDetails] = useState<AccountDetails[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [percent, setPercent] = useState(0);
+  const [allDetails, _setAllDetails] = useState<AccountDetails[]>([]);
+  const [loading, _setLoading] = useState(false);
+  const [percent, _setPercent] = useState(0);
   const [detailIdx, setDetailIdx] = useState(0);
   const rates = useFxRates();
   const account = AccountMap.useActive();
 
   useEffect(() => {
-    const idx = account?.idx;
-    if (!idx)
-      return;
+    log.warn("Replacing IDX with better store")
+    return;
 
-    setAllDetails([]);
-    setPercent(0);
-    let isCancelled = false;
-    const cancel = () => { isCancelled = true; }
-    setLoading(true);
-    loadDetails(props.address, idx, setAllDetails, setPercent, () => isCancelled)
-      .then(() => setLoading(false));
+    // setAllDetails([]);
+    // setPercent(0);
+    // let isCancelled = false;
+    // const cancel = () => { isCancelled = true; }
+    // setLoading(true);
+    // loadDetails(props.address, idx, setAllDetails, setPercent, () => isCancelled)
+    //   .then(() => setLoading(false));
 
-    return cancel;
+    // return cancel;
   }, [props.address, account?.idx]);
 
   const transactions = [
@@ -81,18 +80,8 @@ export const Client = (props: Props) => {
 }
 
 type SetDetailsState = (setter: (acc: AccountDetails[]) => AccountDetails[]) => void;
-async function loadDetails(address: string, client: ComposeClient, setAllDetails: SetDetailsState, setPercent: (n: number)=> void, isCancelled: () => boolean) {
-  const history = await getHistory(address, client, 5, setPercent);
-  if (!history) return;
-
-  for (const raw of history) {
-    try {
-      const decrypted = await client.did?.decryptDagJWE(raw);
-      if (isCancelled()) { return; }
-      setAllDetails(acc => [...acc, decrypted?.data]);
-    }
-    catch (e) { }
-  }
+async function loadDetails(_address: string, _setAllDetails: SetDetailsState, _setPercent: (n: number)=> void, _isCancelled: () => boolean) {
+  log.warn("Not Implemente")
 }
 
 function getIsVerified(details?: AccountDetails) {

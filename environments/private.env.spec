@@ -13,14 +13,6 @@ TRADIER_API_KEY=<SetAPIKey>
 INFURA_PROJECT_ID=<AddThisHere>
 
 #
-# Connection to the IDX testnet.  This testnet is periodically wiped
-# and should not be relied on to permanently store data.
-# Can generate a new seed with
-# node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
-CERAMIC_URL=https://ceramic-clay.3boxlabs.com
-CERAMIC_SEED=<SemiPermanentSeed>
-
-#
 # API Key to pull user data into local DB
 BLOCKPASS_API_KEY=<GetKeyFromBlockpass>
 BLOCKPASS_WEBHOOK_SECRET=<SetASecretToBePassed>

@@ -1,4 +1,3 @@
-// import { type SelfID, getLink } from '@thecointech/idx';
 import { AccountState } from '@thecointech/account';
 import { BillAction, BuyAction, getAllActions, getAllUsers, PluginAction, SellAction } from '@thecointech/broker-db';
 import { type eTransferData, queryETransfers } from '@thecointech/tx-gmail';
@@ -6,7 +5,6 @@ import Decimal from 'decimal.js-light';
 
 export type UserData = {
   address: string,
-  // details: AccountDetails;
 
   Buy: BuyAction[],
   Sell: SellAction[],
@@ -14,12 +12,6 @@ export type UserData = {
   Plugin: PluginAction[],
   balanceCoin: Decimal;
 };
-
-// function detailsFromEtransfer(address: string, etransfers: eTransferData[]) {
-//   return {
-//     given_name: etransfers.find(et => et.address === address)?.name
-//   }
-// }
 
 async function getUsers(emails: eTransferData[], account: AccountState) {
   // Get users from DB

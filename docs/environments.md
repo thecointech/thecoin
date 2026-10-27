@@ -29,7 +29,7 @@ Environments:
     * permanent data persistence
     * sandbox accounts for TheCoin/BrokerCAD etc etc.
     * code identical to production
-    * testnet (ropsten) ethereum connection, live IDX/rates etc
+    * testnet ethereum connection, live rates etc
     * Deployment: merge to 'dev'
     * (?) periodically new contract, with data duplicated from back live contract
  - prod:beta
@@ -52,7 +52,7 @@ Environments:
     Reverting an update happens by moving live version back one step.
     * Deployment: yarn script to update all versions to latest.
 
-NOTE: All environments also have a variable CONFIG_ENV, which is just CONFIG_NAME with 'beta' stripped.  It's purpose is to have a variable that is beta-agnostic for targetting contract/IDX files.
+NOTE: All environments also have a variable CONFIG_ENV, which is just CONFIG_NAME with 'beta' stripped.  It's purpose is to have a variable that is beta-agnostic for targetting contract files.
 
 How it works:
 

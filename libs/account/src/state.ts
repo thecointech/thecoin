@@ -5,7 +5,6 @@ import { NormalizeAddress } from '@thecointech/utilities/Address';
 import type { TheCoin } from '@thecointech/contract-core';
 import type { Transaction } from '@thecointech/tx-blockchain';
 import type { Signer } from 'ethers';
-import type { ComposeClient } from '@thecointech/idx';
 import { PluginDetails } from '@thecointech/contract-plugins';
 
 
@@ -26,12 +25,6 @@ export type AccountState = {
   balance: number;
   // Transaction history
   history: Transaction[];
-
-
-  // IDX vars
-  idx: ComposeClient | null;
-  // Are we saving/loading something from IDX?
-  idxIO?: boolean;
 
   // Private details
   details: AccountDetails;

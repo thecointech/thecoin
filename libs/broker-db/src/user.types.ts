@@ -9,7 +9,7 @@ export type StatusType =
   "approved"| // Approved within BP
   "inreview"|
   "rejected"|
-  "completed"; // Data pulled into users IDX DB & removed from local
+  "completed"; // Data pulled into users DB & removed from local
 
 export type UserVerifiedInfo = {
   // The UniqueID of the individual.  For now, this is
