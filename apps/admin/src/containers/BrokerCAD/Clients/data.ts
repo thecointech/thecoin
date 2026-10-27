@@ -37,10 +37,6 @@ export async function getAllUserData(account: AccountState) {
   const contract = account.contract!;
   const data = await getAllActions(users);
   const balances = await Promise.all(users.map(user => contract.balanceOf(user)));
-  // const details = await Promise.all(users.map(async (user) =>
-  //   await loadDetails(user, account.idx!) ??
-  //   detailsFromEtransfer(user, etransfers))
-  // );
 
   return users.reduce((acc, user, idx) => ([
     ...acc,
@@ -51,7 +47,6 @@ export async function getAllUserData(account: AccountState) {
       Bill: data.Bill[user],
       Plugin: [],
       balanceCoin: new Decimal(balances[idx].toString()),
-      // details: details[idx] ?? {},
     }
   ]), [] as UserData[])
 }
