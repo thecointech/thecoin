@@ -11,7 +11,8 @@
         "{projectRoot}/./build",
         "{projectRoot}/./dist",
         "{projectRoot}/./src/codegen",
-        "{projectRoot}/./mocks/.build"
+        "{projectRoot}/./mocks/.build",
+        "{projectRoot}/./.hardhat/cache"
       ],
       "cache": true
     },

@@ -45,8 +45,15 @@ if (!existsSync(outFolder)) {
   }
 }
 
-const firestore = await init({ service: 'RatesServiceAccount' });
-if (!firestore) throw new Error('Requires firestore');
+try {
+  const firestore = await init({ service: 'RatesServiceAccount' });
+  if (!firestore) throw new Error('Requires firestore');
+}
+catch (err) {
+  // No firestore, just exist
+  log.warn(err, "No connection to prodtest firebase, exiting")
+  process.exit(0);
+}
 
 function validateTimes(rates: any[]) {
   let t = rates[0].validTill;
