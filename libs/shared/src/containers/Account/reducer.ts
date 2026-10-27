@@ -66,7 +66,7 @@ function AccountReducer(address: string, initialState: AccountState) {
         ...this.state.details,
         ...newDetails,
       }
-      yield this.storeValues({ details, idxIO: true });
+      yield this.storeValues({ details });
       log.error("No DB connection present, changes will not be preserved");
     }
 

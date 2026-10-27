@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { AccountDetails } from '@thecointech/account';
-import { AccountMap } from '@thecointech/redux-accounts';
 import { useFxRates } from '@thecointech/shared/containers/FxRate';
 import { Header, Input, List } from 'semantic-ui-react';
 import { ClientTransaction } from './ClientTransaction';
@@ -20,7 +19,7 @@ export const Client = (props: Props) => {
   const [percent, _setPercent] = useState(0);
   const [detailIdx, setDetailIdx] = useState(0);
   const rates = useFxRates();
-  const account = AccountMap.useActive();
+  // const account = AccountMap.useActive();
 
   useEffect(() => {
     log.warn("Replacing IDX with better store")
@@ -35,7 +34,7 @@ export const Client = (props: Props) => {
     //   .then(() => setLoading(false));
 
     // return cancel;
-  }, [props.address, account?.idx]);
+  }, [props.address]);
 
   const transactions = [
     ...props.Buy,
@@ -79,10 +78,10 @@ export const Client = (props: Props) => {
   )
 }
 
-type SetDetailsState = (setter: (acc: AccountDetails[]) => AccountDetails[]) => void;
-async function loadDetails(_address: string, _setAllDetails: SetDetailsState, _setPercent: (n: number)=> void, _isCancelled: () => boolean) {
-  log.warn("Not Implemente")
-}
+// type SetDetailsState = (setter: (acc: AccountDetails[]) => AccountDetails[]) => void;
+// async function loadDetails(_address: string, _setAllDetails: SetDetailsState, _setPercent: (n: number)=> void, _isCancelled: () => boolean) {
+//   log.warn("Not Implemente")
+// }
 
 function getIsVerified(details?: AccountDetails) {
   if (!details?.user)

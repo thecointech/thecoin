@@ -19,9 +19,8 @@ export const CompleteInit = ({signer, address, redirect}: Props) => {
   const account = Account(NormalizeAddress(address));
   account.useStore();
   const api = account.useApi();
-  const data = account.useData();
 
-  const isInitialized = data.idx && !data.idxIO;
+  const isInitialized = true; //data.idx && !data.idxIO;
   useEffect(() => {
     if (!isInitialized) {
       api.setSigner(signer)
