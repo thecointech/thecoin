@@ -1,7 +1,6 @@
 import { StatusType } from '@thecointech/broker-cad';
 import { ContractCore } from '@thecointech/contract-core';
 import { getPluginDetails } from '@thecointech/contract-plugins';
-import { getComposeDB } from '@thecointech/idx';
 import { getSigner, AccountName } from '@thecointech/signers';
 import { NormalizeAddress } from '@thecointech/utilities/Address';
 import { AccountState, buildNewAccount } from '@/state';
@@ -28,7 +27,6 @@ const addRemoteAccount = async (name: AccountName, active: boolean) => {
   if (active) {
     _initial = address;
     _devWallets[address].details.status = StatusType.Incomplete;
-    _devWallets[address].idx = await getComposeDB(signer);
   }
 }
 

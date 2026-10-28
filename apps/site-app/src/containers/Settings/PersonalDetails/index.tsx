@@ -156,7 +156,7 @@ export const PersonalDetails = () => {
           <label htmlFor="the">THE</label>
         </div>
         <div className="x6spaceBefore">
-          <ButtonTertiary onClick={onSetDetails} loading={account.idxIO}>
+          <ButtonTertiary onClick={onSetDetails} loading={false}>
             <FormattedMessage {...translations.button} />
           </ButtonTertiary>
         </div>

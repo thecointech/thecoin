@@ -13,8 +13,6 @@ export enum AccountId {
   // Manage SpxCadOracle
   OracleOwner,
   OracleUpdater,
-  // Locks down ceramic access
-  CeramicValidator,
   // NOTE: The following accounts for testing only!
   Client1,
   Client2,

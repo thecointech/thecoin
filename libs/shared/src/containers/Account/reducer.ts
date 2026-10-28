@@ -7,9 +7,7 @@ import { FxRateReducer } from '../../containers/FxRate/reducer';
 import { SagaReducer } from '@thecointech/redux/immerReducer';
 import { isLocal } from '@thecointech/signers';
 import { loadAndMergeHistory, calculateTxBalances, mergeTransactions, Transaction } from '@thecointech/tx-blockchain';
-import { getComposeDB } from '@thecointech/idx';
 import { AccountDetails, AccountState, DefaultAccountValues } from '@thecointech/account';
-import { loadDetails, setDetails } from '../AccountDetails';
 import { DateTime } from 'luxon';
 import { log } from '@thecointech/logging';
 import { checkCurrentStatus } from './BlockpassKYC';
@@ -58,38 +56,20 @@ function AccountReducer(address: string, initialState: AccountState) {
 
     ///////////////////////////////////////////////////////////////////////////////////
     // Save/load private details
-    *getIDX() {
-      let idx = this.state.idx;
-      if (!idx) {
-        idx = yield call(getComposeDB, this.state.signer);
-        yield this.storeValues({ idx, idxIO: true });
-      }
-      return idx;
-    }
 
     *loadDetails(): SagaIterator {
-      // Connect to IDX
-      const idx = yield* this.getIDX()
-      if (idx) {
-        yield this.storeValues({ idx, idxIO: true });
-        log.trace("IDX: Restoring account details");
-        const payload: Awaited<ReturnType<typeof loadDetails>> = yield call(loadDetails, idx);
-        const details = payload || DefaultAccountValues.details;
-        log.trace("IDX: read complete");
-        yield this.storeValues({ details, idxIO: false });
+      // TODO: Replace with actual DB call when implemented
+      const details = this.state.details || DefaultAccountValues.details;
+      yield this.storeValues({ details });
 
-        // If our details indicate we have started KYC but not completed it,
-        // run a single check to see if it was finishd in our absence
-        if (details.status && details.status != 'completed') {
-          // Give storeValues a little time to complete.
-          // Otherwise our check may be run before and overwrite the new status
-          yield delay(500);
-          // Check to see if we are done
-          yield this.sendValues(this.actions.checkKycStatus);
-        }
-      }
-      else {
-        log.warn("No IDX connection present, details may not be loaded correctly");
+      // If our details indicate we have started KYC but not completed it,
+      // run a single check to see if it was finishd in our absence
+      if (details.status && details.status != 'completed') {
+        // Give storeValues a little time to complete.
+        // Otherwise our check may be run before and overwrite the new status
+        yield delay(500);
+        // Check to see if we are done
+        yield this.sendValues(this.actions.checkKycStatus);
       }
     };
 
@@ -98,23 +78,8 @@ function AccountReducer(address: string, initialState: AccountState) {
         ...this.state.details,
         ...newDetails,
       }
-      yield this.storeValues({ details, idxIO: true });
-      if (this.state.idx) {
-        log.trace("IDX: persisting account details");
-        try {
-          yield call(setDetails, this.state.idx, details);
-          log.debug("IDX: account details write complete");
-        }
-        catch (e: any) {
-          log.error(e, "IDX: account details write failed");
-        }
-        finally {
-          yield this.storeValues({ idxIO: false });
-        }
-      }
-      else {
-        log.error("No IDX connection present, changes will not be preserved");
-      }
+      yield this.storeValues({ details });
+      log.error("No DB connection present, changes will not be preserved");
     }
 
     ///////////////////////////////////////////////////////////////////////////////////
@@ -261,7 +226,7 @@ export function Account(address: string) {
   }
 
   if (!reducerCache[address]) {
-    const reducer = AccountReducer(address, {} as any);
+    const reducer = AccountReducer(address, { ...DefaultAccountValues, address } as any);
     reducer.initialize();
     reducerCache[address] = reducer;
   }

@@ -1,3 +1,0 @@
-type Message @createModel(accountRelation: LIST, description: "Say Something") {
-  someText: String! @string(minLength: 1, maxLength: 200)
-}

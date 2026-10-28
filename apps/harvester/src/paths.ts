@@ -1,4 +1,4 @@
-import { app } from 'electron';
+import electron from 'electron';
 import { existsSync, mkdirSync } from 'fs';
 import path from 'path';
 
@@ -9,14 +9,14 @@ export const rootFolder = (() => {
     return path.resolve(process.env.HARVESTER_PROFILE_FOLDER)
   }
   const rootPath = (
-    app?.getPath('userData') ??
+    electron.app?.getPath('userData') ??
     path.resolve('./.cache/')
   );
   return path.join(rootPath, process.env.CONFIG_ENV ?? 'development')
 })()
 
-if (app) {
-  app.setPath('userData', rootFolder);
+if (electron.app) {
+  electron.app.setPath('userData', rootFolder);
 }
 
 let rootFolderExists = false;

@@ -48,7 +48,6 @@
   "dependencies": {
     "@thecointech/contract-core": "^0.6.7",
     "@thecointech/fx-rates": "^0.6.7",
-    "@thecointech/idx": "^0.6.7",
     "@thecointech/logging": "^0.6.7",
     "@thecointech/signers": "^0.6.7",
     "@thecointech/tx-blockchain": "^0.6.7",
