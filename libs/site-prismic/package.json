@@ -17,6 +17,7 @@
         "build:src": "next build",
         "build:types": "run -T tsc -p tsconfig.build.json",
         "build:semantic": "run-env ./internal/buildSemantic.ts",
+        "clean": "run -T rimraf .next build next-env.d.ts",
         "_start": "next start --port 3011",
         "start:website": "next dev --port 3011",
         "start:slicemachine": "start-slicemachine"
