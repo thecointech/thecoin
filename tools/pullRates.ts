@@ -66,80 +66,86 @@ function validateTimes(rates: any[]) {
   }
 }
 
+try {
+  const db = getFirestore();
+  const coinsRaw = await db.collection("Coin")
+    .where("validTill", ">", start.toJSDate())
+    .get();
+  const coins = coinsRaw.docs.map(d => d.data());
+  log.trace('Testing Coin');
+  validateTimes(coins);
+  log.trace('Testing Fx');
+  const fxsRaw = await db.collection("FxRates")
+    .where("validTill", ">", start.toJSDate())
+    .get()
+  const fxs = fxsRaw.docs.map(d => d.data());
+  // validateTimes(fxs);
 
-const db = getFirestore();
-const coinsRaw = await db.collection("Coin")
-  .where("validTill", ">", start.toJSDate())
-  .get();
-const coins = coinsRaw.docs.map(d => d.data());
-log.trace('Testing Coin');
-validateTimes(coins);
-log.trace('Testing Fx');
-const fxsRaw = await db.collection("FxRates")
-  .where("validTill", ">", start.toJSDate())
-  .get()
-const fxs = fxsRaw.docs.map(d => d.data());
-// validateTimes(fxs);
+  const initTime = coins[0].validFrom.toMillis();
+  const blockTime = 3 * 60 * 60 * 1000; // How long each
+  // merge both data streams into one
+  const rates: { from: number, to: number, rate: number }[] = existing?.rates ?? [];
+  let coinIdx = 0;
+  let fxIdx = 0;
+  const factor = Math.pow(10, 8);
 
-const initTime = coins[0].validFrom.toMillis();
-const blockTime = 3 * 60 * 60 * 1000; // How long each
-// merge both data streams into one
-const rates: { from: number, to: number, rate: number }[] = existing?.rates ?? [];
-let coinIdx = 0;
-let fxIdx = 0;
-const factor = Math.pow(10, 8);
-
-function findFx(coin: any) {
-  for (const fx of fxs) {
-    if (fx.validTill > coin.validFrom)
-      return fx;
-  }
-  throw new Error("fuck");
-}
-
-async function pullRates() {
-  // the fx entries seem to be rather out-of-whack.
-  // We will more-or-less ignore them for this project
-  // and simply use coin data to demarcate our
-  //while (coinIdx < coins.length && fxIdx < fxs.length) {
-  // for (const coin of coins) {
-  for (let i = 0; i < coins.length; i++) {
-    const coin = coins[i];
-    const fx = findFx(coin)
-
-    const from = coin.validFrom.toMillis();
-    const to = coin.validTill.toMillis();
-    const rate = Math.round(factor * ((coin.buy + coin.sell) / 2) * fx["124"]) / factor;
-
-    // Compact any rates that haven't changed.
-    const lastRate = rates[rates.length - 1];
-    if (rate == lastRate?.rate) {
-      lastRate.to = to;
+  function findFx(coin: any) {
+    for (const fx of fxs) {
+      if (fx.validTill > coin.validFrom)
+        return fx;
     }
-    // compact multiple that are shorter than our offset interval
-    else if (lastRate && (to - lastRate.from) <= blockTime) {
-      lastRate.to = to;
-      // The rate is an approximation for historical times already,
-      // so don't worry that this isn't exact.
-      lastRate.rate = Math.round((lastRate.rate + rate) / 2);
-    }
-    else {
-      rates.push({
-        from,
-        to,
-        rate,
-      });
-    }
-
-    if (coin.validTill.toMillis() == to) coinIdx++;
-    if (fx.validTill.toMillis() == to) fxIdx++;
+    throw new Error("fuck");
   }
 
+  async function pullRates() {
+    // the fx entries seem to be rather out-of-whack.
+    // We will more-or-less ignore them for this project
+    // and simply use coin data to demarcate our
+    //while (coinIdx < coins.length && fxIdx < fxs.length) {
+    // for (const coin of coins) {
+    for (let i = 0; i < coins.length; i++) {
+      const coin = coins[i];
+      const fx = findFx(coin)
 
-  writeFileSync(outFile, JSON.stringify({
-    initial: initTime,
-    rates
-  }))
+      const from = coin.validFrom.toMillis();
+      const to = coin.validTill.toMillis();
+      const rate = Math.round(factor * ((coin.buy + coin.sell) / 2) * fx["124"]) / factor;
+
+      // Compact any rates that haven't changed.
+      const lastRate = rates[rates.length - 1];
+      if (rate == lastRate?.rate) {
+        lastRate.to = to;
+      }
+      // compact multiple that are shorter than our offset interval
+      else if (lastRate && (to - lastRate.from) <= blockTime) {
+        lastRate.to = to;
+        // The rate is an approximation for historical times already,
+        // so don't worry that this isn't exact.
+        lastRate.rate = Math.round((lastRate.rate + rate) / 2);
+      }
+      else {
+        rates.push({
+          from,
+          to,
+          rate,
+        });
+      }
+
+      if (coin.validTill.toMillis() == to) coinIdx++;
+      if (fx.validTill.toMillis() == to) fxIdx++;
+    }
+
+
+    writeFileSync(outFile, JSON.stringify({
+      initial: initTime,
+      rates
+    }))
+  }
+
+  await pullRates();
 }
-
-await pullRates();
+catch (err) {
+  log.error(err, "Failed to fetch rates");
+  // Always clean exit so dev:live continues
+  process.exit(0);
+}

@@ -7,7 +7,7 @@ import { FxRateReducer } from '../../containers/FxRate/reducer';
 import { SagaReducer } from '@thecointech/redux/immerReducer';
 import { isLocal } from '@thecointech/signers';
 import { loadAndMergeHistory, calculateTxBalances, mergeTransactions, Transaction } from '@thecointech/tx-blockchain';
-import { AccountDetails, AccountState } from '@thecointech/account';
+import { AccountDetails, AccountState, DefaultAccountValues } from '@thecointech/account';
 import { DateTime } from 'luxon';
 import { log } from '@thecointech/logging';
 import { checkCurrentStatus } from './BlockpassKYC';
@@ -58,7 +58,19 @@ function AccountReducer(address: string, initialState: AccountState) {
     // Save/load private details
 
     *loadDetails(): SagaIterator {
-      log.error("Not Implemented")
+      // TODO: Replace with actual DB call when implemented
+      const details = this.state.details || DefaultAccountValues.details;
+      yield this.storeValues({ details });
+
+      // If our details indicate we have started KYC but not completed it,
+      // run a single check to see if it was finishd in our absence
+      if (details.status && details.status != 'completed') {
+        // Give storeValues a little time to complete.
+        // Otherwise our check may be run before and overwrite the new status
+        yield delay(500);
+        // Check to see if we are done
+        yield this.sendValues(this.actions.checkKycStatus);
+      }
     };
 
     *setDetails(newDetails: Partial<AccountDetails>) {
@@ -214,7 +226,7 @@ export function Account(address: string) {
   }
 
   if (!reducerCache[address]) {
-    const reducer = AccountReducer(address, {} as any);
+    const reducer = AccountReducer(address, { ...DefaultAccountValues, address } as any);
     reducer.initialize();
     reducerCache[address] = reducer;
   }

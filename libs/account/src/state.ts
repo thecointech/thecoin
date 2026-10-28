@@ -42,13 +42,12 @@ export type AccountState = {
   readonly?: boolean;
 };
 
-export const DefaultAccountValues = {
+export const DefaultAccountValues: Omit<AccountState, 'address' | 'signer'> = {
   contract: null,
   balance: -1,
   history: [],
   plugins: [],
 
-  address: '0x0',
   name: "DEFAULT ACCOUNT NAME",
 
   details: {

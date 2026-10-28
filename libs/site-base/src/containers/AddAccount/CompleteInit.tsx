@@ -22,9 +22,7 @@ export const CompleteInit = ({signer, address, redirect}: Props) => {
 
   const isInitialized = true; //data.idx && !data.idxIO;
   useEffect(() => {
-    if (!isInitialized) {
-      api.setSigner(signer)
-    }
+    api.setSigner(signer)
   }, [])
 
   return isInitialized
