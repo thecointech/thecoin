@@ -14,22 +14,20 @@ Environments:
  - dev:live - local machine env
     *env: NODE_ENV=development, SETTINGS: live*
     All projects assumed to be live and running on localhost.  Requires
-    firestore emulator, ethereum emulator running.
+    firestore emulator, ethereum emulator running.  No out-bound connections.
     Systems tests take place in this mode, as well as stress-testing etc.
-    * semi-permanent data persistence
+    * instance-level data persistence
     * inter-service calls, no mocking
     * emulated ethereum connection
     * Deployment: Base level yarn script to start all dependencies
  - prod:test
     *env: NODE_ENV=production, SETTINGS: testing*
     System-wide deployment to sandbox projects in GAE.
-    Testnet deployment for contract.  All projects are
-    automatically updated on successful merge to dev.  Read/write access
-    for all devs.
+    Testnet deployment for contract.  Read/write access for all devs.
     * permanent data persistence
     * sandbox accounts for TheCoin/BrokerCAD etc etc.
     * code identical to production
-    * testnet ethereum connection, live rates etc
+    * testnet ethereum connection, live rates etc.
     * Deployment: merge to 'dev'
     * (?) periodically new contract, with data duplicated from back live contract
  - prod:beta

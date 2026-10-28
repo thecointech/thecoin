@@ -9,7 +9,6 @@ import { toCAD } from './toCAD';
 import { buildUniqueId } from '@thecointech/utilities/Verify';
 import { verifyMessage } from 'ethers';
 import { AddressMatches } from '@thecointech/utilities/Address';
-import { log } from '@thecointech/logging';
 
 export type Props = UserData;
 export const Client = (props: Props) => {
@@ -22,8 +21,6 @@ export const Client = (props: Props) => {
   // const account = AccountMap.useActive();
 
   useEffect(() => {
-    log.warn("Replacing IDX with better store")
-    return;
 
     // setAllDetails([]);
     // setPercent(0);
@@ -49,7 +46,7 @@ export const Client = (props: Props) => {
     ? `Loading... ${(percent * 100).toFixed(1)}%`
     : details?.user
       ? `${details.user.given_name} ${details.user.family_name}`
-      : "UNVERIFIED";
+      : "RE-IMPLEMENT DETAIL STORAGE";
 
   return (
     <div className={styles.clientContainer}>
