@@ -3,8 +3,9 @@ import { IsValidAddress, IsValidShortCode, getShortCode } from "@thecointech/uti
 import { log } from '@thecointech/logging';
 import { DateTime } from "luxon";
 import { referrerConverter, VerifiedReferrer } from "./referrals.types";
-import { ReferralData } from "./user.types";
-import { getUserDoc, getUserData, setUserVerified } from "./user";
+import { ReferralData } from "./user/basic.types";
+import { getUserBasicData, setUserBasicData } from "./user/basic";
+import { getUserDoc } from "./user/layout";
 
 export type { VerifiedReferrer } from './referrals.types';
 
@@ -25,10 +26,13 @@ export async function getReferrerData(code: string) {
   return referrer.data();
 }
 
-export async function getUsersReferrer(address: string) {
-  const user = await getUserData(address);
+export async function getUsersReferrer(address: string): Promise<ReferralData | null> {
+  const user = await getUserBasicData(address);
   if (user?.referredBy && user?.created) {
-    return user as ReferralData;
+    return {
+      referredBy: user.referredBy,
+      created: user.created,
+    };
   }
   return null;
 }
@@ -46,7 +50,7 @@ export async function createReferrer(signature: string, address: string) {
     // Does this address already have a code?
     if (existing.data()?.address == address) {
       log.debug({address, code}, "Found existing code for {address} - {code}");
-      await setUserVerified(address, {referralCode: code });
+      await setUserBasicData(address, { referralCode: code, referralStatus: "assigned" });
       return code;
     }
     // else, if it's a free slot, pop it in.
@@ -59,7 +63,7 @@ export async function createReferrer(signature: string, address: string) {
       await maybe.set(data);
 
       // update the users data
-      await setUserVerified(address, {referralCode: code });
+      await setUserBasicData(address, { referralCode: code, referralStatus: "assigned" });
       log.debug({address, code}, "Set new code for {address} - {code}");
       return code
     }

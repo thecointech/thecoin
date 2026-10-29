@@ -1,7 +1,7 @@
 import { getFirestore, DocumentReference, DocumentSnapshot, FirestoreDataConverter } from "@thecointech/firestore";
 import { log } from "@thecointech/logging";
 import { ActionType, ActionDataTypes, TransitionDelta, TypedAction, AnyActionData, ActionDictionary } from "./types";
-import { getUserDoc } from "../user";
+import { getUserDoc } from "../user/layout";
 import equal from "fast-deep-equal/es6/index.js";
 import { actionConverters, incompleteConverter, transitionConverter } from "./converters";
 

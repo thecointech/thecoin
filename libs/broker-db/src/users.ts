@@ -1,4 +1,4 @@
-import { getUserCollection } from "./user";
+import { getUserCollection } from "./user/layout";
 
 //
 // List all users.  This may not be 100% reliable on client apps
