@@ -8,7 +8,8 @@ import { fetchUser } from './blockpass';
 import { buildUniqueId } from '@thecointech/utilities/Verify';
 import { uploadAndStripImages } from './images';
 import { getBrokerCADPubKey } from '../details';
-import { encryptKyc, BlockpassData } from '@thecointech/account-details';
+import { encryptKyc } from '@thecointech/account-details';
+import type { BlockpassData } from '@thecointech/blockpass/types';
 
 //
 // Called for every status update, allows us to pull user data from BP and store it locally
@@ -69,19 +70,11 @@ export async function uploadUserData(address:string, data: BlockpassData) {
   return true;
 }
 
-// Called when KYC completes: convert the (about to be deleted) raw
-// verification data into an immutable record encrypted to BrokerCAD.
+// Called when KYC completes: convert the raw verification data
+// into an immutable record encrypted to BrokerCAD.
 export async function storeKycRecord(address: string, data: BlockpassData) {
-  if (!data?.identities) {
-    log.error({ address }, "Attempted to store KYC record with no raw data for {address}");
-    return;
-  }
   const brokerPub = await getBrokerCADPubKey();
-  const blob = await encryptKyc(data, brokerPub);
-  await addKycRecord(address, {
-    provider: "blockpass",
-    version: 1,
-    data: blob,
-  });
+  const record = await encryptKyc(data, brokerPub);
+  await addKycRecord(address, record);
   log.info({ address }, "Stored KYC record for {address}");
 }

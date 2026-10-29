@@ -7,6 +7,8 @@ import { Grid } from 'semantic-ui-react';
 import { Account } from '@thecointech/shared/containers/Account';
 import { CopyToClipboard } from '@thecointech/shared/components/CopyToClipboard';
 import { ReferralCode } from './ReferralCode';
+import { getAccountName } from '@thecointech/account';
+import { isKycComplete } from '@thecointech/shared/containers/Account';
 import styles from './styles.module.less';
 
 const translations = defineMessages({
@@ -21,7 +23,9 @@ const translations = defineMessages({
 const POLLING_INTERVAL = 5 * 60 * 1000;
 
 export const UserDetails = () => {
-  const { address, name, details, readonly } = AccountMap.useActive()!;
+  const account = AccountMap.useActive()!;
+  const { address, details, readonly } = account;
+  const name = getAccountName(account);
   const accountApi = Account(address).useApi();
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const detailsRef = useRef(details);
@@ -44,7 +48,8 @@ export const UserDetails = () => {
     if (timeoutRef.current) {
       return;
     }
-    if (detailsRef.current.status && !detailsRef.current.referralCode) {
+    const { basic } = detailsRef.current;
+    if (basic && !isKycComplete(basic)) {
       timeoutRef.current = setTimeout(() => {
         // Recursively call startPolling after the interval
         accountApi.checkKycStatus(forceVerify);
@@ -76,7 +81,7 @@ export const UserDetails = () => {
         <div className={"font-big x4spaceAfter"}>
           {address} <CopyToClipboard payload={address!} />
         </div>
-        <ReferralCode {...details} />
+        <ReferralCode basic={details.basic} />
     </React.Fragment>
   );
 }

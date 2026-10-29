@@ -6,12 +6,14 @@ import { BillPaymentsApi } from './BillPaymentsApi';
 import { DirectTransferApi } from './DirectTransferApi';
 import { StatusApi } from './StatusApi';
 import { UserVerificationApi } from "./UserVerificationApi";
+import { DetailsApi } from "./DetailsApi";
 import { PluginsApi } from './PluginsApi';
 import { HarvesterApi } from './HarvesterApi';
 import type { TimeSource } from "@thecointech/utilities/TimeSource";
 import { createServerTimeSource } from "../../src/broker/serverTimeSource";
 
 export const GetUserVerificationApi = () => new UserVerificationApi();
+export const GetDetailsApi = () => new DetailsApi();
 export const GetStatusApi = () => new StatusApi();
 export const GetBillPaymentsApi = () => new BillPaymentsApi();
 export const GetDirectTransferApi = () => new DirectTransferApi();
@@ -21,7 +23,6 @@ export const GetReferrersApi = () => new ReferralsApi();
 export const GetPluginsApi = () => new PluginsApi();
 export const GetHarvesterApi = () => new HarvesterApi();
 
-export { StatusType } from './UserVerificationApi';
 export { setAssignPluginFailure, type AssignPluginFailure } from './PluginsApi';
 
 // Mimics the real ServerTimeSource (see live.ts), but just returns local

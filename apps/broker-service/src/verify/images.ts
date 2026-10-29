@@ -2,7 +2,7 @@ import { Storage } from '@google-cloud/storage';
 import { log } from '@thecointech/logging';
 import { DateTime } from 'luxon';
 import { getSecret } from "@thecointech/secrets";
-import type { BlockpassData, TypedData } from '@thecointech/account-details/types';
+import type { BlockpassData, TypedData } from '@thecointech/blockpass/types';
 
 const storage = new Storage();
 

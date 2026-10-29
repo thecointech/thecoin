@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { defineMessages, FormattedMessage } from "react-intl";
 import { Button, Form, Header } from "semantic-ui-react";
-import { AccountState } from '@thecointech/account';
+import { AccountState, getAccountName } from '@thecointech/account';
 import { UxPassword } from "../../components/UX/Password";
 import { ValidateCB } from '../../components/UX/types';
 import { ModalOperation } from "../ModalOperation";
@@ -115,7 +115,7 @@ export const Login = (props: Props) => {
         </Header>
         <Header as="h2" className={ `x4spaceBefore` }>
           <FormattedMessage {...translate.title} /> <br />
-            { account.name }
+            { getAccountName(account) }
         </Header>
         <Form id={styles.loginForm}>
           <UxPassword

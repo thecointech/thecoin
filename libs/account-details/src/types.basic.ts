@@ -1,5 +1,5 @@
 import type { DateTime } from "luxon";
-import type { StatusType } from "./types.kyc";
+import type { StatusType } from "@thecointech/blockpass/types";
 
 
 //

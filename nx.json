@@ -2,11 +2,7 @@
   "targetDefaults": {
     "build": {
       "dependsOn": ["^build"],
-      "inputs": [
-        "{projectRoot}/**/*",
-        "!{projectRoot}/**/*.spec.ts",
-        "!{projectRoot}/**/*.test.ts"
-      ],
+      "inputs": ["production", "^production"],
       "outputs": [
         "{projectRoot}/./build",
         "{projectRoot}/./dist",
@@ -57,6 +53,10 @@
   "namedInputs": {
     "default": ["{projectRoot}/**/*", "sharedGlobals"],
     "sharedGlobals": [],
-    "production": ["default"]
+    "production": [
+      "default",
+      "!{projectRoot}/**/*.spec.ts",
+      "!{projectRoot}/**/*.test.ts"
+    ]
   }
 }

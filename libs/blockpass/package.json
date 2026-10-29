@@ -29,11 +29,21 @@
   "exports": {
     ".": {
       "development": "./build/development/index.js",
-      "devlive": "./build/devlive/index.js",
+      "devlive": "./build/development/index.js",
       "default": "./build/index.js"
+    },
+    "./types": "./src/types.ts"
+  },
+  "typesVersions": {
+    "*": {
+      "types": [
+        "src/types.ts"
+      ],
+      "*": [
+        "build/*.d.ts"
+      ]
     }
   },
-  "types": "./build/index.d.ts",
   "dependencies": {
     "@thecointech/shared": "^0.6.7"
   },

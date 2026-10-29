@@ -1,4 +1,4 @@
-import type { StatusType } from '@thecointech/account-details/types'
+import type { StatusType } from '@thecointech/blockpass/types'
 
 // Start moving types out of types project to where they are used.
 

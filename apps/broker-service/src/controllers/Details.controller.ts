@@ -1,15 +1,21 @@
 import { Controller, Route, Put, Get, Response, Tags, Body, Query } from '@tsoa/runtime';
 import { getSigner } from '../signedTimestamp';
 import { getDetails, putDetails } from '../details';
-import { RateLimitError,  type AllUserData } from '@thecointech/broker-db';
-import type { EncryptedBlob } from '@thecointech/account-details/types';
+import { RateLimitError } from '@thecointech/broker-db';
+import type { EncryptedBlob, ReferralStatus } from '@thecointech/account-details/types';
 import type { BoolResponse } from '../types';
+import type { StatusType } from '@thecointech/blockpass/types';
 
 export type DetailsResponse = {
   // Encrypted profile blob (decryptable by the user only)
   preferences?: EncryptedBlob;
   // Basic data (status, referral code, etc.)
-  basic?: AllUserData;
+  basic: {
+    status?: StatusType;
+    statusUpdated?: number;
+    referralCode?: string;
+    referralStatus?: ReferralStatus;
+  }
 }
 
 @Route('details')
@@ -24,7 +30,16 @@ export class DetailsController extends Controller {
   @Response('200', 'User details')
   async getDetails(@Query() ts: string, @Query() sig: string): Promise<DetailsResponse> {
     const address = await getSigner({ message: ts, signature: sig });
-    return getDetails(address);
+    const { preferences, basic } = await getDetails(address);
+    return {
+      preferences,
+      basic: {
+        status: basic?.status,
+        statusUpdated: basic?.statusUpdated?.toMillis(),
+        referralCode: basic?.referralCode,
+        referralStatus: basic?.referralStatus,
+      },
+    };
   }
 
   /**

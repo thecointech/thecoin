@@ -1,4 +1,5 @@
 import {
+  DetailsApi,
   StatusApi,
   StatusType as StatusType_Import,
   // EventType as EventType_Import,
@@ -16,11 +17,10 @@ import type { TimeSource } from "@thecointech/utilities/TimeSource";
 import { createServerTimeSource } from "./serverTimeSource";
 
 export const StatusType = StatusType_Import;
-// export const EventType = EventType_Import;
-export type { UserVerifyData } from '@thecointech/broker-cad';
 
 const BrokerCADAddress = process.env.URL_SERVICE_BROKER;
 export const GetUserVerificationApi = () => createGaeServiceProxy(new UserVerificationApi(undefined, BrokerCADAddress));
+export const GetDetailsApi = () => createGaeServiceProxy(new DetailsApi(undefined, BrokerCADAddress));
 export const GetStatusApi = () => createGaeServiceProxy(new StatusApi(undefined, BrokerCADAddress));
 export const GetBillPaymentsApi = () => createGaeServiceProxy(new BillPaymentsApi(undefined, BrokerCADAddress));
 export const GetDirectTransferApi = () => createGaeServiceProxy(new DirectTransferApi(undefined, BrokerCADAddress));

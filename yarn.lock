@@ -9293,9 +9293,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@thecointech/account-details@workspace:libs/account-details"
   dependencies:
-    "@thecointech/account": "npm:^0.6.7"
+    "@thecointech/fx-rates": "npm:^0.6.7"
     "@thecointech/jestutils": "npm:^0.6.7"
     ethers: "npm:6.15.0"
+    luxon: "npm:3.3.0"
   languageName: unknown
   linkType: soft
 
@@ -9303,6 +9304,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@thecointech/account@workspace:libs/account"
   dependencies:
+    "@thecointech/account-details": "npm:^0.6.7"
     "@thecointech/contract-core": "npm:^0.6.7"
     "@thecointech/fx-rates": "npm:^0.6.7"
     "@thecointech/logging": "npm:^0.6.7"

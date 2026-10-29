@@ -1,5 +1,5 @@
 import React from 'react'
-import { AccountDetails } from '@thecointech/account';
+import type { BasicDetails } from '@thecointech/account-details';
 import { defineMessages, FormattedMessage } from 'react-intl'
 
 const translations = defineMessages({
@@ -17,14 +17,14 @@ const translations = defineMessages({
   },
 });
 
-export const ReferralCode = ({ referralCode, status }: AccountDetails) => (
+export const ReferralCode = ({ basic }: { basic?: BasicDetails }) => (
   <>
     <div className={"font-label border-top-green4 x4spaceBefore x4spaceAfter"} ><FormattedMessage {...translations.label} /></div>
     <div className={"x4spaceAfter"}>{
-      referralCode
-        ? referralCode
+      basic?.referralCode
+        ? basic.referralCode
         : <FormattedMessage {
-          ...(status == "approved"
+          ...(basic?.status == "approved"
             ? translations.generating
             : translations.pleaseVerify
           )

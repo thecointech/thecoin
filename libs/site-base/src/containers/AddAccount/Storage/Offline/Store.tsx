@@ -1,3 +1,4 @@
+import { getAccountName } from '@thecointech/account';
 import React, { useCallback } from 'react'
 import FileSaver from 'file-saver';
 import { getStoredAccountData } from '@thecointech/account/store';
@@ -25,7 +26,7 @@ export const OfflineStore = () => {
   ////////////////////////////////
   const onDownloadClicked = () => {
     onDownload(account.address);
-    accountApi.setDetails({ storedOffline: true })
+    accountApi.setPreferences({ storedOffline: true })
   }
 
   ////////////////////////////////
@@ -61,7 +62,7 @@ export const onDownload = (address: string) => {
   if (isLocal(signer)) {
     const walletStr = JSON.stringify(signer);
     const blob = new Blob([walletStr], { type: "text/plain;charset=utf-8" });
-    FileSaver.saveAs(blob, `${account.name}.wallet.json`);
+    FileSaver.saveAs(blob, `${getAccountName(account)}.wallet.json`);
   }
   else {
     alert("The active wallet is not downloadable (is this a remote wallet?)")

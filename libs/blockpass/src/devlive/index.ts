@@ -1,9 +1,7 @@
 import { sleep } from '@thecointech/async';
 import { useEffect } from 'react';
 import { log } from '@thecointech/logging'
-import { StatusType, GetUserVerificationApi } from '@thecointech/apis/broker';
-// For reasons I don't understand, EventType will not import from apis/broker (in Storybook)
-import { EventType } from '@thecointech/broker-cad';
+import { GetUserVerificationApi } from '@thecointech/apis/broker';
 
 //
 // In DevLive, we just exercise our code (so ignore blockpass itself)
@@ -43,8 +41,8 @@ async function doIt(address: string, onClose: () => void) {
   // First trigger should set status to
   await api.updateStatus("signature", {
     ...base,
-    event: EventType.UserCreated,
-    status: StatusType.Incomplete,
+    event: "user.created",
+    status: "incomplete",
   });
 
   await sleep(10000);
@@ -52,8 +50,8 @@ async function doIt(address: string, onClose: () => void) {
   log.trace('Mocking User Waiting')
   await api.updateStatus("signature", {
     ...base,
-    event: EventType.UserReadyToReview,
-    status: StatusType.Waiting,
+    event: "user.readyToReview",
+    status: "waiting",
   });
 
   // This is where the user theoretically closes their iframe
@@ -64,7 +62,7 @@ async function doIt(address: string, onClose: () => void) {
   log.trace('Mocking User Approved')
   await api.updateStatus("signature", {
     ...base,
-    event: EventType.ReviewApproved,
-    status: StatusType.Approved,
+    event: "review.approved",
+    status: "approved",
   });
 }
