@@ -1,4 +1,4 @@
-import { StatusType } from '@thecointech/broker-db/user.types'
+import type { StatusType } from '@thecointech/account-details/types'
 
 // Start moving types out of types project to where they are used.
 
@@ -104,12 +104,4 @@ export type BlockpassData = {
   }
   // Issuer => JSON-as-string mapping
   certs: any
-}
-
-// A small sub-set of the data stored on firestore (UserVerifyInfo)
-export type UserVerifyData ={
-  status?: StatusType,
-  referralCode?: string,
-  raw?: BlockpassData,
-  uniqueIdSig?: string,
 }

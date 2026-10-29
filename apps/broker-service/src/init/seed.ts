@@ -3,7 +3,7 @@
 //
 import { getAddressShortCodeSig, NormalizeAddress } from "@thecointech/utilities";
 import { createReferree, createReferrer } from "@thecointech/broker-db/referrals";
-import { getUserVerified } from "@thecointech/broker-db/user";
+import { getUserVerified } from "@thecointech/broker-db";
 import { getSigner } from "@thecointech/signers";
 import { DateTime } from "luxon";
 import { uploadUserData } from '../verify'

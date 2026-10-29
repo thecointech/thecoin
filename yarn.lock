@@ -9289,6 +9289,16 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@thecointech/account-details@npm:^0.6.7, @thecointech/account-details@workspace:libs/account-details":
+  version: 0.0.0-use.local
+  resolution: "@thecointech/account-details@workspace:libs/account-details"
+  dependencies:
+    "@thecointech/account": "npm:^0.6.7"
+    "@thecointech/jestutils": "npm:^0.6.7"
+    ethers: "npm:6.15.0"
+  languageName: unknown
+  linkType: soft
+
 "@thecointech/account@npm:^0.6.7, @thecointech/account@workspace:libs/account":
   version: 0.0.0-use.local
   resolution: "@thecointech/account@workspace:libs/account"
@@ -9355,6 +9365,7 @@ __metadata:
   resolution: "@thecointech/broker-db@workspace:libs/broker-db"
   dependencies:
     "@google-cloud/firestore": "npm:7.0.0"
+    "@thecointech/account-details": "npm:^0.6.7"
     "@thecointech/firestore": "npm:^0.6.7"
     "@thecointech/harvester-monitoring": "npm:^0.6.7"
     "@thecointech/utilities": "npm:^0.6.7"
@@ -9367,6 +9378,7 @@ __metadata:
   resolution: "@thecointech/broker-service@workspace:apps/broker-service"
   dependencies:
     "@google-cloud/storage": "npm:^7.19.0"
+    "@thecointech/account-details": "npm:^0.6.7"
     "@thecointech/async": "npm:^0.6.7"
     "@thecointech/broker-db": "npm:^0.6.7"
     "@thecointech/contract-core": "npm:^0.6.7"
@@ -9822,6 +9834,7 @@ __metadata:
     "@nivo/line": "npm:0.99.0"
     "@nivo/tooltip": "npm:0.99.0"
     "@thecointech/account": "npm:^0.6.7"
+    "@thecointech/account-details": "npm:^0.6.7"
     "@thecointech/apis": "npm:^0.6.7"
     "@thecointech/contract-core": "npm:^0.6.7"
     "@thecointech/fx-rates": "npm:^0.6.7"
@@ -36838,6 +36851,7 @@ __metadata:
     "@electron-forge/maker-zip": "npm:^7.2.0"
     "@electron-forge/plugin-auto-unpack-natives": "npm:^7.2.0"
     "@electron-forge/plugin-webpack": "npm:^7.2.0"
+    "@thecointech/account-details": "npm:^0.6.7"
     "@thecointech/contract-core": "npm:^0.6.7"
     "@thecointech/electron-signer": "workspace:*"
     "@thecointech/setenv": "workspace:^"

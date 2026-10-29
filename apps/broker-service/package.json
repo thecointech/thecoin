@@ -39,6 +39,7 @@
   "main": "./build/main.js",
   "dependencies": {
     "@google-cloud/storage": "^7.19.0",
+    "@thecointech/account-details": "^0.6.7",
     "@thecointech/async": "^0.6.7",
     "@thecointech/broker-db": "^0.6.7",
     "@thecointech/contract-core": "^0.6.7",

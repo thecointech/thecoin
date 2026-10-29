@@ -1,12 +1,12 @@
-import { Controller, Route, Post, Response, Tags, Body, Get, Query, Delete, Request, Header  } from '@tsoa/runtime';
+import { Controller, Route, Post, Response, Tags, Body, Get, Query, Request, Header  } from '@tsoa/runtime';
 import { IsValidAddress } from '@thecointech/utilities';
 import { log } from '@thecointech/logging';
-import { getUserData } from '@thecointech/broker-db/user';
+import { getUserBasicData, type AllUserData } from '@thecointech/broker-db';
 import { getSigner } from '../signedTimestamp';
-import { deleteRawData, updateUserVerification } from '../verify';
+import { updateUserVerification } from '../verify';
 import { checkHeader } from '../verify/checkHeader';
 import type { Request as ExpressRequest} from "express";
-import type { BlockpassPayload, UserVerifyData } from './types';
+import type { BlockpassPayload } from './types';
 
 @Route('verify')
 @Tags('UserVerification')
@@ -17,29 +17,10 @@ export class VerifyController extends Controller {
    */
   @Get('/data')
   @Response('200', 'User Data')
-  async userGetData(@Query() ts: string, @Query() sig: string) : Promise<UserVerifyData> {
+  async userGetData(@Query() ts: string, @Query() sig: string) : Promise<AllUserData|undefined> {
     const address = await getSigner({message: ts, signature: sig});
-    const user = await getUserData(address);
-
-    return {
-      status: user?.status,
-      referralCode: user?.referralCode ?? undefined,
-      raw: user?.raw,
-      uniqueIdSig: user?.uniqueIdSig,
-    }
-  }
-
-  /**
-   * Delete raw data.  Called by the user once the raw data is safely
-   * uploaded to 3DX
-   * @param ts Timestamp
-   * @param sig User signature of timestamp
-   */
-  @Delete()
-  @Response('200', 'Raw Deleted')
-  async userDeleteRaw(@Query() ts: string, @Query() sig: string) {
-    const address = await getSigner({message: ts, signature: sig});
-    await deleteRawData(address);
+    const user = await getUserBasicData(address);
+    return user;
   }
 
   /**
