@@ -41,7 +41,7 @@ export async function uploadUserData(address:string, data: BlockpassData) {
   const uniqueId = buildUniqueId({
     given_name: data.identities.given_name.value,
     family_name: data.identities.family_name.value,
-    DOB: data.identities.dob.value,
+    dob: data.identities.dob.value,
   });
   const uniqueIdSig = await sign(uniqueId, signer);
 
