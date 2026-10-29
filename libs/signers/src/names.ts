@@ -6,7 +6,6 @@ export enum AccountId {
   TheCoin,
   TCManager,
   Minter,
-  NFTMinter,
   Police,
   BrokerCAD,
   BrokerTransferAssistant,

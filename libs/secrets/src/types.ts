@@ -12,9 +12,6 @@ export enum SecretKey {
   PolygonscanApiKey = "PolygonscanApiKey",
   EtherscanApiKey = "EtherscanApiKey",
 
-  PinataApiKey = "PinataApiKey",
-  PinataApiSecret = "PinataApiSecret",
-
   GithubPackageToken = "GithubPackageToken",
 
   RbcApiCredentials = "RbcApiCredentials",
@@ -23,7 +20,6 @@ export enum SecretKey {
   SignerTheCoinPwd = "SignerTheCoinPwd",
   SignerTCManagerPwd = "SignerTCManagerPwd",
   SignerMinterPwd = "SignerMinterPwd",
-  SignerNFTMinterPwd = "SignerNFTMinterPwd",
   SignerPolicePwd = "SignerPolicePwd",
   SignerBrokerCADPwd = "SignerBrokerCADPwd",
   SignerBrokerTransferAssistantPwd = "SignerBrokerTransferAssistantPwd",

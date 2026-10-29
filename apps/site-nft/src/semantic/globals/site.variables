@@ -1,5 +1,0 @@
-/*******************************
-     Site-specific Global Variables
-*******************************/
-
-@pageBackground      : @theCoinPaletteGray2;

@@ -1,3 +1,3 @@
 # `contract-base`
 
-Shared code for NFT & Core contracts.
+Shared code for contracts.

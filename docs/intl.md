@@ -17,8 +17,8 @@ in the interests of doing the least work possible, the message syntax we prefer 
 ```ts
 const messages = defineMessages({
   home:     { defaultMessage: "Home", description: "MainNav Home page" },
-  claim:    { defaultMessage: "Claim", description: "MainNav page to claim an NFT" },
-  profile:  { defaultMessage: "Profile", description: "MainNav page to set Profile image on NFT" }
+  claim:    { defaultMessage: "Claim", description: "MainNav page to claim token" },
+  profile:  { defaultMessage: "Profile", description: "MainNav page to set Profile image on token" }
 });
 ```
 
