@@ -1,5 +1,5 @@
 import { log } from '@thecointech/logging';
-import { getVerifiedUsersNoReferralCode, getUsersWithUniqueIdSig } from '@thecointech/broker-db/user';
+import { getUsersPendingReferral, getUsersWithUniqueIdSig } from '@thecointech/broker-db/user';
 import { createReferrer } from '@thecointech/broker-db/referrals';
 import { SendMail } from '@thecointech/email';
 import { getSigner } from '@thecointech/signers';
@@ -13,7 +13,7 @@ export async function processReferrals() {
 
   log.trace('Processing Referrals...');
   // get newly verified accounts
-  const newlyVerified = await getVerifiedUsersNoReferralCode();
+  const newlyVerified = await getUsersPendingReferral();
 
   // for each account, let's create & assign a referral code
   for (const {address, uniqueIdSig} of newlyVerified) {
