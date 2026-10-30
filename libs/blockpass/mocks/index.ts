@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { sleep } from '@thecointech/async/sleep';
 import { log } from '@thecointech/logging';
 import { GetUserVerificationApi } from '@thecointech/apis/broker';
-import { openMockKycDialog, MockKycFields } from '../mockDialog';
+import { openMockKycDialog, MockKycFields } from './dialog';
 
 //
 // In development, the Blockpass widget is replaced by a mock dialog.
@@ -29,6 +29,7 @@ export function useBlockpass(address: string, _email: string|undefined, onClose:
   return "ready";
 }
 
+// This is run in the browser.  Ideally, in devlive, it would be provided to broker-service.
 async function runMockFlow(address: string, _fields: MockKycFields, onClose: () => void) {
   const approved = _fields.outcome === "approved";
   const base = {
@@ -53,6 +54,20 @@ async function runMockFlow(address: string, _fields: MockKycFields, onClose: () 
     event: "user.readyToReview",
     status: "waiting",
   });
+
+  // If we are approved, write out _fields to a file to allow for testing
+  if (approved) {
+    // TODO: Write _fields to a file
+    if (process.env.CONFIG_NAME === 'devlive') {
+      const response = await fetch(`${process.env.URL_SERVICE_BROKER}/mock/blockpass/${encodeURIComponent(address)}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(_fields),
+      });
+      if (!response.ok) throw new Error(`Cannot seed mock Blockpass data: ${response.status}`);
+    }
+
+  }
 
   // This is where the user theoretically closes their iframe
   onClose();

@@ -237,8 +237,6 @@ function AccountReducer(address: string, initialState: AccountState) {
         log.trace("Account decrypted successfully");
         // Store the result
         yield this.sendValues(this.actions.setSigner, decrypted);
-        // The profile blob could not be decrypted while locked; reload now
-        yield this.sendValues(this.actions.loadDetails);
       }
       catch (error: any) {
         log.warn(error.message);

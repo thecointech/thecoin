@@ -59,8 +59,8 @@ export const Client = (props: Props) => {
   const name = (!kyc && loading)
     ? `Loading... ${(percent * 100).toFixed(1)}%`
     : kyc?.identities
-      ? `${kyc.identities.given_name} ${kyc.identities.family_name}`
-      : "RE-IMPLEMENT DETAIL STORAGE";
+      ? `${kyc.identities.given_name.value} ${kyc.identities.family_name.value}`
+      : "No KYC record";
 
   return (
     <div className={styles.clientContainer}>

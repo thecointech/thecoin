@@ -4,7 +4,7 @@ import { getSigner } from '@thecointech/signers';
 import { sign } from '@thecointech/utilities/SignedMessages';
 import { DateTime } from 'luxon';
 import { BlockpassPayload } from '../controllers/types';
-import { fetchUser } from './blockpass';
+import { fetchUser } from '@thecointech/blockpass/fetch';
 import { buildUniqueId } from '@thecointech/utilities/Verify';
 import { uploadAndStripImages } from './images';
 import { getBrokerCADPubKey } from '../details';

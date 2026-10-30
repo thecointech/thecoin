@@ -435,6 +435,10 @@
     "defaultMessage": "e-Transfer",
     "description": "app.makepayments.tabs.etransfer: Title for the tabs the Make a payment page in the app"
   },
+  "lvjk1Z": {
+    "defaultMessage": "This identity has already been assigned a referral code",
+    "description": "app.settings.userDetails.duplicate: Referral code is unavailable for a duplicate identity"
+  },
   "m0DPoc": {
     "defaultMessage": "Home",
     "description": "app.MainNavigation.home: Title for the Home entry in the menu"

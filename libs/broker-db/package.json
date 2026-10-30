@@ -32,9 +32,8 @@
   "exports": {
     ".": "./build/index.js",
     "./transaction": "./build/transaction/index.js",
-    "./*": [
-      "./build/*.js"
-    ]
+    "./user": "./build/user/index.js",
+    "./*": "./build/*.js"
   },
   "types": "./build/index.d.ts",
   "typesVersions": {

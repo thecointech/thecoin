@@ -28,9 +28,14 @@
   ],
   "exports": {
     ".": {
-      "development": "./build/development/index.js",
-      "devlive": "./build/development/index.js",
+      "development": "./mocks/index.ts",
+      "devlive": "./mocks/index.ts",
       "default": "./build/index.js"
+    },
+    "./fetch": {
+      "development": "./mocks/fetch.ts",
+      "devlive": "./mocks/fetch.ts",
+      "default": "./build/fetch.js"
     },
     "./types": "./src/types.ts"
   },
@@ -45,6 +50,7 @@
     }
   },
   "dependencies": {
+    "@thecointech/secrets": "^0.6.7",
     "@thecointech/shared": "^0.6.7"
   },
   "devDependencies": {
