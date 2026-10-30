@@ -1,5 +1,5 @@
 const { getEnvVars } = require('@thecointech/setenv');
-const  netstat = require('node-netstat');
+const { createConnection } = require('net');
 const { join } = require('path');
 
 const config = getEnvVars('development');
@@ -8,23 +8,17 @@ const FirestorePort = devlive.FIRESTORE_EMULATOR_PORT;
 const BlockchainPort = devlive.DEPLOY_NETWORK_PORT;
 
 async function portInUse(port) {
-  return new Promise((resolve, reject) => {
-    const handler = netstat({
-      filter: {
-        protocol: 'tcp',
-        local: {
-          port: Number(port)
-        }
-      }
-    }, item => {
-      clearTimeout(timer);
-      resolve(!!item)
-      return false;
-    })
-    const timer = setTimeout(() => {
-      handler.cancel();
-      resolve(false)
-    }, 50);
+  if (!port) return false;
+  return new Promise(resolve => {
+    const socket = createConnection({ host: '127.0.0.1', port: Number(port) });
+    const finish = available => {
+      socket.destroy();
+      resolve(available);
+    };
+    socket.setTimeout(1000);
+    socket.once('connect', () => finish(true));
+    socket.once('error', () => finish(false));
+    socket.once('timeout', () => finish(false));
   })
 }
 

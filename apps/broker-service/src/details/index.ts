@@ -1,20 +1,20 @@
 import { getUserPreferences, getUserBasicData, setUserPreferences } from '@thecointech/broker-db';
 import { GetContract } from '../signer/Wallet';
 import { getSigner } from '@thecointech/signers';
-import type { Wallet } from 'ethers';
-import type { EncryptedBlob } from '@thecointech/account-details';
+import { getEncryptionKey, type EncryptedBlob } from '@thecointech/account-details';
 
 const MAX_BLOB_SIZE = 10 * 1024; // 10KB - details are a small JSON struct
 
-// The broker public key is needed to wrap KYC records.  The address alone
-// cannot yield it (hash), so it's published via env var.  In dev we can
-// pull it from the local signer.
+// The BrokerCAD encryption public key is needed to wrap KYC records.
+// It is derived from a BrokerCAD signature (see getEncryptionKey), so is
+// published via env var (generate with `yarn encKey` in libs/signers).
+// If not set, derive it from the signer directly.
 export async function getBrokerCADPubKey(): Promise<string> {
-  if (process.env.WALLET_BrokerCAD_PUBKEY) {
-    return process.env.WALLET_BrokerCAD_PUBKEY;
+  if (process.env.WALLET_BrokerCAD_ENCKEY) {
+    return process.env.WALLET_BrokerCAD_ENCKEY;
   }
-  const brokerCad = await getSigner('BrokerCAD');
-  return (brokerCad as Wallet).signingKey.compressedPublicKey;
+  const key = await getEncryptionKey(await getSigner('BrokerCAD'));
+  return key.compressedPublicKey;
 }
 
 // A user may store details if the broker already knows them

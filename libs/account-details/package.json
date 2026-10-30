@@ -43,8 +43,8 @@
     }
   },
   "dependencies": {
-    "ethers": "6.15.0",
     "@thecointech/fx-rates": "^0.6.7",
+    "ethers": "6.15.0",
     "luxon": "3.3.0"
   },
   "devDependencies": {

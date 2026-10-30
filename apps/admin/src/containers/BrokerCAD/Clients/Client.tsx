@@ -6,11 +6,11 @@ import { UserData } from './data';
 import styles from './Client.module.less';
 import { toCAD } from './toCAD';
 import { buildUniqueId } from '@thecointech/utilities/Verify';
-import { verifyMessage, Wallet } from 'ethers';
+import { verifyMessage } from 'ethers';
 import { AddressMatches } from '@thecointech/utilities/Address';
 import { getSigner } from '@thecointech/signers';
 import { type AllUserData, getCurrentKycRecord, getUserBasicData } from '@thecointech/broker-db'
-import { decryptKyc } from '@thecointech/account-details';
+import { decryptKyc, getEncryptionKey } from '@thecointech/account-details';
 import { log } from '@thecointech/logging';
 import type { BlockpassData } from '@thecointech/blockpass/types';
 
@@ -88,14 +88,8 @@ async function loadDetails(address: string) : Promise<ClientDetails|undefined> {
   if (!currentKyc) {
     return undefined;
   }
-  const signer = await getSigner("BrokerCAD");
-  const privateKey = (signer as Wallet).privateKey;
-  if (!privateKey) {
-    log.warn("BrokerCAD signer has no private key: cannot decrypt KYC records");
-    return undefined;
-  }
-
-  const decrypted = await decryptKyc(currentKyc, privateKey);
+  const key = await getEncryptionKey(await getSigner("BrokerCAD"));
+  const decrypted = await decryptKyc(currentKyc, key.privateKey);
   if (!decrypted) {
     log.warn("Failed to decrypt KYC record");
     return undefined;

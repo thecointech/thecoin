@@ -1,4 +1,6 @@
-import { AccountId, AccountName, getSigner } from './index_mocked';
+import { describe } from '@thecointech/jestutils'
+import { getEncryptionKey } from '@thecointech/account-details';
+import { AccountId, AccountName, getSigner } from './index_devlive';
 import { getEnvVars } from '@thecointech/setenv';
 
 const vars = getEnvVars("devlive");
@@ -16,4 +18,11 @@ describe('verify devlive signers', () => {
       expect(address).toEqual(vars[`WALLET_${name}_ADDRESS`]);
     }
   })
-})
+
+  it ('has the correct ENCKEY for BrokerCAD', async () => {
+    expect(vars.WALLET_BrokerCAD_ENCKEY).toBeDefined();
+    const key = await getEncryptionKey(await getSigner('BrokerCAD'));
+    expect(key.compressedPublicKey).toEqual(vars.WALLET_BrokerCAD_ENCKEY);
+  })
+  // Only run tests if emulator is running
+}, !!process.env.DEPLOY_NETWORK_PORT)

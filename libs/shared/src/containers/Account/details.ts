@@ -1,23 +1,14 @@
 import { DateTime } from 'luxon';
-import { isLocal } from '@thecointech/signers';
 import { GetDetailsApi, GetStatusApi } from '@thecointech/apis/broker';
 import { GetSignedMessage } from '@thecointech/utilities/SignedMessages';
-import { encryptPreferences, decryptPreferences } from '@thecointech/account-details';
+import { encryptPreferences, decryptPreferences, getEncryptionKey } from '@thecointech/account-details';
 import { log } from '@thecointech/logging';
-import type { Signer, Wallet } from 'ethers';
+import type { Signer } from 'ethers';
 import type { BasicDetails, EncryptedBlob, UserPreferences } from '@thecointech/account-details';
 
 export async function getSignedTimestamp(signer: Signer) {
   const ts = await GetStatusApi().timestamp();
   return GetSignedMessage(ts.data.toString(), signer);
-}
-
-// If the signer is locked (encrypted JSON) or remote we cannot
-// encrypt/decrypt preferences.
-function getWallet(signer: Signer): Wallet | null {
-  if (!isLocal(signer)) return null;
-  const wallet = signer as Wallet;
-  return wallet.privateKey ? wallet : null;
 }
 
 async function getRemoteDetails(signer: Signer) {
@@ -45,8 +36,8 @@ export async function fetchBasicDetails(signer: Signer) {
 }
 
 // Fetch all details.  Preferences are undefined if none are stored,
-// or if the signer is locked and cannot decrypt them.  preferencesLoaded
-// is true if we know the remote state (decrypted, or none stored).
+// or if they could not be decrypted (eg the user declined to sign).
+// preferencesLoaded is true if we know the remote state (decrypted, or none stored).
 export async function fetchDetails(signer: Signer) {
   const remote = await getRemoteDetails(signer);
   const preferences = await toPreferences(signer, remote.preferences);
@@ -60,20 +51,21 @@ export type FetchedDetails = Awaited<ReturnType<typeof fetchDetails>>;
 
 async function toPreferences(signer: Signer, preferences: EncryptedBlob | undefined): Promise<UserPreferences | undefined> {
   if (!preferences) return undefined;
-  const wallet = getWallet(signer);
-  if (!wallet) return undefined;
-  return await decryptPreferences(preferences, wallet.privateKey);
+  try {
+    const key = await getEncryptionKey(signer);
+    return await decryptPreferences(preferences, key.privateKey);
+  }
+  catch (err: any) {
+    log.warn(err, "Cannot decrypt preferences");
+    return undefined;
+  }
 }
 
 // Encrypt (to the users own key) and upload preferences.
 export async function uploadPreferences(signer: Signer, preferences: UserPreferences): Promise<boolean> {
-  const wallet = getWallet(signer);
-  if (!wallet) {
-    log.warn("Cannot store preferences: signer is locked or remote, changes will not be preserved");
-    return false;
-  }
   try {
-    const blob = await encryptPreferences(preferences, wallet.signingKey.compressedPublicKey);
+    const key = await getEncryptionKey(signer);
+    const blob = await encryptPreferences(preferences, key.compressedPublicKey);
     const signed = await getSignedTimestamp(signer);
     const r = await GetDetailsApi().putDetails(signed.message, signed.signature, blob);
     return r.data.success;
