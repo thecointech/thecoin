@@ -9350,6 +9350,7 @@ __metadata:
   dependencies:
     "@thecointech/async": "npm:^0.6.7"
     "@thecointech/broker-cad": "npm:^0.6.7"
+    "@thecointech/secrets": "npm:^0.6.7"
     "@thecointech/shared": "npm:^0.6.7"
   languageName: unknown
   linkType: soft
