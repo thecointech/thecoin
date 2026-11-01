@@ -2,6 +2,7 @@ import { Controller, Route, Put, Get, Response, Tags, Body, Query } from '@tsoa/
 import { getSigner } from '../signedTimestamp';
 import { getDetails, putDetails } from '../details';
 import { RateLimitError } from '@thecointech/broker-db';
+import { log } from '@thecointech/logging';
 import type { EncryptedBlob, ReferralStatus } from '@thecointech/account-details/types';
 import type { BoolResponse } from '../types';
 import type { StatusType } from '@thecointech/blockpass/types';
@@ -58,6 +59,7 @@ export class DetailsController extends Controller {
       return { success: true };
     }
     catch (e) {
+      log.warn({ err: e, address }, 'Failed to store preferences for {address}');
       if (e instanceof RateLimitError) {
         this.setStatus(429);
       } else {
