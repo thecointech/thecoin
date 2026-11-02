@@ -72,7 +72,15 @@ function AccountReducer(address: string, initialState: AccountState) {
     *loadDetails(): SagaIterator {
       const { signer } = this.state;
       if (!signer) return;
-      const remote: FetchedDetails = yield call(fetchDetails, signer);
+      let remote: FetchedDetails;
+      try {
+        remote = yield call(fetchDetails, signer);
+      }
+      catch (err) {
+        log.warn(err, "Cannot load account details, keeping local values");
+        yield this.storeValues({ details: { ...this.state.details, preferencesLoaded: false } });
+        return;
+      }
       const { basic, preferencesLoaded } = remote;
       // Remote preferences are canonical, local values fill any gaps
       const preferences = { ...this.state.details.preferences, ...remote.preferences };
@@ -101,10 +109,16 @@ function AccountReducer(address: string, initialState: AccountState) {
       // Sync with remote before writing, so we never upload
       // stale/default values over the stored preferences
       if (!preferencesLoaded && signer) {
-        const remote: FetchedDetails = yield call(fetchDetails, signer);
-        if (remote.preferencesLoaded) {
-          preferences = { ...preferences, ...remote.preferences };
-          preferencesLoaded = true;
+        try {
+          const remote: FetchedDetails = yield call(fetchDetails, signer);
+          if (remote.preferencesLoaded) {
+            preferences = { ...preferences, ...remote.preferences };
+            preferencesLoaded = true;
+          }
+        }
+        catch (err) {
+          log.warn(err, "Cannot load preferences, keeping changes local");
+          preferencesLoaded = false;
         }
       }
       preferences = { ...preferences, ...newPreferences };
@@ -129,7 +143,7 @@ function AccountReducer(address: string, initialState: AccountState) {
         yield this.storeValues({
           details: {
             ...this.state.details,
-            basic: { status: "started", statusUpdated: DateTime.now() },
+            basic: { kycStage: "started", kycUpdated: DateTime.now() },
           }
         });
       }
@@ -140,7 +154,7 @@ function AccountReducer(address: string, initialState: AccountState) {
         // Delay polling time then trime again
         yield delay(KycPollingInterval);
         const current: AccountState = yield select(AccountReducer.selector);
-        log.trace({address: this.state.address}, `{address} polled KYC - current status: ${current.details.basic?.status}`);
+        log.trace({address: this.state.address}, `{address} polled KYC - current status: ${current.details.basic?.kycStage}`);
         if (isKycComplete(current.details.basic))
           break;
       }

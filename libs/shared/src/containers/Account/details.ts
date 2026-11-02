@@ -21,10 +21,10 @@ type RemoteBasic = Awaited<ReturnType<typeof getRemoteDetails>>["basic"];
 
 // Convert from wire format.  No status means the broker doesn't know this user yet.
 function toBasicDetails(basic: RemoteBasic): BasicDetails | undefined {
-  if (!basic?.status) return undefined;
+  if (!basic?.kycStage) return undefined;
   return {
-    status: basic.status,
-    statusUpdated: DateTime.fromMillis(basic.statusUpdated ?? 0),
+    kycStage: basic.kycStage,
+    kycUpdated: DateTime.fromMillis(basic.kycUpdated ?? 0),
     referralCode: basic.referralCode,
     referralStatus: basic.referralStatus,
   };

@@ -23,7 +23,7 @@ export async function setUserPreferences(address: string, blob: EncryptedBlob) {
   await db.runTransaction(async transaction => {
     const existing = (await transaction.get(ref)).data();
     const now = DateTime.now();
-    const dayWrites = existing?.updated.hasSame(now, "day")
+    const dayWrites = existing?.updated?.hasSame(now, "day")
       ? existing.dayWrites
       : 0;
     if (dayWrites >= MAX_WRITES_PER_DAY) {

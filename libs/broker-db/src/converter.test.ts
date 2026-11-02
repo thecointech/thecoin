@@ -22,7 +22,7 @@ describe('Live DB fetching', () => {
   const address = `0x123456789012345678901234567${Date.now()}`;
   const spyTo = jest.spyOn(userDataConverter, "toFirestore");
   const spyFrom = jest.spyOn(userDataConverter, "fromFirestore");
-  const data = { statusUpdated: DateTime.now() }
+  const data = { kycUpdated: DateTime.now() }
 
   it('converts to Timestamp in DB', async () => {
     await setUserBasicData(address, data);
@@ -37,7 +37,7 @@ describe('Live DB fetching', () => {
     await setUserBasicData(address, data);
     const out = await getUserBasicData(address);
     expect(spyFrom).toHaveBeenCalledTimes(1);
-    expect(out?.statusUpdated).toEqual(data.statusUpdated);
+    expect(out?.kycUpdated).toEqual(data.kycUpdated);
   })
 
   it('round-trips decimals appropriately', async () => {

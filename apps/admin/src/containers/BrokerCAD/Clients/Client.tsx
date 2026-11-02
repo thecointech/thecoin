@@ -18,6 +18,7 @@ import type { BlockpassData } from '@thecointech/blockpass/types';
 type ClientDetails = {
   basic?: AllUserData;
   kyc: BlockpassData;
+  uniqueIdSig: string;
 }
 
 export type Props = UserData;
@@ -55,7 +56,7 @@ export const Client = (props: Props) => {
     ...props.Plugin
   ].sort((a, b) => a.data.date.toMillis() - b.data.date.toMillis());
 
-  const { basic, kyc } = userData || {};
+  const { kyc, uniqueIdSig } = userData || {};
   const name = (!kyc && loading)
     ? `Loading... ${(percent * 100).toFixed(1)}%`
     : kyc?.identities
@@ -69,10 +70,11 @@ export const Client = (props: Props) => {
       </Header>
       <hr />
       <div>{name}</div>
+      <div>KYC Stage: {userData?.basic?.kycStage ?? ' - '}</div>
       <div>DOB: {kyc?.identities?.dob?.value ?? 'N/A'}</div>
       <div>email: {kyc?.identities?.email?.value ?? 'N/A'}</div>
       <div>status: {kyc?.status ?? 'N/A'}</div>
-      <div>verified: {getIsVerified(basic?.uniqueIdSig, kyc).toString()}</div>
+      <div>verified: {getIsVerified(uniqueIdSig, kyc).toString()}</div>
       <hr />
       <List className={styles.transactionList}>
         {transactions.map(ClientTransaction)}
@@ -100,6 +102,7 @@ async function loadDetails(address: string) : Promise<ClientDetails|undefined> {
   return {
     basic,
     kyc: decrypted,
+    uniqueIdSig: currentKyc.uniqueIdSig,
   }
 }
 

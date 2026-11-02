@@ -1,4 +1,4 @@
-import type { StatusType, ReferralStatus, BlockpassPayload } from "@thecointech/broker-cad";
+import type { ReferralStatus, BlockpassPayload, BlockpassStatus } from "@thecointech/broker-cad";
 
 //
 // Shared state connecting the mock webhook (UserVerificationApi)
@@ -6,7 +6,7 @@ import type { StatusType, ReferralStatus, BlockpassPayload } from "@thecointech/
 // broker-service DB in development mode.
 //
 type MockKycState = {
-  status?: StatusType;
+  status?: BlockpassStatus;
   statusUpdated?: number;
   referralStatus?: ReferralStatus;
   referralCode?: string;
@@ -18,7 +18,7 @@ let state: MockKycState = {};
 export const getKycState = (): MockKycState => state;
 
 export function updateKyc(payload: BlockpassPayload) {
-  const status = payload.status as StatusType;
+  const status = payload.status;
   state = { ...state, status, statusUpdated: Date.now(), payload };
 
   // On approval, emulate tx-processor picking up the
@@ -27,7 +27,7 @@ export function updateKyc(payload: BlockpassPayload) {
     state.referralStatus = "pending";
     state.referralCode = undefined;
     setTimeout(() => {
-      state.referralStatus = "assigned";
+      state.referralStatus = "active";
       state.referralCode = "MOCKCODE";
     }, 3000);
   }

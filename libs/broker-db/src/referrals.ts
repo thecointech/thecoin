@@ -50,7 +50,7 @@ export async function createReferrer(signature: string, address: string) {
     // Does this address already have a code?
     if (existing.data()?.address == address) {
       log.debug({address, code}, "Found existing code for {address} - {code}");
-      await setUserBasicData(address, { referralCode: code, referralStatus: "assigned" });
+      await setUserBasicData(address, { referralCode: code });
       return code;
     }
     // else, if it's a free slot, pop it in.
@@ -63,7 +63,7 @@ export async function createReferrer(signature: string, address: string) {
       await maybe.set(data);
 
       // update the users data
-      await setUserBasicData(address, { referralCode: code, referralStatus: "assigned" });
+      await setUserBasicData(address, { referralCode: code });
       log.debug({address, code}, "Set new code for {address} - {code}");
       return code
     }

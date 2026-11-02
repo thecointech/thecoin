@@ -3,17 +3,16 @@ import { getSigner } from '../signedTimestamp';
 import { getDetails, putDetails } from '../details';
 import { RateLimitError } from '@thecointech/broker-db';
 import { log } from '@thecointech/logging';
-import type { EncryptedBlob, ReferralStatus } from '@thecointech/account-details/types';
+import type { EncryptedBlob, KycStage, ReferralStatus } from '@thecointech/account-details/types';
 import type { BoolResponse } from '../types';
-import type { StatusType } from '@thecointech/blockpass/types';
 
 export type DetailsResponse = {
   // Encrypted profile blob (decryptable by the user only)
   preferences?: EncryptedBlob;
   // Basic data (status, referral code, etc.)
   basic: {
-    status?: StatusType;
-    statusUpdated?: number;
+    kycUpdated?: number;
+    kycStage?: KycStage;
     referralCode?: string;
     referralStatus?: ReferralStatus;
   }
@@ -35,8 +34,8 @@ export class DetailsController extends Controller {
     return {
       preferences,
       basic: {
-        status: basic?.status,
-        statusUpdated: basic?.statusUpdated?.toMillis(),
+        kycUpdated: basic?.kycUpdated?.toMillis(),
+        kycStage: basic?.kycStage,
         referralCode: basic?.referralCode,
         referralStatus: basic?.referralStatus,
       },

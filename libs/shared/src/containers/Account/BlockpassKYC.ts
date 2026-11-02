@@ -7,7 +7,7 @@ import type { BasicDetails } from '@thecointech/account-details';
 
 // KYC is complete once approved, and the referral process has resolved
 export const isKycComplete = (basic?: BasicDetails) =>
-  basic?.status === "approved" && !!basic.referralStatus && basic.referralStatus !== "pending";
+  basic?.kycStage === "approved" && !!basic.referralStatus && basic.referralStatus !== "pending";
 
 // Check the broker for an updated KYC status.  Returns the new
 // basic details if they have changed, otherwise undefined.
@@ -21,12 +21,12 @@ export function* checkCurrentStatus(state: AccountState, forceVerify?: boolean):
   if (!basic)
     return undefined;
 
-  const changed = basic.status !== current?.status
+  const changed = basic.kycStage !== current?.kycStage
     || basic.referralStatus !== current?.referralStatus
     || basic.referralCode !== current?.referralCode;
   if (!changed)
     return undefined;
 
-  log.trace({ address: state.address }, `Updating {address} with new KYC status: ${basic.status}`);
+  log.trace({ address: state.address }, `Updating {address} with new KYC status: ${basic.kycStage}`);
   return basic;
 }

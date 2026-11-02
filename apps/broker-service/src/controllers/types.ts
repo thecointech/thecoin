@@ -1,4 +1,4 @@
-import type { StatusType } from '@thecointech/blockpass/types'
+import type { BlockpassStatus } from '@thecointech/blockpass/types'
 
 // Start moving types out of types project to where they are used.
 
@@ -25,7 +25,7 @@ type EventType =
 export type BlockpassPayload = {
   guid: string,
   // current user status
-  status: StatusType,
+  status: BlockpassStatus,
   // Id of the service as defined in the Admin Console
   clientId: string,
   // Event that triggered the webhook

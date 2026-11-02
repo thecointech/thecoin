@@ -7,6 +7,7 @@ import { getUserVerified } from "@thecointech/broker-db";
 import { getSigner } from "@thecointech/signers";
 import { DateTime } from "luxon";
 import { uploadUserData } from '../verify'
+import { BlockpassData } from "@thecointech/blockpass/types";
 //
 // When we seed the DB, we initialize the DB with 1 verified client, and 1 referred
 export async function seed() {
@@ -25,15 +26,16 @@ export async function seed() {
 async function setVerified(clientAddress: string) {
   const address = NormalizeAddress(clientAddress);
   // First, supply verified details
-  await uploadUserData(clientAddress, {
+  const partialData: Partial<BlockpassData> = {
     status:  "approved",
     blockPassID: "12345",
     identities: {
-      given_name: { value: "Test" },
-      family_name: { value: "Account" },
-      dob: { value: "12/31/2016" },
+      given_name: { type: "string", value: "Test" },
+      family_name: { type: "string", value: "Account" },
+      dob: { type: "string", value: "12/31/2016" },
     }
-  } as any)
+  }
+  await uploadUserData(clientAddress, partialData as BlockpassData)
   // Next, create referral code
   const signer = await getSigner("BrokerCAD");
   const sig = await getAddressShortCodeSig(address, signer);

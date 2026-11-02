@@ -1,5 +1,5 @@
 
-export type StatusType =
+export type BlockpassStatus =
   "started"| // Button clicked in UI.  Starts polling
   "incomplete"| // Submission started, but not finished
   "waiting"| // Submission uploaded to BP
@@ -18,7 +18,7 @@ export type TypedData = {
 // Sample from: https://docs.blockpass.org/docs/connect/KYCC-Dashboard-API-RefId#response-1
 // This is a best-guess, and should not be assumed to be inviolate
 export type BlockpassData = {
-  status: StatusType,
+  status: BlockpassStatus,
   refId: string,
   isArchived: boolean,
   blockPassID: string,

@@ -38,19 +38,3 @@ export async function generateReferralCode(address: string, uniqueIdSig: string)
   const sig = await getAddressShortCodeSig(address, signer);
   return await createReferrer(sig, address);
 }
-
-async function findDuplicates(address: string, uniqueIdSig: string) {
-  const withSig = await getUsersWithUniqueIdSig(uniqueIdSig);
-  const potentialDuplicates = withSig.filter(user => user.address != address);
-
-  if (potentialDuplicates.length > 0) {
-    // Email me!
-    const dups = potentialDuplicates
-      .map(d => `${d.created} - ${d.address} with seed ${d.seed}`)
-      .join('\n')
-    log.error({address}, `Duplicate Signatures found with user data for {address}, ${dups}`);
-    await SendMail("Duplicate User Found", `Duplicate Signatures found with user data for ${address}, ${dups}`);
-    return true;
-  }
-  return false;
-}

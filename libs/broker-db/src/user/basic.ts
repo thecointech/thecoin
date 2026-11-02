@@ -18,20 +18,7 @@ export async function setUserBasicData(address: string, data: AllUserData) {
 
 export async function getUserVerified(address: string) {
   const userData = await getUserBasicData(address);
-  return userData?.status == "approved";
-}
-
-// Get users with matching UniqueIdSig
-export async function getUsersWithUniqueIdSig(uniqueIdSig: string) {
-  const r = await getUserCollection()
-    .where("uniqueIdSig", "==", uniqueIdSig)
-    .get();
-
-  // TODO: Remove unnecessary spread once TS is upgraded
-  return [...r.docs].map(doc => ({
-    ...doc.data(),
-    address: doc.id,
-  }));
+  return userData?.kycStage === "complete";
 }
 
 //

@@ -50,8 +50,8 @@
     }
   },
   "dependencies": {
-    "@thecointech/secrets": "^0.6.7",
-    "@thecointech/shared": "^0.6.7"
+    "@thecointech/apis": "^0.6.7",
+    "@thecointech/secrets": "^0.6.7"
   },
   "devDependencies": {
     "@thecointech/async": "^0.6.7",

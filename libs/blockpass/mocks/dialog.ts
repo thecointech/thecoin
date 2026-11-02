@@ -8,7 +8,6 @@
 export type MockKycFields = {
   givenName: string;
   familyName: string;
-  dob: string;
   street: string;
   city: string;
   country: string;

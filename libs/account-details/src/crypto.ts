@@ -1,4 +1,4 @@
-import { SigningKey, Wallet, getBytes, hexlify, keccak256, toUtf8Bytes, computeAddress } from "ethers";
+import { SigningKey, Wallet, getBytes, hexlify, keccak256, toUtf8Bytes, computeAddress, encodeBase64, decodeBase64 } from "ethers";
 import type { EncryptedBlob, Recipient } from "./types";
 
 const KEY_LEN = 32;
@@ -19,8 +19,8 @@ async function randomBytes(len: number): Promise<Uint8Array> {
   return r;
 }
 
-const b64 = (b: Uint8Array) => Buffer.from(b).toString("base64");
-const unb64 = (s: string) => new Uint8Array(Buffer.from(s, "base64"));
+const b64 = (b: Uint8Array) => encodeBase64(b);
+const unb64 = (s: string) => new Uint8Array(decodeBase64(s));
 
 // ECIES key-wrap: shared = ephemeralPriv * recipientPub, mask = keccak256(shared).
 // The mask is unique per ephemeral key, so XOR is a one-time pad.

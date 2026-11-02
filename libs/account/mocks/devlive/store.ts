@@ -1,4 +1,3 @@
-import { StatusType } from '@thecointech/broker-cad';
 import { ContractCore } from '@thecointech/contract-core';
 import { getPluginDetails } from '@thecointech/contract-plugins';
 import { getSigner, AccountName } from '@thecointech/signers';
@@ -28,8 +27,8 @@ const addRemoteAccount = async (name: AccountName, active: boolean) => {
   if (active) {
     _initial = address;
     _devWallets[address].details.basic = {
-      status: StatusType.Incomplete,
-      statusUpdated: DateTime.now(),
+      kycStage: "started",
+      kycUpdated: DateTime.now(),
     };
   }
 }
