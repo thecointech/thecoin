@@ -9,10 +9,10 @@ const render = (basic?: BasicDetails) => renderComponent(
   <IntlProvider locale="en"><ReferralCode basic={basic} /></IntlProvider>
 ).container.textContent;
 
-const approved: BasicDetails = { status: 'approved', statusUpdated: DateTime.now() };
+const approved: BasicDetails = { kycStage: 'complete', kycUpdated: DateTime.now() };
 
 it('shows the assigned referral code', () => {
-  expect(render({ ...approved, referralStatus: 'assigned', referralCode: 'TESTCODE' })).toContain('TESTCODE');
+  expect(render({ ...approved, referralStatus: 'active', referralCode: 'TESTCODE' })).toContain('TESTCODE');
 });
 
 it('shows pending assignment while a code is being generated', () => {
@@ -20,8 +20,8 @@ it('shows pending assignment while a code is being generated', () => {
 });
 
 it('does not promise a code for a duplicate identity', () => {
-  const result = render({ ...approved, referralStatus: 'duplicate' });
-  expect(result).toContain('This identity has already been assigned a referral code');
+  const result = render({ ...approved, referralStatus: 'ineligible' });
+  expect(result).toContain('This account is not eligible for a referral code');
   expect(result).not.toContain('We are generating your code');
 });
 

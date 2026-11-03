@@ -435,10 +435,6 @@
     "defaultMessage": "e-Transfer",
     "description": "app.makepayments.tabs.etransfer: Title for the tabs the Make a payment page in the app"
   },
-  "lvjk1Z": {
-    "defaultMessage": "This identity has already been assigned a referral code",
-    "description": "app.settings.userDetails.duplicate: Referral code is unavailable for a duplicate identity"
-  },
   "m0DPoc": {
     "defaultMessage": "Home",
     "description": "app.MainNavigation.home: Title for the Home entry in the menu"
@@ -474,6 +470,10 @@
   "q0z7qW": {
     "defaultMessage": "Step 2 of 3: Sending bill payment to our servers...",
     "description": "app.accounts.billPayments.step2: Message for the form the make a payment page / bill payment tab"
+  },
+  "q20ma8": {
+    "defaultMessage": "This account is not eligible for a referral code",
+    "description": "app.settings.userDetails.ineligible: Referral code is unavailable for this account"
   },
   "qppWkL": {
     "defaultMessage": "Verify",

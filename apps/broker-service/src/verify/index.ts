@@ -74,19 +74,27 @@ export async function uploadUserData(address:string, data: BlockpassData) {
 
   // Wrap everything that follows in a transaction:
   // What is the users uniqueID?
-  const kycStage = await getNextKycStage(address, uniqueIdSig);
+  const existing = await getUserBasicData(address);
+  const kycStage = await getNextKycStage(address, existing, uniqueIdSig);
   log.info({ address, kycStage }, "Moving user {address} to KYC stage {kycStage}");
 
+  // On complete, update the accepted identity
   const acceptedIdentity = kycStage === "complete" ? {
-      uniqueIdSig,
+      uniqueIdSig: uniqueIdSig!,
       ...record,
     } : undefined;
+
+  // On complete, allow referral code to be generated
+  const referralStep: BasicDetails = !existing?.referralCode && kycStage === "complete"
+    ? { referralStatus: "pending" }
+    : { };
 
   await finalizeKyc(address, {
       blockpassStatus: data.status,
       kycUpdated: DateTime.now(),
       kycStage,
       kycLock: "complete",
+      ...referralStep
     },
     acceptedIdentity
   )
@@ -115,9 +123,7 @@ async function getUniqueIdSig(data: BlockpassData): Promise<string | null> {
 }
 
 // Once approved, check for any edge cases that might require in-coin review
-async function getNextKycStage(address: string, uniqueIdSig: string|null): Promise<KycStage> {
-  const existing = await getUserBasicData(address);
-
+async function getNextKycStage(address: string, existing: BasicDetails|undefined, uniqueIdSig: string|null): Promise<KycStage> {
   // Never overwrite a rejected or suspended status
   if (existing?.kycStage === "rejected" || existing?.kycStage === "suspended") {
     return existing.kycStage;

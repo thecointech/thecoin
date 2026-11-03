@@ -1,7 +1,6 @@
 import { log } from '@thecointech/logging';
-import { getUsersPendingReferral, getUsersWithUniqueIdSig } from '@thecointech/broker-db/user';
+import { getUsersPendingReferral } from '@thecointech/broker-db/user';
 import { createReferrer } from '@thecointech/broker-db/referrals';
-import { SendMail } from '@thecointech/email';
 import { getSigner } from '@thecointech/signers';
 import { getAddressShortCodeSig } from '@thecointech/utilities';
 
@@ -16,8 +15,8 @@ export async function processReferrals() {
   const newlyVerified = await getUsersPendingReferral();
 
   // for each account, let's create & assign a referral code
-  for (const {address, uniqueIdSig} of newlyVerified) {
-    const code = await generateReferralCode(address, uniqueIdSig!);
+  for (const { address } of newlyVerified) {
+    const code = await generateReferralCode(address);
     log.debug({address}, `Generated referral code (${code}) for {address}`);
 
     // Now!  You could do something neat like pay out a referral bonus.
@@ -27,13 +26,7 @@ export async function processReferrals() {
 }
 
 // If the user is unique, automatically generate referral code
-export async function generateReferralCode(address: string, uniqueIdSig: string) {
-
-  if (await findDuplicates(address, uniqueIdSig)) {
-    return null;
-  }
-
-  // Ok, no duplicates, generate address short code
+export async function generateReferralCode(address: string) {
   const signer = await getSigner("BrokerCAD");
   const sig = await getAddressShortCodeSig(address, signer);
   return await createReferrer(sig, address);

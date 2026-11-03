@@ -11,9 +11,9 @@ const translations = defineMessages({
     defaultMessage: 'We are generating your code, please check back in a few hours',
     description: 'app.settings.userDetails.codeInfos: Label for the info for the tab User details in the setting page in the app'
   },
-  duplicate: {
-    defaultMessage: 'This identity has already been assigned a referral code',
-    description: 'app.settings.userDetails.duplicate: Referral code is unavailable for a duplicate identity'
+  ineligible: {
+    defaultMessage: 'This account is not eligible for a referral code',
+    description: 'app.settings.userDetails.ineligible: Referral code is unavailable for this account'
   },
   pleaseVerify: {
     defaultMessage: 'You need to verify your account to obtain one',
@@ -28,11 +28,11 @@ export const ReferralCode = ({ basic }: { basic?: BasicDetails }) => (
       basic?.referralCode
         ? basic.referralCode
         : <FormattedMessage {
-          ...(basic?.status !== "approved"
+          ...(basic?.kycStage !== "approved"
             ? translations.pleaseVerify
-            : basic.referralStatus === "duplicate"
-              ? translations.duplicate
-              : translations.generating
+            : basic.referralStatus === "pending"
+              ? translations.generating
+              : translations.ineligible
           )
         } />
     }

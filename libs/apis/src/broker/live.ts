@@ -1,8 +1,6 @@
 import {
   DetailsApi,
   StatusApi,
-  StatusType as StatusType_Import,
-  // EventType as EventType_Import,
   BillPaymentsApi,
   DirectTransferApi,
   ETransferApi,
@@ -15,8 +13,6 @@ import {
 import { createGaeServiceProxy } from "../resilience";
 import type { TimeSource } from "@thecointech/utilities/TimeSource";
 import { createServerTimeSource } from "./serverTimeSource";
-
-export const StatusType = StatusType_Import;
 
 const BrokerCADAddress = process.env.URL_SERVICE_BROKER;
 export const GetUserVerificationApi = () => createGaeServiceProxy(new UserVerificationApi(undefined, BrokerCADAddress));
