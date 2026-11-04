@@ -1,6 +1,6 @@
 import { InitialCoinBlock, ContractCore, type TheCoin } from '@thecointech/contract-core';
 import { Signer, Wallet, type Provider } from 'ethers';
-import { call, delay, select, StrictEffect } from "@redux-saga/core/effects";
+import { call, delay, StrictEffect } from "@redux-saga/core/effects";
 import { IsValidAddress, NormalizeAddress } from '@thecointech/utilities';
 import { buildSagas } from './actions';
 import { FxRateReducer } from '../../containers/FxRate/reducer';
@@ -11,15 +11,14 @@ import { AccountState, DefaultAccountValues, getAccountName } from '@thecointech
 import { setStoredAccountName } from '@thecointech/account/store';
 import { DateTime } from 'luxon';
 import { log } from '@thecointech/logging';
-import { checkCurrentStatus, isKycComplete } from './BlockpassKYC';
-import type { BasicDetails, UserPreferences } from '@thecointech/account-details';
+import type { UserPreferences } from '@thecointech/account-details';
 import type { SagaIterator } from '@redux-saga/core';
 import type { AccountMapStore } from '@thecointech/redux-accounts';
 import type { DecryptCallback, IActions } from './types';
 import type { Dictionary } from 'lodash';
 import { getPluginDetails } from '@thecointech/contract-plugins';
 import { getProvider } from '@thecointech/ethers-provider';
-import { fetchDetails, uploadPreferences, type FetchedDetails } from './details';
+import { fetchBasicDetails, fetchDetails, uploadPreferences, type FetchedDetails } from './details';
 
 // The account name is the only preference cached locally (so we can display
 // locked accounts).  Keep that cache in sync when the name changes.
@@ -29,10 +28,6 @@ function syncStoredName(account: AccountState, preferences: UserPreferences) {
     setStoredAccountName(account.address, accountName);
   }
 }
-
-const KycPollingInterval = (process.env.NODE_ENV === 'production')
-  ? 5 * 60 * 1000 // 5 minutes
-  : 5 * 1000; // 5 seconds
 
 // The reducer for a single account state
 function AccountReducer(address: string, initialState: AccountState) {
@@ -91,16 +86,6 @@ function AccountReducer(address: string, initialState: AccountState) {
       if (preferencesLoaded && !remote.preferences) {
         yield call(uploadPreferences, signer, preferences);
       }
-
-      // If our details indicate we have started KYC but not completed it,
-      // run a single check to see if it was finishd in our absence
-      if (basic && !isKycComplete(basic)) {
-        // Give storeValues a little time to complete.
-        // Otherwise our check may be run before and overwrite the new status
-        yield delay(500);
-        // Check to see if we are done
-        yield this.sendValues(this.actions.checkKycStatus);
-      }
     };
 
     *setPreferences(newPreferences: Partial<UserPreferences>): SagaIterator {
@@ -147,21 +132,10 @@ function AccountReducer(address: string, initialState: AccountState) {
           }
         });
       }
-      while (1) {
-        // Trigger Check Saga.  This is an async call
-        // and we cannot receive the return value here
-        yield this.sendValues(this.actions.checkKycStatus);
-        // Delay polling time then trime again
-        yield delay(KycPollingInterval);
-        const current: AccountState = yield select(AccountReducer.selector);
-        log.trace({address: this.state.address}, `{address} polled KYC - current status: ${current.details.basic?.kycStage}`);
-        if (isKycComplete(current.details.basic))
-          break;
-      }
     }
 
-    *checkKycStatus(forceVerify?: boolean): SagaIterator {
-      const basic: BasicDetails | undefined = yield call(checkCurrentStatus, this.state, forceVerify);
+    *loadBasicDetails(): SagaIterator {
+      const basic = yield call(fetchBasicDetails, this.state.signer!);
       if (basic) {
         yield this.storeValues({ details: { ...this.state.details, basic } });
       }

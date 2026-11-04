@@ -11,17 +11,20 @@ import { getBrokerCADPubKey } from '../details';
 import { encryptKyc } from '@thecointech/account-details';
 import type { BlockpassData, BlockpassStatus } from '@thecointech/blockpass/types';
 import { SendMail } from '@thecointech/email';
-import { IsValidAddress } from '@thecointech/utilities';
+import { IsValidAddress, NormalizeAddress } from '@thecointech/utilities';
 import { KycStage, BasicDetails } from '@thecointech/account-details/types';
 
 //
 // Called for every status update, allows us to pull user data from BP and store it locally
 export async function updateUserVerification(payload: BlockpassPayload) {
-  const address = payload.refId;
-  if (!IsValidAddress(address)) {
-    log.error({refId: address, blockPassID: payload.blockPassID}, "Invalid address {refId} received in KYC for {blockPassID}");
+  const rawAddress = payload.refId;
+  if (!IsValidAddress(rawAddress)) {
+    log.error({refId: rawAddress, blockPassID: payload.blockPassID}, "Invalid address {refId} received in KYC for {blockPassID}");
     throw new Error(`Invalid address`);
   }
+  const address = NormalizeAddress(rawAddress);
+  log.info({address}, "Received Blockpass status update for {address}");
+
   if (payload.status == "approved") {
     try {
       // First, mark the user uploading.  If the uploadProcess
@@ -87,7 +90,10 @@ export async function uploadUserData(address:string, data: BlockpassData) {
   // On complete, allow referral code to be generated
   const referralStep: BasicDetails = !existing?.referralCode && kycStage === "complete"
     ? { referralStatus: "pending" }
-    : { };
+    // If a new update has rendered an existing "pending" status invalid, clear it
+    : existing?.referralStatus === "pending"
+      ? { referralStatus: undefined }
+      : { };
 
   await finalizeKyc(address, {
       blockpassStatus: data.status,

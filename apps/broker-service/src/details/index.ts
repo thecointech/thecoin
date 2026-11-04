@@ -1,5 +1,5 @@
 import { getUserPreferences, getUserBasicData, setUserPreferences } from '@thecointech/broker-db';
-import { GetContract } from '../signer/Wallet';
+// import { GetContract } from '../signer/Wallet';
 import { getSigner } from '@thecointech/signers';
 import { getEncryptionKey, type EncryptedBlob } from '@thecointech/account-details';
 
@@ -19,12 +19,15 @@ export async function getBrokerCADPubKey(): Promise<string> {
 
 // A user may store details if the broker already knows them
 // (a User doc exists) or their account is funded.
-async function isEligible(address: string) {
-  const user = await getUserBasicData(address);
-  if (user) return true;
-  const contract = await GetContract();
-  const balance = await contract.balanceOf(address);
-  return balance > 0n;
+async function isEligible(_address: string) {
+  // This may prove valuable in the future, but for now we'll allow any account to store details.
+  // It's necessary to allow an initial account to store it's name.
+  return true;
+  // const user = await getUserBasicData(address);
+  // if (user) return true;
+  // const contract = await GetContract();
+  // const balance = await contract.balanceOf(address);
+  // return balance > 0n;
 }
 
 export async function getDetails(address: string) {

@@ -26,7 +26,7 @@ const button = defineMessage({
 export const Unverified = ({address, readonly}: PropsVerified) => {
 
   const accountApi = Account(address).useApi();
-  const state = useBlockpass(address, undefined, accountApi.checkKycStatus);
+  const state = useBlockpass(address, undefined, accountApi.loadBasicDetails);
 
   return (
     <>

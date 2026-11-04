@@ -26,10 +26,10 @@ const addRemoteAccount = async (name: AccountName, active: boolean) => {
   console.log('Loaded remote account: ' + address);
   if (active) {
     _initial = address;
-    _devWallets[address].details.basic = {
-      kycStage: "started",
-      kycUpdated: DateTime.now(),
-    };
+    // _devWallets[address].details.basic = {
+    //   kycStage: "started",
+    //   kycUpdated: DateTime.now(),
+    // };
   }
 }
 

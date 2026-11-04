@@ -29,6 +29,8 @@ export async function getUserVerified(address: string) {
 export async function getUsersPendingReferral() {
   const r = await getUserCollection()
     .where("referralStatus", "==", "pending")
+    .where("kycStage", "==", "complete")
+    .where("kycLock", "==", "complete")
     .get();
   // TODO: Remove unnecessary spread once TS is upgraded
   return [...r.docs].map(doc => ({

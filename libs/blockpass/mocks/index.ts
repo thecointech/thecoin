@@ -12,19 +12,38 @@ import { openMockKycDialog, MockKycFields } from './dialog';
 export function useBlockpass(address: string, _email: string|undefined, onClose: () => void) {
 
   useEffect(() => {
-    const button = document.getElementById("blockpass-kyc-connect");
-    if (!button) return;
-    const click = button.onclick;
-    button.onclick = (...args) => {
-      //@ts-ignore
-      if (click) click(...args);
-      openMockKycDialog(
-        (fields) => runMockFlow(address, fields, onClose),
-        onClose
-      );
-    };
-    return () => { button.onclick = click; }
+    hookButton(address, onClose);
   }, [])
+
+  async function hookButton(address: string, onClose: () => void) {
+    await sleep(500);
+
+    const button = document.getElementById("blockpass-kyc-connect");
+    if (!button) {
+      log.error("Blockpass button not found");
+      return;
+    }
+    const click = button.onclick;
+
+    // Running this too quickly means our "on-click" handler gets overwritten
+    // by the react-set on-click in `Unverified.tsx`
+    const timeout = setTimeout(() => {
+      button.onclick = (...args) => {
+        //@ts-ignore
+        if (click) click(...args);
+        openMockKycDialog(
+          (fields) => runMockFlow(address, fields, onClose),
+          onClose
+        );
+      };
+    }, 500);
+    return () => {
+      clearTimeout(timeout);
+      if (button) {
+        button.onclick = click;
+      }
+    }
+  }
 
   return "ready";
 }

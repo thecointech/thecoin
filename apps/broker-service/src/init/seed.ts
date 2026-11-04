@@ -13,18 +13,18 @@ import { BlockpassData } from "@thecointech/blockpass/types";
 export async function seed() {
   const Client1 = await getSigner("Client1");
   const clientAddress = await Client1.getAddress();
+  const address = NormalizeAddress(clientAddress);
 
   // test if seed hasn't happened yet
-  if (!await getUserVerified(clientAddress)) {
-    const code = await setVerified(clientAddress);
+  if (!await getUserVerified(address)) {
+    const code = await setVerified(address);
     await referClient2(code);
   }
 }
 
 //
 // Set the first account as verified, this allows it to refer other accounts
-async function setVerified(clientAddress: string) {
-  const address = NormalizeAddress(clientAddress);
+async function setVerified(address: string) {
   // First, supply verified details
   const partialData: Partial<BlockpassData> = {
     status:  "approved",
@@ -35,7 +35,7 @@ async function setVerified(clientAddress: string) {
       dob: { type: "string", value: "12/31/2016" },
     }
   }
-  await uploadUserData(clientAddress, partialData as BlockpassData)
+  await uploadUserData(address, partialData as BlockpassData)
   // Next, create referral code
   const signer = await getSigner("BrokerCAD");
   const sig = await getAddressShortCodeSig(address, signer);

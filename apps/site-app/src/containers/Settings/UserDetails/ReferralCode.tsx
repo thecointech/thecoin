@@ -21,20 +21,24 @@ const translations = defineMessages({
   },
 });
 
+const getReferralMessage = (basic?: BasicDetails) => {
+  switch(basic?.referralStatus) {
+    case 'pending':
+      return translations.generating;
+    case 'ineligible':
+      return translations.ineligible;
+    default:
+      return translations.pleaseVerify;
+  }
+}
+
 export const ReferralCode = ({ basic }: { basic?: BasicDetails }) => (
   <>
     <div className={"font-label border-top-green4 x4spaceBefore x4spaceAfter"} ><FormattedMessage {...translations.label} /></div>
     <div className={"x4spaceAfter"}>{
       basic?.referralCode
         ? basic.referralCode
-        : <FormattedMessage {
-          ...(basic?.kycStage !== "approved"
-            ? translations.pleaseVerify
-            : basic.referralStatus === "pending"
-              ? translations.generating
-              : translations.ineligible
-          )
-        } />
+        : <FormattedMessage {...getReferralMessage(basic)} />
     }
     </div>
   </>
