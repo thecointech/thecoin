@@ -29,8 +29,6 @@
     "clean:contracts": "run -T rimraf ./src/codegen && run -T rimraf ./src/types && run -T rimraf ./.hardhat",
     "test": "run :jest",
     "validate:prod": "run -T cross-env CONFIG_NAME=prod yarn _hardhat ./scripts/validate.ts",
-    "checkadmin": "yarn _hardhat ./tools/checkAdmin.ts",
-    "fixownership": "yarn _hardhat ./scripts/fixOwnership.ts",
     "validate:localprod": "run -T cross-env CONFIG_NAME=prod URL_SERVICE_RATES=http://localhost:7001/api/v1 yarn _hardhat ./scripts/validate.ts",
     "reset:localprod": "run -T cross-env CONFIG_NAME=prod URL_SERVICE_RATES=http://localhost:7001/api/v1 yarn _hardhat ./scripts/reset.ts",
     "dev:live": "run -T wait-port 9545 && run -T cross-env CONFIG_NAME=devlive yarn deploy:polygon",

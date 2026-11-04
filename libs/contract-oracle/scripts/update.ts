@@ -5,7 +5,7 @@ import { getSigner } from '@thecointech/signers';
 import { getSecret } from '@thecointech/secrets';
 import { writeFileSync } from 'fs';
 
-const owner = await getSigner("OracleUpdater");
+const owner = await getSigner("OracleOwner");
 const existing = await ContractOracle.get();
 const existingAddress = await existing.getAddress();
 
