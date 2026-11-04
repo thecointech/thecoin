@@ -39,8 +39,20 @@ export async function createAndInitOracle(owner: SignerWithAddress, rate = 2, bl
   // setOracleValueRepeat takes its duration in days (and does
   // its own conversion to block count), so express the target
   // span as a fractional number of days.
-  const daysToCover = (target - initialTime) / Duration.fromObject({day: 1}).as("milliseconds");
-  await setOracleValueRepeat(oracle, rate, daysToCover);
+  const dayInMs = Duration.fromObject({day: 1}).as("milliseconds");
+  const daysToCover = (target - initialTime) / dayInMs;
+  // bulkUpdate rejects pushes whose validity would extend more
+  // than one block past the current chain time, so when blockTime
+  // is shorter than the span remaining until midnight the target
+  // is unreachable in a single update.  Limit the span to what
+  // the contract will accept; coverage still reaches the target
+  // whenever blockTime permits.
+  const bt = (oracle as any).__blockTime;
+  // (the -1ms margin ensures rounding inside setOracleValueRepeat
+  // cannot push the count back over maxEntries)
+  const maxEntries = Math.floor((Number(await oracle.msNow()) + bt - initialTime) / bt);
+  const daysAllowed = (maxEntries * bt - 1) / dayInMs;
+  await setOracleValueRepeat(oracle, rate, Math.min(daysToCover, daysAllowed));
   return oracle;
 }
 
