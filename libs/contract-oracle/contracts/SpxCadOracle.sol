@@ -18,7 +18,7 @@ contract SpxCadOracle is AggregatorV3Interface, OwnableUpgradeable, AccessContro
 
   // OracleUpdater.  This is the only address allowed
   // to update the oracle price.
-  bytes32 public constant UPDATER_ROLE = DEFAULT_ADMIN_ROLE;
+  bytes32 public constant UPDATER_ROLE = keccak256("UPDATER_ROLE");
 
   // We allow updates to happen from this many millis prior to expiry.
   // This prevents updates happening into the future
@@ -55,6 +55,7 @@ contract SpxCadOracle is AggregatorV3Interface, OwnableUpgradeable, AccessContro
   function initialize(address updater, int initialTimestamp, int blockTime) public initializer {
     __Ownable_init();
     __AccessControl_init();
+    _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
     _setupRole(UPDATER_ROLE, updater);
 
     INITIAL_TIMESTAMP = initialTimestamp;

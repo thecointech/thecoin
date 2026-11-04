@@ -8,7 +8,7 @@ import { getSigner } from '@thecointech/signers';
 
 async function main() {
 
-  const owner = await getSigner("OracleOwner")
+  const owner = await getSigner("OracleUpdater")
   const contractArgs = await getArguments()
   const Oracle = await hre.ethers.getContractFactory("SpxCadOracle", owner);
   const oracle = await hre.upgrades.deployProxy(Oracle, contractArgs);
