@@ -6,15 +6,12 @@ export enum AccountId {
   TheCoin,
   TCManager,
   Minter,
-  NFTMinter,
   Police,
   BrokerCAD,
   BrokerTransferAssistant,
   // Manage SpxCadOracle
   OracleOwner,
   OracleUpdater,
-  // Locks down ceramic access
-  CeramicValidator,
   // NOTE: The following accounts for testing only!
   Client1,
   Client2,

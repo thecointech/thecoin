@@ -1,3 +1,4 @@
+import { getAccountName } from '@thecointech/account';
 import React, { useCallback, useMemo } from 'react';
 import { AccountMap } from '@thecointech/redux-accounts';
 import { useLocation } from 'react-router';
@@ -70,7 +71,7 @@ export const HarvesterConnect: React.FC = () => {
       siteOrigin: window.location.origin,
       timestamp: Date.now().toString(),
       address: active.address,
-      name: active.name,
+      name: getAccountName(active),
       walletFile: walletFile!,
       ...mnemonic!,
     };

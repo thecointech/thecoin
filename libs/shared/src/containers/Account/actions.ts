@@ -12,11 +12,11 @@ export const buildSagas : SagaBuilder<IActions, AccountState> = (sagaReducer) =>
     yield takeLatest(actions.setSigner.type, buildSaga(sagaReducer, "setSigner"))
     yield takeLatest(actions.connect.type, buildSaga(sagaReducer, "connect"))
     yield takeLatest(actions.loadDetails.type, buildSaga(sagaReducer, "loadDetails"))
-    yield takeLatest(actions.setDetails.type, buildSaga(sagaReducer, "setDetails"))
+    yield takeLatest(actions.setName.type, buildSaga(sagaReducer, "setName"))
+    yield takeLatest(actions.setPreferences.type, buildSaga(sagaReducer, "setPreferences"))
 
     yield takeLatest(actions.initKycProcess.type, buildSaga(sagaReducer, "initKycProcess"))
-    yield takeLatest(actions.checkKycStatus.type, buildSaga(sagaReducer, "checkKycStatus"))
-
+    yield takeLatest(actions.loadBasicDetails.type, buildSaga(sagaReducer, "loadBasicDetails"))
   }
   return rootSaga;
 }

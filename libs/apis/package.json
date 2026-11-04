@@ -36,10 +36,6 @@
       "development": "./mocks/pricing.ts",
       "default": "./build/pricing/live.js"
     },
-    "./nft": {
-      "development": "./mocks/nft.ts",
-      "default": "./build/nft/live.js"
-    },
     "./vqa": {
       "default": "./build/vqa/live.js"
     }
@@ -55,9 +51,6 @@
       "pricing": [
         "./build/pricing/live.d.ts"
       ],
-      "nft": [
-        "./build/nft/live.d.ts"
-      ],
       "vqa": [
         "./build/vqa/live.d.ts"
       ]
@@ -65,7 +58,6 @@
   },
   "dependencies": {
     "@thecointech/broker-cad": "^0.6.7",
-    "@thecointech/nft": "^0.6.7",
     "@thecointech/pricing": "^0.6.7",
     "@thecointech/secrets": "^0.6.7",
     "@thecointech/utilities": "^0.6.7",

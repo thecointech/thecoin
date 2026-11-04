@@ -1,4 +1,5 @@
 import React, { useCallback } from "react";
+import { getAccountName } from '@thecointech/account';
 import { UxInput } from "@thecointech/shared/components/UX/Input";
 import { defineMessages } from "react-intl";
 import { AccountMap } from "@thecointech/redux-accounts";
@@ -31,7 +32,7 @@ export const NameInput = (props: Props) => {
 
   const { setName, ...rest } = props;
   const accounts = AccountMap.useAsArray();
-  const accountNames = accounts.map(a => a.name);
+  const accountNames = accounts.map(getAccountName);
 
   const onValidate = useCallback(
     (value: string) => validateName(value, accountNames),

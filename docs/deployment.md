@@ -27,15 +27,13 @@ setup yarn for publishing Github packages:
 
 Our system is built to be deployed on Google App Engine (GAE).  The services are deployed as standard environment on GAE, and the websites are deployed to Firebase Hosting.
 
-Each deployment app (rates/broker/site/nft) needs a GAE configuration for each environment (test/beta|prod).  The GAE configuration is used to set the deployment target for all the apps, deploying at the same time. See https://medium.com/google-cloud/how-to-use-multiple-accounts-with-gcloud-848fdb53a39a for how to create new configs.
+Each deployment app (rates/broker/site) needs a GAE configuration for each environment (test/beta|prod).  The GAE configuration is used to set the deployment target for all the apps, deploying at the same time. See https://medium.com/google-cloud/how-to-use-multiple-accounts-with-gcloud-848fdb53a39a for how to create new configs.
 
 #### Caveate BETA|PROD:
 Our BETA services (rates/broker) are assigned a specific version to differentiate them from prod.  Unfortunately, we cannot specify a version using configs on GAE.   The beta environments are deployed to prod and the version is specified within the `deploy.ts` deployment scripts.
 
-NOTE: nft site does not currently support `beta` as we are still pre-alpha for that project.
-
 #### Selecting the right Config when deploying an app.
-The configuration name to switch to when deploying an app should be set in the .env file.  This is how we send prodtest to `tc-nft-testing`, and prod to `tc-nft` using the same deploy command.  Eg, if you create a config for deploying rates-service to the prodtest project, in the prodtest file set:
+The configuration name to switch to when deploying an app should be set in the .env file.  This is how we send prodtest to `rates-testing`, and prod to `rates-?` using the same deploy command.  Eg, if you create a config for deploying rates-service to the prodtest project, in the prodtest file set:
 
 `GCLOUD_RATES_CONFIG=rates-testing`
 
@@ -43,8 +41,6 @@ In the deployment script for rates-service, there is a setup call to `SetGCloudC
 
 
 Because the app/landing websites are a pair, they are hosted under the same project.  This means these sites also have a connection in their `.firebaserc` files to specify which app in the hosting they deploy to.
-
-The NFT site does not have this connection because it is a stand-alone website.
 
 ## Building
 
@@ -92,10 +88,6 @@ Apps:
  - site-landing: Static landing website, connects to broker
  - site-app: Static App website.  Connects to broker & rates.
  - site-wallet: [TODO] Static website runs wallet code. Runs site-app in a sandboxed iframe.
-
- - nft-service: Simple service handles claiming/updating NFT's
- - site-nft: Website to match
-
 
 
 ## Authentication

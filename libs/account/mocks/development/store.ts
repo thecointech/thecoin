@@ -4,7 +4,6 @@ import { ContractCore } from '@thecointech/contract-core';
 import { getPluginDetails } from '@thecointech/contract-plugins';
 import type { AccountMap } from '@/map';
 import { type AccountState, buildNewAccount } from '@/state';
-import { getComposeDB } from '@thecointech/idx';
 
 const _devAccounts: AccountMap = {};
 let _initial: null|string = null;
@@ -23,7 +22,6 @@ async function initDevWallets() {
   // connect to mocked services - normally this is done by "connect" call
   randomAccount.contract = await ContractCore.connect(randomWallet);
   randomAccount.plugins = await getPluginDetails(randomAccount.contract, randomWallet.address);
-  randomAccount.idx = await getComposeDB(randomAccount.signer);
 
   _devAccounts[randomAccount.address] = randomAccount
   _initial = randomAccount.address;
@@ -41,6 +39,15 @@ async function initDevWallets() {
 export const getStoredAccountData = (address: string) => _devAccounts[address];
 export const storeAccount = (account: AccountState) => _devAccounts[account.address] = {...account};
 export const deleteAccount = (account: AccountState) => delete _devAccounts[account.address];
+export const setStoredAccountName = (address: string, accountName: string) => {
+  const account = _devAccounts[address];
+  if (account) {
+    _devAccounts[address] = {
+      ...account,
+      details: { ...account.details, preferences: { ...account.details.preferences, accountName } },
+    };
+  }
+}
 export const getInitialAddress = () => _initial;
 export const getAllAccounts = async () => {
   if (Object.keys(_devAccounts).length === 0) {

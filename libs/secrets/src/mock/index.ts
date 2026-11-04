@@ -23,9 +23,6 @@ export async function getSecret(name: SecretKeyType) {
       return Promise.resolve("");
     case "VqaSslCertPrivate":
       return Promise.resolve("");
-    case "CeramicSeed":
-      // Used by devlive for self-hosted ceramic
-      return Promise.resolve("e663239643ed99d36a29bd048717c4e2b4be6c5629b997cae6de6184bf4e92a1")
     case "TxGmailClient":
     {
       // tx-gmail:authConfig needs a parsable value

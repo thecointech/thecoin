@@ -23,10 +23,10 @@ const button = defineMessage({
 
 //
 // Component to show if the account is needs verification
-export const Unverified = ({address, details, readonly}: PropsVerified) => {
+export const Unverified = ({address, readonly}: PropsVerified) => {
 
   const accountApi = Account(address).useApi();
-  const state = useBlockpass(address, details.user?.email, accountApi.checkKycStatus);
+  const state = useBlockpass(address, undefined, accountApi.loadBasicDetails);
 
   return (
     <>

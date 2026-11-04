@@ -11,6 +11,6 @@ export const getCSP = () =>
   `script-src 'self' ${devScript}; ` +
   `style-src 'self' ${devStyle} fonts.googleapis.com; ` +
   "media-src 'self' https://storage.googleapis.com/tccc-releases/Tutorials/; " +
-  `connect-src 'self'  localhost:* data: ${polygonScanUrl} ${vars.INFURA_URL} ${vars.CERAMIC_URL} ${vars.URL_SERVICE_RATES}/;` +
+  `connect-src 'self'  localhost:* data: ${polygonScanUrl} ${vars.INFURA_URL} ${vars.URL_SERVICE_RATES}/;` +
   "font-src 'self' data: fonts.gstatic.com; " +
   "object-src 'none' "

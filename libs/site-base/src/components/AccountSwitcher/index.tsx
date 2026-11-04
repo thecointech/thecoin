@@ -5,7 +5,7 @@ import { AccountMap } from "@thecointech/redux-accounts";
 import { getAvatarLink } from '@thecointech/shared/components/Avatars';
 import { FormattedMessage, useIntl } from 'react-intl';
 import styles from './styles.module.less';
-import { AccountState } from '@thecointech/account';
+import { AccountState, getAccountName } from '@thecointech/account';
 import { defineMessage } from '@formatjs/intl';
 
 
@@ -40,7 +40,7 @@ export const AccountSwitcher = () => {
 
   // Build the title of the dropdown - LOGIN text or avatar and account name
   const trigger = activeAccount
-    ? <><img src={getAvatarLink("14")} className={styles.avatars} /><span>{activeAccount.name}</span></>
+    ? <><img src={getAvatarLink("14")} className={styles.avatars} /><span>{getAccountName(activeAccount)}</span></>
     : intl.formatMessage(titleMsg)
   const onClick = (_: unknown, data: DropdownItemProps) => (
     accountsApi.setActiveAccount(data.address)
@@ -53,7 +53,7 @@ export const AccountSwitcher = () => {
         </Dropdown.Header>
         {
           accounts
-            .sort((a, b) => a.name.localeCompare(b.name))
+            .sort((a, b) => getAccountName(a).localeCompare(getAccountName(b)))
             .map(account => (
               <AccountItem key={account.address} account={account} onClick={onClick} active={account.address == activeAccount?.address}/>
             ))
@@ -80,6 +80,6 @@ const AccountItem = ({active, onClick, account}: ActiveProps) =>
         address={account.address}
         onClick={onClick}
       >
-        {account.name}
+        {getAccountName(account)}
       </Dropdown.Item>
     : null

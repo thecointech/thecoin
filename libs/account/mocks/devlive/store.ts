@@ -1,13 +1,12 @@
-import { StatusType } from '@thecointech/broker-cad';
 import { ContractCore } from '@thecointech/contract-core';
 import { getPluginDetails } from '@thecointech/contract-plugins';
-import { getComposeDB } from '@thecointech/idx';
 import { getSigner, AccountName } from '@thecointech/signers';
 import { NormalizeAddress } from '@thecointech/utilities/Address';
-import { AccountState, buildNewAccount } from '@/state';
+import { AccountState, buildNewAccount, getAccountName } from '@/state';
 import * as Browser from '@/store';
 import type { AccountMap } from '@/map';
 import { Wallet } from 'ethers';
+import { DateTime } from 'luxon';
 
 let _devWallets: AccountMap = {};
 let _initial = null as string|null;
@@ -27,8 +26,10 @@ const addRemoteAccount = async (name: AccountName, active: boolean) => {
   console.log('Loaded remote account: ' + address);
   if (active) {
     _initial = address;
-    _devWallets[address].details.status = StatusType.Incomplete;
-    _devWallets[address].idx = await getComposeDB(signer);
+    // _devWallets[address].details.basic = {
+    //   kycStage: "started",
+    //   kycUpdated: DateTime.now(),
+    // };
   }
 }
 
@@ -48,7 +49,7 @@ export const getAllAccounts = async () => {
     _devWallets = await Browser.getAllAccounts();
     // Remove any existing "Local1" accounts;
     Object.keys(_devWallets).forEach((address) => {
-      if (_devWallets[address].name === "Local1") {
+      if (getAccountName(_devWallets[address]) === "Local1") {
         deleteAccount(_devWallets[address]);
         delete _devWallets[address];
       }
@@ -70,4 +71,11 @@ export const deleteAccount = (account: AccountState) => {
 }
 // We need some persistence to be able to test account storage
 export const storeAccount = Browser.storeAccount;
+export const setStoredAccountName = (address: string, accountName: string) => {
+  Browser.setStoredAccountName(address, accountName);
+  const account = _devWallets[address];
+  if (account) {
+    account.details.preferences = { ...account.details.preferences, accountName };
+  }
+}
 export const getStoredAccountData = (address: string) => _devWallets[address] ?? Browser.getStoredAccountData(address);

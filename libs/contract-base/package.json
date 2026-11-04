@@ -1,7 +1,7 @@
 {
   "name": "@thecointech/contract-base",
   "version": "0.6.7",
-  "description": "TheCoin: Basic contract management for NFT & Core contracts",
+  "description": "TheCoin: Basic contract management for contracts",
   "type": "module",
   "keywords": [
     "TheCoin",

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { AccountMap } from '@thecointech/redux-accounts';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { AccountVerify } from '../Verified';
@@ -7,7 +7,10 @@ import { Grid } from 'semantic-ui-react';
 import { Account } from '@thecointech/shared/containers/Account';
 import { CopyToClipboard } from '@thecointech/shared/components/CopyToClipboard';
 import { ReferralCode } from './ReferralCode';
+import { getAccountName } from '@thecointech/account';
+import { isKycComplete, isReferralComplete } from '@thecointech/account-details';
 import styles from './styles.module.less';
+import { log } from '@thecointech/logging';
 
 const translations = defineMessages({
   accountName : {
@@ -18,45 +21,41 @@ const translations = defineMessages({
       description: 'app.settings.userDetails.address: Label for the info for the tab User details in the setting page in the app'},
 });
 
-const POLLING_INTERVAL = 5 * 60 * 1000;
+const KycPollingInterval = (process.env.NODE_ENV === 'production')
+  ? 5 * 60 * 1000 // 5 minutes
+  : 5 * 1000; // 5 seconds
 
 export const UserDetails = () => {
-  const { address, name, details, readonly } = AccountMap.useActive()!;
+  const account = AccountMap.useActive()!;
+  const { address, details, readonly } = account;
+  const name = getAccountName(account);
   const accountApi = Account(address).useApi();
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const detailsRef = useRef(details);
   // Allow for manually forcing a re-verify of an account
   const forceVerify = window.location.hash == "#/settings?forceVerify=true";
 
-  // Should we check for latest?
+  // Run-once on mount (for each account)
   useEffect(() => {
-    // Execute the check immediately on mount/re-run
-    if (!readonly) {
-      accountApi.checkKycStatus(forceVerify);
+    if (!details.basic) {
+      log.info('Loading basic details for account', { address });
+      accountApi.loadBasicDetails();
     }
-  }, [forceVerify, readonly]);
+  }, [address]);
 
+  // Poll for KYC status updates if started but not yet complete
   useEffect(() => {
-    detailsRef.current = details;
-  }, [details]);
+    if (readonly || !details.basic?.kycStage) return;
+    if (isKycComplete(details.basic) && isReferralComplete(details.basic)) return;
 
-  useEffect(() => {
-    if (timeoutRef.current) {
-      return;
-    }
-    if (detailsRef.current.status && !detailsRef.current.referralCode) {
-      timeoutRef.current = setTimeout(() => {
-        // Recursively call startPolling after the interval
-        accountApi.checkKycStatus(forceVerify);
-      }, POLLING_INTERVAL);
-    }
-    return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-        timeoutRef.current = null;
-      }
-    }
-  }, [details]);
+    // Trigger polling
+    let timer: NodeJS.Timeout;
+    const tick = () => {
+      log.info({address}, 'Polling for KYC status update');
+      accountApi.loadBasicDetails();
+      timer = setTimeout(tick, KycPollingInterval);
+    };
+    timer = setTimeout(tick, KycPollingInterval);
+    return () => clearTimeout(timer);
+  }, [details.basic]);
 
   return (
     <React.Fragment>
@@ -72,11 +71,13 @@ export const UserDetails = () => {
           </Grid.Row>
         </Grid>
         <AccountVerify details={details} address={address} forceVerify={forceVerify} readonly={readonly} />
-        <div className={"font-label border-top-green4 x4spaceBefore x4spaceAfter"} ><FormattedMessage {...translations.address}/></div>
+        <div className={"font-label border-top-green4 x4spaceBefore x4spaceAfter"} >
+          <FormattedMessage {...translations.address}/>
+        </div>
         <div className={"font-big x4spaceAfter"}>
           {address} <CopyToClipboard payload={address!} />
         </div>
-        <ReferralCode {...details} />
+        <ReferralCode basic={details.basic} />
     </React.Fragment>
   );
 }

@@ -12,7 +12,7 @@ export const AccountBase = ({id}: Props) => {
   const accounts = AccountMap.useAsArray();
   const accountsApi = AccountMap.useApi();
 
-  const theCoin = accounts.find(account => account.name === AccountId[id])!;
+  const theCoin = accounts.find(account => account.details.preferences?.accountName === AccountId[id])!;
   Account(theCoin.address).useStore();
   useEffect(() => {
     accountsApi.setActiveAccount(theCoin?.address ?? null);

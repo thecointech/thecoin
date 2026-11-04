@@ -104,7 +104,7 @@ const ConnectionResult = (props: { forceCheck: boolean } & Partial<AccountState>
         </div>
         {success ? (
           <div className={styles.statusAddress}>
-            {props.name} - {props.address}
+            {props.details?.preferences?.accountName ?? "Coin Account"} - {props.address}
           </div>
         ) : (
           <div>

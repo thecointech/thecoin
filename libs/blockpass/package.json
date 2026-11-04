@@ -28,14 +28,30 @@
   ],
   "exports": {
     ".": {
-      "development": "./build/development/index.js",
-      "devlive": "./build/devlive/index.js",
+      "development": "./mocks/index.ts",
+      "devlive": "./mocks/index.ts",
       "default": "./build/index.js"
+    },
+    "./fetch": {
+      "development": "./mocks/fetch.ts",
+      "devlive": "./mocks/fetch.ts",
+      "default": "./build/fetch.js"
+    },
+    "./types": "./src/types.ts"
+  },
+  "typesVersions": {
+    "*": {
+      "types": [
+        "src/types.ts"
+      ],
+      "*": [
+        "build/*.d.ts"
+      ]
     }
   },
-  "types": "./build/index.d.ts",
   "dependencies": {
-    "@thecointech/shared": "^0.6.7"
+    "@thecointech/apis": "^0.6.7",
+    "@thecointech/secrets": "^0.6.7"
   },
   "devDependencies": {
     "@thecointech/async": "^0.6.7",

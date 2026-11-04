@@ -28,14 +28,14 @@ const LoginAccount = ({account}: {account: AccountState}) => {
     if (!account?.contract) return;
     const {signer} = account;
     if (!isLocal(signer)) {
-      alert("Using harvester with remote accounts is not currently supported.  Ping me for details");
+      alert("Using harvester with remote accounts is not currently supported, but could be.  Ping me for details");
       throw new Error("Cannot continue, must give up...");
     }
 
     // pass the unlocked account to scraper.  This will
     // need some hard-core protection in time...
     const hdWallet = signer as BaseWallet as HDNodeWallet;
-    const coinAccount = toCoinAccount(hdWallet, account.name);
+    const coinAccount = toCoinAccount(hdWallet, account.details.preferences?.accountName ?? "Coin Account");
     const phrase = hdWallet.mnemonic?.phrase;
     if (!phrase) {
       throw new Error("Account mnemonic not available");

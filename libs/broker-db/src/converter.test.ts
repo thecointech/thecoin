@@ -1,9 +1,9 @@
 import { jest } from '@jest/globals';
 import { getFirestore, init, Timestamp } from '@thecointech/firestore';
 import { describe, filterByEmulator } from '@thecointech/jestutils';
-import { getUserData, setUserVerified } from './user';
+import { getUserBasicData, setUserBasicData } from './user/basic';
 import { DateTime } from 'luxon';
-import { userDataConverter } from './user.types';
+import { userDataConverter } from './user/basic.types';
 import { getActionFromInitial } from './transaction';
 import Decimal from 'decimal.js-light';
 import { PurchaseType } from './transaction/types';
@@ -22,10 +22,10 @@ describe('Live DB fetching', () => {
   const address = `0x123456789012345678901234567${Date.now()}`;
   const spyTo = jest.spyOn(userDataConverter, "toFirestore");
   const spyFrom = jest.spyOn(userDataConverter, "fromFirestore");
+  const data = { kycUpdated: DateTime.now() }
 
   it('converts to Timestamp in DB', async () => {
-    const dt = DateTime.now();
-    await setUserVerified(address, { statusUpdated: dt});
+    await setUserBasicData(address, data);
     expect(spyTo).toHaveBeenCalledTimes(1);
     // Double check - do we have timestamp in the DB?
     const doc = await getFirestore().doc(`User/${address}`).get();
@@ -34,11 +34,10 @@ describe('Live DB fetching', () => {
   })
 
   it('converts to DateTime from DB', async () => {
-    const dt = DateTime.now();
-    await setUserVerified(address, { statusUpdated: dt});
-    const data = await getUserData(address);
+    await setUserBasicData(address, data);
+    const out = await getUserBasicData(address);
     expect(spyFrom).toHaveBeenCalledTimes(1);
-    expect(data?.statusUpdated).toEqual(dt);
+    expect(out?.kycUpdated).toEqual(data.kycUpdated);
   })
 
   it('round-trips decimals appropriately', async () => {

@@ -43,10 +43,6 @@
     "defaultMessage": "User Settings",
     "description": "app.settings.tabs.main: Title for the tabs the setting page in the app"
   },
-  "0vf3sT": {
-    "defaultMessage": "Address",
-    "description": "app.settings.personaldetails.address: Address field for the page setting / tab personal details in the app"
-  },
   "0wqDQX": {
     "defaultMessage": "Generate",
     "description": "app.purchase.button: Name for the button Generate in the purchase list explanation page in the app"
@@ -66,10 +62,6 @@
   "3gMrt1": {
     "defaultMessage": "Please wait, we are sending your order to our servers...",
     "description": "app.accounts.billPayments.transferOutProgress: Message for the form the make a payment page / bill payment tab"
-  },
-  "4Qov/+": {
-    "defaultMessage": "Country",
-    "description": "app.settings.personaldetails.country: Country Adress field for the page setting / tab personal details in the app"
   },
   "4mI50N": {
     "defaultMessage": "Climate Impact",
@@ -103,10 +95,6 @@
     "defaultMessage": "Processing Transfer...",
     "description": "app.accounts.transfer.transferOutHeader: transferHeader for the make a payment page / transfer tab"
   },
-  "78Tc76": {
-    "defaultMessage": "Family Name",
-    "description": "app.settings.personaldetails.familyname: Name field for the page setting / tab personal details in the app"
-  },
   "8jxTzX": {
     "defaultMessage": "Secret:",
     "description": "app.accounts.purchase.yourTransferSecret"
@@ -114,10 +102,6 @@
   "9d/cRr": {
     "defaultMessage": "Order received. You should receive the transfer in 1-2 business days.",
     "description": "app.accounts.transfer.successMessage: Success Message for the make a payment page / etransfer tab"
-  },
-  "ACdNla": {
-    "defaultMessage": "Suite/Appt/Box #",
-    "description": "app.settings.personaldetails.address: Address field for the page setting / tab personal details in the app"
   },
   "ATYl3e": {
     "defaultMessage": "Contact Us",
@@ -151,10 +135,6 @@
     "defaultMessage": "were planted thanks to you",
     "description": "shared.widgets.climateimpact.treesText: Text for the Widget Climate impact in the app"
   },
-  "GGCxth": {
-    "defaultMessage": "Personal Details",
-    "description": "app.settings.personaldetails.title: Title for the page setting / tab personal details in the app"
-  },
   "GL/pX/": {
     "defaultMessage": "We have encountered an error. Don't worry, your money is safe, but please still contact support@thecoin.io",
     "description": "app.accounts.transfer.errorMessage: Error Message for the make a payment page / etransfer tab"
@@ -162,10 +142,6 @@
   "GdAloC": {
     "defaultMessage": "Cannot send bill payments from readonly account",
     "description": "app.accounts.billPayments.errorReadonlyAccount: Message for the form the make a payment page / bill payment tab"
-  },
-  "GnQEdK": {
-    "defaultMessage": "City",
-    "description": "app.settings.personaldetails.city: City Address field for the page setting / tab personal details in the app"
   },
   "H+LMwK": {
     "defaultMessage": "Templates",
@@ -210,14 +186,6 @@
   "JHN0Qb": {
     "defaultMessage": "Transfer funds from your Canadian bank to your account.",
     "description": "app.topup.description: Description for the topup page in the app"
-  },
-  "JhnxYB": {
-    "defaultMessage": "Postal Code",
-    "description": "app.settings.personaldetails.postalcode: Postal Code Address field for the page setting / tab personal details in the app"
-  },
-  "KID9KZ": {
-    "defaultMessage": "Email",
-    "description": "app.settings.personaldetails.email: Email field for the page setting / tab personal details in the app"
   },
   "Lcl2H7": {
     "defaultMessage": "Contact Us",
@@ -275,10 +243,6 @@
     "defaultMessage": "Account name",
     "description": "app.settings.userDetails.name: Label for the info for the tab User details in the setting page in the app"
   },
-  "Q+m04R": {
-    "defaultMessage": "Save",
-    "description": "app.settings.personaldetails.save: Edit zone for the page setting / tab personal details in the app"
-  },
   "QRAezj": {
     "defaultMessage": "Payee Account Number",
     "description": "app.accounts.billPayments.form.accNumber: Label for the form the make a payment page / bill payment tab"
@@ -302,10 +266,6 @@
   "S/Ujpm": {
     "defaultMessage": "In",
     "description": "app.historygraph.tooltip.in: HistoryGraph tooltip - total transaction in"
-  },
-  "SlkrJd": {
-    "defaultMessage": "Given Name",
-    "description": "app.settings.personaldetails.name: Name field for the page setting / tab personal details in the app"
   },
   "Sp5Ik1": {
     "defaultMessage": "Step 1 of 3: Checking payment availability...",
@@ -395,10 +355,6 @@
     "defaultMessage": "Growth",
     "description": "app.historygraph.profit: HistoryGraph tooltip - Profit"
   },
-  "abj6qK": {
-    "defaultMessage": "State",
-    "description": "app.settings.personaldetails.state: State field for the page setting / tab personal details in the app"
-  },
   "bGtD3a": {
     "defaultMessage": "Your account is verified.",
     "description": "app.settings.verified.descriptionVerified: message shown if account has been verified"
@@ -410,10 +366,6 @@
   "ctuWPW": {
     "defaultMessage": "Year",
     "description": "app.historyGraph.Year: button for Duration of 1 year"
-  },
-  "d5xJbS": {
-    "defaultMessage": "Save",
-    "description": "app.settings.personaldetails.button: Button for the page setting / tab personal details in the app"
   },
   "dWvxu+": {
     "defaultMessage": "Step 1 of 3: Checking order availability...",
@@ -491,10 +443,6 @@
     "defaultMessage": "Please wait...",
     "description": "app.accounts.purchase.getTransferCodeHeader"
   },
-  "o8vxz/": {
-    "defaultMessage": "Date of Birth",
-    "description": "app.settings.personaldetails.dob: Date of birth field for the page setting / tab personal details in the app"
-  },
   "oMopOa": {
     "defaultMessage": "The given number is not a valid visa card",
     "description": "app.accounts.billPayments.invalidVisaAccount: Error message for the bill payement page"
@@ -522,6 +470,10 @@
   "q0z7qW": {
     "defaultMessage": "Step 2 of 3: Sending bill payment to our servers...",
     "description": "app.accounts.billPayments.step2: Message for the form the make a payment page / bill payment tab"
+  },
+  "q20ma8": {
+    "defaultMessage": "This account is not eligible for a referral code",
+    "description": "app.settings.userDetails.ineligible: Referral code is unavailable for this account"
   },
   "qppWkL": {
     "defaultMessage": "Verify",
@@ -578,10 +530,6 @@
     "defaultMessage": "Send us a secured message and we will answer as quickly as we can",
     "description": "app.contactus.description: Description for the Contact Us page in the app"
   },
-  "uHI1R0": {
-    "defaultMessage": "Edit",
-    "description": "app.settings.personaldetails.edit: Edit zone for the page setting / tab personal details in the app"
-  },
   "ulVAYv": {
     "defaultMessage": "Interac E-mail Transfer",
     "description": "app.topup.tabs.etransfer: Title for the tabs the topup page in the app"
@@ -597,10 +545,6 @@
   "x+rlDN": {
     "defaultMessage": "Profile",
     "description": "app.accounts.sidebar.profile: Title for the Profile entry in the menu"
-  },
-  "x4o9ah": {
-    "defaultMessage": "Phone Number",
-    "description": "app.settings.personaldetails.phone: Phone field for the page setting / tab personal details in the app"
   },
   "xAqVcA": {
     "defaultMessage": "Generate your personalized e-Transfer recipient",

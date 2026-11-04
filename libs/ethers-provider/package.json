@@ -55,6 +55,7 @@
       "default": "./build/web/remote/index.js"
     },
     "./Erc20Provider/web": "./build/web/remote/index.js",
+    "./Erc20Provider/local": "./build/web/local/index.js",
     "./errors": "./build/errors.js"
   },
   "types": "./build/index.d.ts",
@@ -65,6 +66,9 @@
       ],
       "Erc20Provider/web": [
         "build/web/remote/index.d.ts"
+      ],
+      "Erc20Provider/local": [
+        "build/web/local/index.d.ts"
       ],
       "infura": [
         "build/node/remote.d.ts"

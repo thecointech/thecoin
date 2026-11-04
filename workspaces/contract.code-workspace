@@ -17,10 +17,6 @@
       "path": "../libs/contract-oracle"
     },
     {
-      "name": "contract-nft",
-      "path": "../libs/contract-nft"
-    },
-    {
       "name": "contract-base",
       "path": "../libs/contract-base"
     },
@@ -41,8 +37,6 @@
     }
   ],
 	"settings": {
-		"javascript.format.semicolons": "insert",
-		"typescript.format.semicolons": "insert",
 		"files.exclude": {
 			"**/build/": true,
 			"**/node_modules/": true,

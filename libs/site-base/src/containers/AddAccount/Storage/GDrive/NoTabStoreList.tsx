@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { getAccountName } from '@thecointech/account';
 import { List } from 'semantic-ui-react';
 import { AccountMap } from '@thecointech/redux-accounts';
 import { defineMessage, FormattedMessage, MessageDescriptor } from 'react-intl';
@@ -56,7 +57,7 @@ export const NoTabStoreList = ({code}: Props) => {
                 .map(account => (
                   <List.Item key={account.address}>
                     <List.Content className={styles.accountRow}>
-                      <div className={styles.nameWallet}>{account.name}</div>
+                      <div className={styles.nameWallet}>{getAccountName(account)}</div>
                       <ButtonPrimary className={`${styles.buttonRestore} x2spaceBefore x2spaceAfter`} floated='right'
                         address={account.address}
                         onClick={(_, data) => onStore(data.address)}

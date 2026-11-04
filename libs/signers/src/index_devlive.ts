@@ -1,5 +1,5 @@
 
-import { getProvider } from "@thecointech/ethers-provider/Erc20Provider";
+import { getProvider } from "@thecointech/ethers-provider/Erc20Provider/local";
 import { getAndCacheSigner } from './cache';
 import { AccountId, AccountName } from './names';
 

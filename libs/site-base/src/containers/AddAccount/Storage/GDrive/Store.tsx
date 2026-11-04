@@ -16,7 +16,7 @@ const onAuth = async (token: string, address: string, api: IActions) => {
   log.trace({ address: address }, "Commencing backup of {address} to GDrive");
   if (await completeStore(token, address)) {
     log.trace({ address: address }, 'GDrive backup of {address} complete');
-    api.setDetails({ storedOnGoogle: true });
+    api.setPreferences({ storedOnGoogle: true });
   }
   else {
     log.error({ address: address }, 'Backup of {address} failed');

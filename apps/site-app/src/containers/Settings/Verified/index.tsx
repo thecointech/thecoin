@@ -13,12 +13,14 @@ export const AccountVerify = (props: PropsVerified) => {
     return <Unverified {...props} />
   }
 
-  switch(props.details?.status) {
+  switch(props.details.basic?.kycStage) {
     case "approved":
-    case "completed":
+    case "complete":
       return <Verified />
-    case "waiting":
-    case "inreview":
+    case "reviewing":
+    case "reviewDataMissing":
+    case "reviewDuplicate":
+    case "reviewIdentityChange":
       return <InProcess />
     default: return <Unverified {...props} />
   }

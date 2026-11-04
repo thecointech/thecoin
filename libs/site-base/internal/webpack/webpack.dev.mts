@@ -50,7 +50,6 @@ const devOptions: webpack.Configuration = {
             filterSourceMappingUrl: (url, resourcePath) => {
               if (
                 /immer-reducer/.test(resourcePath) ||
-                /IDX\/node_modules/.test(resourcePath) ||
                 /@formatjs/.test(resourcePath)
               ) {
                 return false;

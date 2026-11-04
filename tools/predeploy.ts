@@ -75,7 +75,6 @@ export async function copyEnvVarsLocal(outYamlFile: string, additionalVars: Reco
   const yamlVars = Object.entries(env)
     .filter(([key]) => !key.startsWith('#'))
     .filter(([key]) => !(key.startsWith('WALLET_') && !key.includes('_ADDRESS')))
-    .filter(([key]) => !key.startsWith('CERAMIC_'))
     .filter(([key]) => !key.startsWith('GITHUB_'))
     .filter(([key]) => !key.startsWith('PRIVATE_'))
     .filter(([key]) => !key.endsWith('_SERVICE_ACCOUNT'))

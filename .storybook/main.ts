@@ -17,7 +17,6 @@ const envVarsRaw = {
   ...getEnvVars("development"),
   LOG_LEVEL: 0,
   LOG_NAME: "storybook",
-  WALLET_CeramicValidator_DID: "did:ethr:0x1234567890123456789012345678901234567890",
 }
 const envVars = Object.entries(envVarsRaw).map(([k, v]) => [`process.env.${k}`, JSON.stringify(v)]);
 

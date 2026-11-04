@@ -32,7 +32,7 @@ export function StorageOptions() {
 
   const [loading, doUpload] = useGoogleStore(activeAccount.address);
 
-  const checked = activeAccount?.details.storedOnGoogle;
+  const checked = activeAccount?.details.preferences.storedOnGoogle;
   return local
     ? <Container>
       <Header as='h5' className={"appTitles"}>
@@ -53,7 +53,7 @@ export function StorageOptions() {
           <Checkbox
             toggle
             disabled={loading}
-            checked={activeAccount?.details.storedOnGoogle}
+            checked={checked}
             onChange={() => {
               if (!checked) {
                 doUpload();
