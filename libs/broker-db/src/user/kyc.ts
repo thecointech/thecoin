@@ -45,18 +45,21 @@ export async function getUsersWithUniqueIdSig(uniqueIdSig: string): Promise<stri
     .where("uniqueIdSig", "==", uniqueIdSig)
     .get();
 
-  // TODO: Remove unnecessary spread once TS is upgraded
-  const addresses = new Set([...r.docs].flatMap(doc => {
+  // Every doc in this collection group must live at
+  // User/{addr}/details/kyc/kycHistory/{ts} - anything else means
+  // the layout changed and this query can no longer be trusted.
+  const addresses = new Set([...r.docs].map(doc => {
     const parts = doc.ref.path.split("/");
-    return (
+    if (
       parts.length === 6 &&
       parts[0] === UserDoc &&
       parts[2] === DetailsCollection &&
       parts[3] === KycDoc &&
       parts[4] === KycHistoryCollection
-        ? [parts[1]]
-        : []
-    );
+    ) {
+      return parts[1];
+    }
+    throw new Error(`Unexpected KYC history document path: ${doc.ref.path}`);
   }));
   return [...addresses];
 }

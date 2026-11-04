@@ -1,4 +1,4 @@
-import { BasicDetails } from "types.basic";
+import { BasicDetails } from "./types.basic";
 
 export * from "./types";
 export * from "./kyc";

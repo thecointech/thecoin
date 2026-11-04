@@ -1,4 +1,4 @@
-import type { ReferralStatus, BlockpassPayload, BlockpassStatus } from "@thecointech/broker-cad";
+import type { ReferralStatus, BlockpassPayload, BlockpassStatus, KycStage } from "@thecointech/broker-cad";
 
 //
 // Shared state connecting the mock webhook (UserVerificationApi)
@@ -6,7 +6,8 @@ import type { ReferralStatus, BlockpassPayload, BlockpassStatus } from "@thecoin
 // broker-service DB in development mode.
 //
 type MockKycState = {
-  status?: BlockpassStatus;
+  blockpassStatus?: BlockpassStatus;
+  kycStage?: KycStage;
   statusUpdated?: number;
   referralStatus?: ReferralStatus;
   referralCode?: string;
@@ -17,9 +18,29 @@ let state: MockKycState = {};
 
 export const getKycState = (): MockKycState => state;
 
+// Mirror kycStageFromBlockpassStatus in broker-service/verify:
+// the client reads kycStage, not the raw Blockpass status.
+function stageFromStatus(status: BlockpassStatus): KycStage {
+  switch (status) {
+    case "started":
+    case "incomplete": return "started";
+    case "waiting":
+    case "inreview": return "reviewing";
+    case "approved": return "complete";
+    case "rejected": return "rejected";
+    default: return "reviewing";
+  }
+}
+
 export function updateKyc(payload: BlockpassPayload) {
   const status = payload.status;
-  state = { ...state, status, statusUpdated: Date.now(), payload };
+  state = {
+    ...state,
+    blockpassStatus: status,
+    kycStage: stageFromStatus(status),
+    statusUpdated: Date.now(),
+    payload,
+  };
 
   // On approval, emulate tx-processor picking up the
   // pending referral and assigning a code shortly after.

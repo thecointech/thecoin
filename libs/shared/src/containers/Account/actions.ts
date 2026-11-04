@@ -17,8 +17,6 @@ export const buildSagas : SagaBuilder<IActions, AccountState> = (sagaReducer) =>
 
     yield takeLatest(actions.initKycProcess.type, buildSaga(sagaReducer, "initKycProcess"))
     yield takeLatest(actions.loadBasicDetails.type, buildSaga(sagaReducer, "loadBasicDetails"))
-    // yield takeLatest(actions.checkKycStatus.type, buildSaga(sagaReducer, "checkKycStatus"))
-
   }
   return rootSaga;
 }

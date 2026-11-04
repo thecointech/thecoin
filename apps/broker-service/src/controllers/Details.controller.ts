@@ -1,6 +1,6 @@
 import { Controller, Route, Put, Get, Response, Tags, Body, Query } from '@tsoa/runtime';
 import { getSigner } from '../signedTimestamp';
-import { getDetails, putDetails } from '../details';
+import { getDetails, putDetails, DetailsValidationError } from '../details';
 import { RateLimitError } from '@thecointech/broker-db';
 import { log } from '@thecointech/logging';
 import type { EncryptedBlob, KycStage, ReferralStatus } from '@thecointech/account-details/types';
@@ -49,6 +49,7 @@ export class DetailsController extends Controller {
    */
   @Put()
   @Response('200', 'Details stored')
+  @Response('400', 'Malformed blob')
   @Response('403', 'Not eligible')
   @Response('429', 'Rate limit exceeded')
   async putDetails(@Query() ts: string, @Query() sig: string, @Body() blob: EncryptedBlob): Promise<BoolResponse> {
@@ -61,6 +62,8 @@ export class DetailsController extends Controller {
       log.warn({ err: e, address }, 'Failed to store preferences for {address}');
       if (e instanceof RateLimitError) {
         this.setStatus(429);
+      } else if (e instanceof DetailsValidationError) {
+        this.setStatus(400);
       } else {
         this.setStatus(403);
       }

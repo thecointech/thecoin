@@ -13,8 +13,8 @@ export class DetailsApi implements Pick<SrcApi, keyof SrcApi> {
     return Promise.resolve(
       buildResponse({
         basic: {
-          status: kyc.status,
-          statusUpdated: kyc.statusUpdated,
+          kycStage: kyc.kycStage,
+          kycUpdated: kyc.statusUpdated,
           referralStatus: kyc.referralStatus,
           referralCode: kyc.referralCode,
         },

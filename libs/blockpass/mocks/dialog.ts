@@ -8,6 +8,7 @@
 export type MockKycFields = {
   givenName: string;
   familyName: string;
+  dob: string;
   street: string;
   city: string;
   country: string;
@@ -16,10 +17,10 @@ export type MockKycFields = {
 
 export type MockKycResult = MockKycFields | null;
 
-const field = (name: string, label: string, type = "text") =>
+const field = (name: string, label: string, type = "text", value = "") =>
   `<label style="display:block;margin-bottom:8px;font-size:14px">
      ${label}
-     <input name="${name}" type="${type}"
+     <input name="${name}" type="${type}" value="${value}"
        style="display:block;width:100%;box-sizing:border-box;padding:6px;margin-top:2px" />
    </label>`;
 
@@ -35,6 +36,7 @@ export function openMockKycDialog(onSubmit: (fields: MockKycFields) => void, onC
       <h3 style="margin-top:0">Mock KYC (development)</h3>
       ${field("givenName", "Given Name")}
       ${field("familyName", "Family Name")}
+      ${field("dob", "Date of Birth (MM/DD/YYYY)", "text", "01/01/1990")}
       ${field("street", "Street Address")}
       ${field("city", "City")}
       ${field("country", "Country")}

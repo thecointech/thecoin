@@ -12,7 +12,9 @@ import { openMockKycDialog, MockKycFields } from './dialog';
 export function useBlockpass(address: string, _email: string|undefined, onClose: () => void) {
 
   useEffect(() => {
-    hookButton(address, onClose);
+    let cleanup: (() => void) | undefined;
+    hookButton(address, onClose).then(c => cleanup = c);
+    return () => cleanup?.();
   }, [])
 
   async function hookButton(address: string, onClose: () => void) {

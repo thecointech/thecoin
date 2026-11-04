@@ -5,6 +5,14 @@ import { getEncryptionKey, type EncryptedBlob } from '@thecointech/account-detai
 
 const MAX_BLOB_SIZE = 10 * 1024; // 10KB - details are a small JSON struct
 
+// Blob failed validation (bad shape, oversized).  Maps to HTTP 400.
+export class DetailsValidationError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "DetailsValidationError";
+  }
+}
+
 // The BrokerCAD encryption public key is needed to wrap KYC records.
 // It is derived from a BrokerCAD signature (see getEncryptionKey), so is
 // published via env var (generate with `yarn encKey` in libs/signers).
@@ -46,10 +54,10 @@ export async function putDetails(address: string, blob: EncryptedBlob) {
     throw new Error("Account is not eligible to store details");
   }
   if (blob.v !== 1 || !blob.cipher || !blob.iv || !blob.wrappedKeys) {
-    throw new Error("Malformed details blob");
+    throw new DetailsValidationError("Malformed details blob");
   }
   if (JSON.stringify(blob).length > MAX_BLOB_SIZE) {
-    throw new Error("Details blob too large");
+    throw new DetailsValidationError("Details blob too large");
   }
   await setUserPreferences(address, blob);
 }

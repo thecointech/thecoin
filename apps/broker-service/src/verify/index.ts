@@ -48,10 +48,10 @@ export async function updateUserVerification(payload: BlockpassPayload) {
   }
   else {
     // get current to check KYC stage
-    const current = await getUserBasicData(payload.refId);
+    const current = await getUserBasicData(address);
     // Always update local status
     const kycStage = kycStageFromBlockpassStatus(payload.status, current)
-    await setUserBasicData(payload.refId, {
+    await setUserBasicData(address, {
       blockpassStatus: payload.status,
       kycStage,
       kycUpdated: DateTime.now(),

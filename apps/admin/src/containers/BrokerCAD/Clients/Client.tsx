@@ -59,8 +59,8 @@ export const Client = (props: Props) => {
   const { kyc, uniqueIdSig } = userData || {};
   const name = (!kyc && loading)
     ? `Loading... ${(percent * 100).toFixed(1)}%`
-    : kyc?.identities
-      ? `${kyc.identities.given_name.value} ${kyc.identities.family_name.value}`
+    : kyc?.identities?.given_name?.value || kyc?.identities?.family_name?.value
+      ? `${kyc.identities.given_name?.value ?? ""} ${kyc.identities.family_name?.value ?? ""}`.trim()
       : "No KYC record";
 
   return (
@@ -114,8 +114,14 @@ function getIsVerified(uniqueIdSig?: string, details?: BlockpassData) {
   if (!given_name || !family_name || !dob)
     return false;
 
-  const uniqueId = buildUniqueId({given_name: given_name.value, family_name: family_name.value, dob: dob.value});
-  const signedBy = verifyMessage(uniqueId, uniqueIdSig);
-  return AddressMatches(signedBy, process.env.WALLET_BrokerTransferAssistant_ADDRESS!);
+  try {
+    const uniqueId = buildUniqueId({given_name: given_name.value, family_name: family_name.value, dob: dob.value});
+    const signedBy = verifyMessage(uniqueId, uniqueIdSig);
+    return AddressMatches(signedBy, process.env.WALLET_BrokerTransferAssistant_ADDRESS!);
+  }
+  catch (e) {
+    log.warn(e, "Invalid uniqueIdSig on KYC record");
+    return false;
+  }
 }
 
