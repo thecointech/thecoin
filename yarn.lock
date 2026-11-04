@@ -9348,10 +9348,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@thecointech/blockpass@workspace:libs/blockpass"
   dependencies:
+    "@thecointech/apis": "npm:^0.6.7"
     "@thecointech/async": "npm:^0.6.7"
     "@thecointech/broker-cad": "npm:^0.6.7"
     "@thecointech/secrets": "npm:^0.6.7"
-    "@thecointech/shared": "npm:^0.6.7"
   languageName: unknown
   linkType: soft
 
@@ -9383,6 +9383,7 @@ __metadata:
     "@google-cloud/storage": "npm:^7.19.0"
     "@thecointech/account-details": "npm:^0.6.7"
     "@thecointech/async": "npm:^0.6.7"
+    "@thecointech/blockpass": "npm:^0.6.7"
     "@thecointech/broker-db": "npm:^0.6.7"
     "@thecointech/contract-core": "npm:^0.6.7"
     "@thecointech/contract-plugins": "npm:^0.6.7"
