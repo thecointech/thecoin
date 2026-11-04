@@ -34,8 +34,15 @@ async function getProductionArguments() {
   ]
 }
 
-export const getArguments = () =>
-  process.env.NODE_ENV !== "production"
-  ? getDevLiveArguments()
-  : getProductionArguments();
+export const getArguments = () => {
+  switch(process.env.CONFIG_ENV) {
+    case "prod":
+    case "prodtest":
+      return getProductionArguments();
+    case "devlive":
+      return getDevLiveArguments();
+    default:
+      throw new Error("Invalid CONFIG_ENV");
+  }
+};
 

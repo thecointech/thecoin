@@ -2,6 +2,7 @@ import { describe } from '@thecointech/jestutils'
 import { getEncryptionKey } from '@thecointech/account-details';
 import { AccountId, AccountName, getSigner } from './index_devlive';
 import { getEnvVars } from '@thecointech/setenv';
+import { NormalizeAddress } from '@thecointech/utilities/Address';
 
 const vars = getEnvVars("devlive");
 const names = Object.keys(AccountId).filter(
@@ -15,7 +16,7 @@ describe('verify devlive signers', () => {
       const signer = await getSigner(name as AccountName);
       expect(signer).toBeDefined();
       const address = await signer.getAddress();
-      expect(address).toEqual(vars[`WALLET_${name}_ADDRESS`]);
+      expect(NormalizeAddress(address)).toEqual(vars[`WALLET_${name}_ADDRESS`]);
     }
   })
 

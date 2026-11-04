@@ -1,6 +1,6 @@
 
 import { CertifiedTransfer, CertifiedTransferRequest, UberTransferAction } from '@thecointech/types';
-import { NormalizeAddress } from '@thecointech/utilities';
+import { AddressMatches, NormalizeAddress } from '@thecointech/utilities';
 import { getSigner } from '@thecointech/utilities/VerifiedAction'
 import { GetTransferSigner } from '@thecointech/utilities/VerifiedTransfer'
 import { getTransferSigner as UberSigner } from '@thecointech/utilities/UberTransfer'
@@ -29,7 +29,7 @@ const throwError = <T>(src: T, key: keyof T, message: string) => { throw new Val
 const validUberTransferTime = (transfer: UberTransferAction) => (
   ( // This is purely to allow initDemoAccount to work in devlive
     process.env.CONFIG_NAME === "devlive" &&
-    transfer.transfer.from === process.env.WALLET_TestDemoAccount_ADDRESS
+    AddressMatches(transfer.transfer.from, process.env.WALLET_TestDemoAccount_ADDRESS)
   ) ||
   ( // This is purely to allow initDemoAccount to catch up in prodtest
     process.env.CONFIG_NAME === "prodtest"

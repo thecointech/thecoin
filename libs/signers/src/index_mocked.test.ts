@@ -1,3 +1,4 @@
+import { NormalizeAddress } from '@thecointech/utilities/Address';
 import { AccountId, AccountName, getSigner } from './index_mocked';
 import { getEncryptionKey } from '@thecointech/account-details';
 
@@ -12,7 +13,7 @@ describe('verify mocked signers', () => {
       const signer = await getSigner(name as AccountName);
       expect(signer).toBeDefined();
       const address = await signer.getAddress();
-      expect(address).toEqual(process.env[`WALLET_${name}_ADDRESS`]);
+      expect(NormalizeAddress(address)).toEqual(process.env[`WALLET_${name}_ADDRESS`]);
     }
   })
 

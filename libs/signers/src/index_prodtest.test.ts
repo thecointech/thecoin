@@ -2,6 +2,7 @@ import { getEncryptionKey } from '@thecointech/account-details';
 import { AccountId, AccountName, getSigner } from './index_prodtest';
 import { describe } from '@thecointech/jestutils';
 import { ifSecret } from '@thecointech/secrets/jestutils';
+import { NormalizeAddress } from '@thecointech/utilities/Address';
 
 const names = Object.keys(AccountId).filter(
   (name): name is AccountName =>
@@ -14,7 +15,7 @@ describe('verify prodtest signers', () => {
       const signer = await getSigner(name as AccountName);
       expect(signer).toBeDefined();
       const address = await signer.getAddress();
-      expect(address).toEqual(process.env[`WALLET_${name}_ADDRESS`]);
+      expect(NormalizeAddress(address)).toEqual(process.env[`WALLET_${name}_ADDRESS`]);
     }
   })
 
