@@ -50,6 +50,7 @@
     "@nivo/line": "0.99.0",
     "@nivo/tooltip": "0.99.0",
     "@thecointech/account": "^0.6.7",
+    "@thecointech/account-details": "^0.6.7",
     "@thecointech/apis": "^0.6.7",
     "@thecointech/contract-core": "^0.6.7",
     "@thecointech/fx-rates": "^0.6.7",

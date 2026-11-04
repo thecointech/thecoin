@@ -32,10 +32,11 @@ app.use(bodyParser.json({
     req.rawBody=buf
   }
 }));
+
 RegisterRoutes(app);
 
 (async () => {
-  await init();
+  await init(app);
 
   app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 

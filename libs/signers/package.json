@@ -21,7 +21,8 @@
     "prepublishOnly": "yarn run -T rimraf ./build/.buildinfo",
     "build": "run -T tsc -b",
     "clean": "rimraf ./build && rimraf ./coverage",
-    "test": "run :jest"
+    "test": "run :jest",
+    "encKey": "run -T cross-env URL_SEQ_LOGGING=false TC_LOG_FOLDER=false run-env cfg=prod ./tools/printEncryptionKey.ts"
   },
   "files": [
     "build/**/*"
@@ -63,7 +64,9 @@
     "@thecointech/utilities": "^0.6.7"
   },
   "devDependencies": {
-    "@thecointech/electron-utils": "^0.6.7"
+    "@thecointech/account-details": "^0.6.7",
+    "@thecointech/electron-utils": "^0.6.7",
+    "@thecointech/setenv": "^0.6.7"
   },
   "gitHead": "020dc77a4f35658ec7616021248b732b11c9ae0e"
 }

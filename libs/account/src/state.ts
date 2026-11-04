@@ -1,4 +1,3 @@
-import { CurrencyCode } from '@thecointech/fx-rates'
 import { AccountDetails } from './details';
 import { DateTime } from 'luxon';
 import { NormalizeAddress } from '@thecointech/utilities/Address';
@@ -11,8 +10,6 @@ import { PluginDetails } from '@thecointech/contract-plugins';
 // An account state holds all relevant info
 // for an account, including loaded transactions etc
 export type AccountState = {
-  // The accounts name as specified by the user
-  name: string;
   // A normalized version of the accounts address
   address: string;
   // Possibly encrypted raw ethers wallet or metamask account
@@ -26,9 +23,8 @@ export type AccountState = {
   // Transaction history
   history: Transaction[];
 
-  // Private details
+  // User-stored account details
   details: AccountDetails;
-  // Public profile (?)
 
   // cache values to remember the date range we
   // have stored, and corresponding block numbers
@@ -48,20 +44,28 @@ export const DefaultAccountValues: Omit<AccountState, 'address' | 'signer'> = {
   history: [],
   plugins: [],
 
-  name: "DEFAULT ACCOUNT NAME",
-
   details: {
-    displayCurrency: CurrencyCode.CAD,
-    referralCode: undefined,
-    status: undefined,
+    preferences: {
+      displayCurrency: 124, // CAD
+    }
   }
 };
 
 export function buildNewAccount(name: string, address: string, signer: Signer): AccountState {
   return {
     ...DefaultAccountValues,
-    name,
+    details: {
+      ...DefaultAccountValues.details,
+      preferences: {
+        ...DefaultAccountValues.details.preferences,
+        accountName: name,
+      },
+    },
     address: NormalizeAddress(address),
     signer,
   }
 }
+
+// The user-visible name of the account (stored in preferences)
+export const getAccountName = (account: Pick<AccountState, "address" | "details">) =>
+  account.details.preferences.accountName ?? account.address;

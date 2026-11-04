@@ -1,8 +1,8 @@
-import { BlockpassData, TypedData } from '../controllers/types';
 import { Storage } from '@google-cloud/storage';
 import { log } from '@thecointech/logging';
 import { DateTime } from 'luxon';
 import { getSecret } from "@thecointech/secrets";
+import type { BlockpassData, TypedData } from '@thecointech/blockpass/types';
 
 const storage = new Storage();
 
@@ -18,7 +18,7 @@ export async function uploadAndStripImages({identities, refId}: BlockpassData) {
   for (const key of imageKeys) {
     const imageData = identities[key];
     if (imageData) {
-      log.debug({address: refId}, `Have KYC image: ${key} for {address}`)
+      log.debug({address: refId, key}, `Have KYC image: {key} for {address}`)
 
       const upload = await uploadImage(key, refId, now, imageData);
       // If successful, strip the image from the DB data
@@ -26,7 +26,7 @@ export async function uploadAndStripImages({identities, refId}: BlockpassData) {
         imageData.value = upload;
       }
       else {
-        log.error({address: refId}, `Error uploading ${key}`);
+        log.error({address: refId, key}, "Error uploading {key}");
       }
     }
   }

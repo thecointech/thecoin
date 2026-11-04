@@ -8,7 +8,7 @@ it ("generates appropriate tests", async () => {
   const data = {
     given_name: "GIVEN",
     family_name: "FAMILY",
-    DOB: "1/2/3456",
+    dob: "1/2/3456",
   };
   const signer = Wallet.createRandom();
   const uniqueId = buildUniqueId(data);

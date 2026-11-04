@@ -1,4 +1,4 @@
-import { buildNewAccount } from '@/state';
+import { buildNewAccount, getAccountName } from '@/state';
 import { NormalizeAddress } from '@thecointech/utilities/Address';
 import * as Browser from '@/store';
 import { getProvider } from '@thecointech/ethers-provider';
@@ -14,7 +14,7 @@ export const getAllAccounts = async () => {
   // First, load any user accounts from browser localStorage
   const accounts = await Browser.getAllAccounts();
 
-  const alreadyInjected = Object.values(accounts).some(a => a.name === testDemoAccountName);
+  const alreadyInjected = Object.values(accounts).some(a => getAccountName(a) === testDemoAccountName);
   if (!alreadyInjected) {
     // Inject the TestDemoAccount if available from compile-time env variable
     const walletJson = process.env.PRODTEST_TESTDEMOACCOUNT_WALLET;

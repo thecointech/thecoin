@@ -1,3 +1,4 @@
+import { getAccountName } from '@thecointech/account';
 import React from 'react';
 import { getAvatarLink } from '@thecointech/shared/components/Avatars';
 import { AccountMap } from '@thecointech/redux-accounts';
@@ -97,10 +98,10 @@ export function useSidebar() {
     sidebarApi.setHeader({
       title: translations.profile,
       avatar: getAvatarLink("14"),
-      accountName: active?.name ?? intl.formatMessage(translations.noAccount),
+      accountName: active ? getAccountName(active) : intl.formatMessage(translations.noAccount),
       address: active?.address ?? "-----------",
     })
-  }, [active?.address]);
+  }, [active?.address, active?.details.preferences.accountName]);
 
   // We do not want the sidebar to display when in an open route
   React.useEffect(() => {

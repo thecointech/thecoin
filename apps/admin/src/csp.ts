@@ -1,8 +1,10 @@
 import { getFirebaseConfig } from "./firebaseConfig";
 
 const connectRates = new URL(process.env.URL_SERVICE_RATES ?? "https://localhost").origin
-const connectInfura = process.env.POLYGONSCAN_URL
-const connectFirestore = "https://firestore.googleapis.com"
+const polygonScanUrl = process.env.POLYGONSCAN_URL || 'http://127.0.0.1:9545';
+const connectFirestore = process.env.FIRESTORE_EMULATOR_PORT
+ ? `http://localhost:${process.env.FIRESTORE_EMULATOR_PORT}`
+ : "https://firestore.googleapis.com"
 
 let appCSP = "";
 async function getAppCSP() {
@@ -14,7 +16,7 @@ async function getAppCSP() {
     img-src 'self' data: ;
     script-src 'self' 'unsafe-eval' https://apis.google.com https://firestore.googleapis.com;
     style-src 'self' 'unsafe-inline' fonts.googleapis.com;
-    connect-src 'self' data: https://oauth2.googleapis.com/token https://www.googleapis.com https://securetoken.googleapis.com ${connectFirestore} ${connectInfura} ${connectRates};
+    connect-src 'self' data: https://oauth2.googleapis.com/token https://www.googleapis.com https://securetoken.googleapis.com ${connectFirestore} ${polygonScanUrl} ${connectRates};
     font-src 'self' data: fonts.gstatic.com;
     frame-src https://broker-cad.firebaseapp.com/ https://${authDomain}/;
   `;

@@ -1,6 +1,6 @@
 import { type CollectionReference, type DocumentData, type DocumentReference, getFirestore, type FirestoreAdmin } from "@thecointech/firestore";
 import type { DocumentReference as AdminDocumentReference, FirestoreDataConverter as AdminFirestoreDataConverter } from "@google-cloud/firestore";
-import { getUserDoc } from "../user";
+import { getUserDoc } from "../user/layout";
 import {
   HarvesterClientInfo,
   HarvesterInstallationInfo,

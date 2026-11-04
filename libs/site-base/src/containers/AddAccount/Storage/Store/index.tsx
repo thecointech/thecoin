@@ -46,10 +46,10 @@ export const Store = () => {
   const nextStep = usePreserveQuery('/congratulations');
 
   const isBackedUp = (
-    activeAccount?.details?.storedOffline ||
-    activeAccount?.details?.storedOnGoogle ||
-    activeAccount?.details?.storedOnDropbox ||
-    activeAccount?.details?.storedOnOneDrive
+    activeAccount?.details.preferences.storedOffline ||
+    activeAccount?.details.preferences.storedOnGoogle ||
+    activeAccount?.details.preferences.storedOnDropbox ||
+    activeAccount?.details.preferences.storedOnOneDrive
   );
 
   return (

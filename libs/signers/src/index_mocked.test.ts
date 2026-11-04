@@ -1,4 +1,5 @@
 import { AccountId, AccountName, getSigner } from './index_mocked';
+import { getEncryptionKey } from '@thecointech/account-details';
 
 const names = Object.keys(AccountId).filter(
   (name): name is AccountName =>
@@ -13,5 +14,11 @@ describe('verify mocked signers', () => {
       const address = await signer.getAddress();
       expect(address).toEqual(process.env[`WALLET_${name}_ADDRESS`]);
     }
+  })
+
+  it ('has the correct ENCKEY for BrokerCAD', async () => {
+    expect(process.env.WALLET_BrokerCAD_ENCKEY).toBeDefined();
+    const key = await getEncryptionKey(await getSigner('BrokerCAD'));
+    expect(key.compressedPublicKey).toEqual(process.env.WALLET_BrokerCAD_ENCKEY);
   })
 })

@@ -1,3 +1,4 @@
+import { getEncryptionKey } from '@thecointech/account-details';
 import { AccountId, AccountName, getSigner } from './index_prod';
 import { describe } from '@thecointech/jestutils';
 import { ifSecret } from '@thecointech/secrets/jestutils';
@@ -16,5 +17,11 @@ describe('verify production signers', () => {
       const address = await signer.getAddress();
       expect(address).toEqual(process.env[`WALLET_${name}_ADDRESS`]);
     }
+  })
+
+  it ('has the correct ENCKEY for BrokerCAD', async () => {
+    expect(process.env.WALLET_BrokerCAD_ENCKEY).toBeDefined();
+    const key = await getEncryptionKey(await getSigner('BrokerCAD'));
+    expect(key.compressedPublicKey).toEqual(process.env.WALLET_BrokerCAD_ENCKEY);
   })
 }, await ifSecret("SignerBrokerCADPwd"))

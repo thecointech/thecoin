@@ -1,35 +1,41 @@
 import { InitialCoinBlock, ContractCore, type TheCoin } from '@thecointech/contract-core';
 import { Signer, Wallet, type Provider } from 'ethers';
-import { call, delay, select, StrictEffect } from "@redux-saga/core/effects";
+import { call, delay, StrictEffect } from "@redux-saga/core/effects";
 import { IsValidAddress, NormalizeAddress } from '@thecointech/utilities';
 import { buildSagas } from './actions';
 import { FxRateReducer } from '../../containers/FxRate/reducer';
 import { SagaReducer } from '@thecointech/redux/immerReducer';
 import { isLocal } from '@thecointech/signers';
 import { loadAndMergeHistory, calculateTxBalances, mergeTransactions, Transaction } from '@thecointech/tx-blockchain';
-import { AccountDetails, AccountState, DefaultAccountValues } from '@thecointech/account';
+import { AccountState, DefaultAccountValues, getAccountName } from '@thecointech/account';
+import { setStoredAccountName } from '@thecointech/account/store';
 import { DateTime } from 'luxon';
 import { log } from '@thecointech/logging';
-import { checkCurrentStatus } from './BlockpassKYC';
-import { StatusType } from '@thecointech/broker-cad';
+import type { UserPreferences } from '@thecointech/account-details';
 import type { SagaIterator } from '@redux-saga/core';
 import type { AccountMapStore } from '@thecointech/redux-accounts';
 import type { DecryptCallback, IActions } from './types';
 import type { Dictionary } from 'lodash';
 import { getPluginDetails } from '@thecointech/contract-plugins';
 import { getProvider } from '@thecointech/ethers-provider';
+import { fetchBasicDetails, fetchDetails, uploadPreferences, type FetchedDetails } from './details';
 
-const KycPollingInterval = (process.env.NODE_ENV === 'production')
-  ? 5 * 60 * 1000 // 5 minutes
-  : 5 * 1000; // 5 seconds
+// The account name is the only preference cached locally (so we can display
+// locked accounts).  Keep that cache in sync when the name changes.
+function syncStoredName(account: AccountState, preferences: UserPreferences) {
+  const { accountName } = preferences;
+  if (accountName && accountName !== account.details.preferences.accountName) {
+    setStoredAccountName(account.address, accountName);
+  }
+}
 
 // The reducer for a single account state
 function AccountReducer(address: string, initialState: AccountState) {
   const AccountReducer = class AccountReducer extends SagaReducer<IActions, AccountState>(address, initialState, buildSagas)
     implements IActions {
 
-    setName(name: string): void {
-      this.draftState.name = name;
+    *setName(name: string): SagaIterator {
+      yield this.sendValues(this.actions.setPreferences, { accountName: name });
     }
 
     *setSigner(signer: Signer): Generator<StrictEffect, void, Provider> {
@@ -45,6 +51,7 @@ function AccountReducer(address: string, initialState: AccountState) {
       yield this.sendValues(this.actions.loadDetails);
 
       const { signer } = this.state;
+
       // Connect to the contract
       const contract = yield call(ContractCore.connect, signer);
       const plugins = yield call(getPluginDetails, contract, signer);
@@ -58,28 +65,57 @@ function AccountReducer(address: string, initialState: AccountState) {
     // Save/load private details
 
     *loadDetails(): SagaIterator {
-      // TODO: Replace with actual DB call when implemented
-      const details = this.state.details || DefaultAccountValues.details;
-      yield this.storeValues({ details });
+      const { signer } = this.state;
+      if (!signer) return;
+      let remote: FetchedDetails;
+      try {
+        remote = yield call(fetchDetails, signer);
+      }
+      catch (err) {
+        log.warn(err, "Cannot load account details, keeping local values");
+        yield this.storeValues({ details: { ...this.state.details, preferencesLoaded: false } });
+        return;
+      }
+      const { basic, preferencesLoaded } = remote;
+      // Remote preferences are canonical, local values fill any gaps
+      const preferences = { ...this.state.details.preferences, ...remote.preferences };
+      yield call(syncStoredName, this.state, preferences);
+      yield this.storeValues({ details: { basic, preferences, preferencesLoaded } });
 
-      // If our details indicate we have started KYC but not completed it,
-      // run a single check to see if it was finishd in our absence
-      if (details.status && details.status != 'completed') {
-        // Give storeValues a little time to complete.
-        // Otherwise our check may be run before and overwrite the new status
-        yield delay(500);
-        // Check to see if we are done
-        yield this.sendValues(this.actions.checkKycStatus);
+      // Nothing stored remotely yet: seed it with our local values (eg, account name)
+      if (preferencesLoaded && !remote.preferences) {
+        yield call(uploadPreferences, signer, preferences);
       }
     };
 
-    *setDetails(newDetails: Partial<AccountDetails>) {
-      const details = {
-        ...this.state.details,
-        ...newDetails,
+    *setPreferences(newPreferences: Partial<UserPreferences>): SagaIterator {
+      const { signer } = this.state;
+      let { preferences, preferencesLoaded } = this.state.details;
+      // Sync with remote before writing, so we never upload
+      // stale/default values over the stored preferences
+      if (!preferencesLoaded && signer) {
+        try {
+          const remote: FetchedDetails = yield call(fetchDetails, signer);
+          if (remote.preferencesLoaded) {
+            preferences = { ...preferences, ...remote.preferences };
+            preferencesLoaded = true;
+          }
+        }
+        catch (err) {
+          log.warn(err, "Cannot load preferences, keeping changes local");
+          preferencesLoaded = false;
+        }
       }
-      yield this.storeValues({ details });
-      log.error("No DB connection present, changes will not be preserved");
+      preferences = { ...preferences, ...newPreferences };
+      yield call(syncStoredName, this.state, preferences);
+      yield this.storeValues({ details: { ...this.state.details, preferences, preferencesLoaded } });
+
+      if (signer && preferencesLoaded) {
+        yield call(uploadPreferences, signer, preferences);
+      }
+      else {
+        log.warn("Remote preferences not loaded (no signer, or locked), changes will not be preserved");
+      }
     }
 
     ///////////////////////////////////////////////////////////////////////////////////
@@ -87,28 +123,22 @@ function AccountReducer(address: string, initialState: AccountState) {
 
     *initKycProcess(): SagaIterator {
       log.info({address: this.state.address}, "Initializing KYC for {address}");
-      if (!this.state.details.status) {
-        yield this.sendValues(this.actions.setDetails, {
-          status: StatusType.Started,
-          statusUpdated: Date.now(),
-        })
-      }
-      while (1) {
-        // Trigger Check Saga.  This is an async call
-        // and we cannot receive the return value here
-        yield this.sendValues(this.actions.checkKycStatus);
-        // Delay polling time then trime again
-        yield delay(KycPollingInterval);
-        const current = yield select(AccountReducer.selector);
-        log.trace({address: this.state.address}, `{address} polled KYC - current status: ${current.details.status}`);
-        if (current.details.status == StatusType.Completed)
-          break;
+      if (!this.state.details.basic) {
+        // Local-only until the broker receives a status from Blockpass
+        yield this.storeValues({
+          details: {
+            ...this.state.details,
+            basic: { kycStage: "started", kycUpdated: DateTime.now() },
+          }
+        });
       }
     }
 
-    *checkKycStatus(forceVerify?: boolean): SagaIterator {
-      const r = yield call(checkCurrentStatus, this.actions, this.state, forceVerify);
-      return yield r;
+    *loadBasicDetails(): SagaIterator {
+      const basic = yield call(fetchBasicDetails, this.state.signer!);
+      if (basic) {
+        yield this.storeValues({ details: { ...this.state.details, basic } });
+      }
     }
 
     ///////////////////////////////////////////////////////////////////////////////////
@@ -170,7 +200,8 @@ function AccountReducer(address: string, initialState: AccountState) {
 
     ///////////////////////////////////////////////////////////////////////////////////
     *decrypt(password: string, callback: DecryptCallback | undefined): SagaIterator {
-      const { signer, name } = this.state;
+      const { signer } = this.state;
+      const name = getAccountName(this.state);
       if (!signer) {
         throw (`Could not decrypt ${name} because it is not in local storage`);
       }

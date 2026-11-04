@@ -39,6 +39,15 @@ async function initDevWallets() {
 export const getStoredAccountData = (address: string) => _devAccounts[address];
 export const storeAccount = (account: AccountState) => _devAccounts[account.address] = {...account};
 export const deleteAccount = (account: AccountState) => delete _devAccounts[account.address];
+export const setStoredAccountName = (address: string, accountName: string) => {
+  const account = _devAccounts[address];
+  if (account) {
+    _devAccounts[address] = {
+      ...account,
+      details: { ...account.details, preferences: { ...account.details.preferences, accountName } },
+    };
+  }
+}
 export const getInitialAddress = () => _initial;
 export const getAllAccounts = async () => {
   if (Object.keys(_devAccounts).length === 0) {

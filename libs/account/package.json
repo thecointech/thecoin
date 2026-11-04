@@ -46,6 +46,7 @@
     }
   },
   "dependencies": {
+    "@thecointech/account-details": "^0.6.7",
     "@thecointech/contract-core": "^0.6.7",
     "@thecointech/fx-rates": "^0.6.7",
     "@thecointech/logging": "^0.6.7",

@@ -1,4 +1,4 @@
-import { StatusType } from '@thecointech/broker-db/user.types'
+import type { BlockpassStatus } from '@thecointech/blockpass/types'
 
 // Start moving types out of types project to where they are used.
 
@@ -25,7 +25,7 @@ type EventType =
 export type BlockpassPayload = {
   guid: string,
   // current user status
-  status: StatusType,
+  status: BlockpassStatus,
   // Id of the service as defined in the Admin Console
   clientId: string,
   // Event that triggered the webhook
@@ -52,64 +52,4 @@ export type BlockpassPayload = {
   isPing?: boolean,
   // should be 'prod'
   env?: "prod",
-}
-
-export type TypedData = {
-  type: string;
-  value: string;
-}
-
-// NOTE: Mocked entry was deleted in Commit: #108c21b38993745e16056ea8d5a38c5cb81136a5
-// Basic type for the data returned from blockpass.
-// Sample from: https://docs.blockpass.org/docs/connect/KYCC-Dashboard-API-RefId#response-1
-// TODO: this has not yet been verified with live data
-export type BlockpassData = {
-  status: StatusType,
-  refId: string,
-  isArchived: boolean,
-  blockPassID: string,
-  inreviewDate: string,
-  waitingDate: string,
-  customFields: {
-    RiskLevel: string, // "Low"
-  },
-  identities: {
-    // "{\"postalCode\":\"62576-6471\",\"city\":\"Luettgenchester\",\"address\":\"4611 Zieme Knoll\",\"extraInfo\":\"extra\",\"country\":\"VNM\",\"state\":\"\"}"
-    address?: TypedData;
-    // "12/31/2016"
-    dob: TypedData;
-    // "52777-50830-Alexandre42@yahoo.com"
-    email?: TypedData;
-    // "StromanBot"
-    family_name: TypedData,
-    // "Helmer"
-    given_name: TypedData,
-    // "{\"countryCode\":\"VNM\",\"countryCode2\":\"vn\",\"phoneNumber\":\"+84987543212\",\"number\":\"987543212\"}"
-    phone?: TypedData,
-    // "/9j/4AAQSkZJRgABAQEASABIAAD/<...>"
-    selfie_national_id?: TypedData,
-    // "/9j/4AAQSkZJRgABAQEASABI<...>"
-    proof_of_address?: TypedData,
-    // "/9j/4AAQSkZJRgABAQEA<...>"
-    driving_license?: TypedData,
-    driving_license_dob?: TypedData,
-    driving_license_expiration?: TypedData,
-    driving_license_issuing_country?: TypedData,
-    driving_license_number?: TypedData,
-
-    // "/9j/4AAQSkZJRgABAQEA<...>"
-    selfie?: TypedData,
-    // "/9j/4AAQSkZJ<...>"
-    passport?: TypedData,
-  }
-  // Issuer => JSON-as-string mapping
-  certs: any
-}
-
-// A small sub-set of the data stored on firestore (UserVerifyInfo)
-export type UserVerifyData ={
-  status?: StatusType,
-  referralCode?: string,
-  raw?: BlockpassData,
-  uniqueIdSig?: string,
 }

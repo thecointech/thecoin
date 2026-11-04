@@ -1,5 +1,5 @@
 import React from 'react'
-import { AccountDetails } from '@thecointech/account';
+import type { BasicDetails } from '@thecointech/account-details';
 import { defineMessages, FormattedMessage } from 'react-intl'
 
 const translations = defineMessages({
@@ -11,24 +11,34 @@ const translations = defineMessages({
     defaultMessage: 'We are generating your code, please check back in a few hours',
     description: 'app.settings.userDetails.codeInfos: Label for the info for the tab User details in the setting page in the app'
   },
+  ineligible: {
+    defaultMessage: 'This account is not eligible for a referral code',
+    description: 'app.settings.userDetails.ineligible: Referral code is unavailable for this account'
+  },
   pleaseVerify: {
     defaultMessage: 'You need to verify your account to obtain one',
     description: 'app.settings.userDetails.codeInfos: Label for the info for the tab User details in the setting page in the app'
   },
 });
 
-export const ReferralCode = ({ referralCode, status }: AccountDetails) => (
+const getReferralMessage = (basic?: BasicDetails) => {
+  switch(basic?.referralStatus) {
+    case 'pending':
+      return translations.generating;
+    case 'ineligible':
+      return translations.ineligible;
+    default:
+      return translations.pleaseVerify;
+  }
+}
+
+export const ReferralCode = ({ basic }: { basic?: BasicDetails }) => (
   <>
     <div className={"font-label border-top-green4 x4spaceBefore x4spaceAfter"} ><FormattedMessage {...translations.label} /></div>
     <div className={"x4spaceAfter"}>{
-      referralCode
-        ? referralCode
-        : <FormattedMessage {
-          ...(status == "approved"
-            ? translations.generating
-            : translations.pleaseVerify
-          )
-        } />
+      basic?.referralCode
+        ? basic.referralCode
+        : <FormattedMessage {...getReferralMessage(basic)} />
     }
     </div>
   </>

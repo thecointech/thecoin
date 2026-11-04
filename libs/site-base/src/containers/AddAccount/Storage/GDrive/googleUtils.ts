@@ -1,3 +1,4 @@
+import { getAccountName } from '@thecointech/account';
 import { log } from "@thecointech/logging";
 import { GetSecureApi } from '@thecointech/apis/broker';
 import { getStoredAccountData } from '@thecointech/account/store';
@@ -101,7 +102,7 @@ function fetchAndVerifyWallet(address: string) {
     alert("Could upload decrypted wallet - if you are seeing this, contact support@thecoin.io");
     throw new Error("Cannot upload wallet with private key");
   }
-  return { wallet, name: account.name };
+  return { wallet, name: getAccountName(account) };
 }
 
 
