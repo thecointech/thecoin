@@ -17,14 +17,30 @@ export async function createOracle(owner: SignerWithAddress, daysAgo = 6, blockT
   const bt = blockTime ?? Duration.fromObject({day: 1}).as("milliseconds");
   await oracle.initialize(owner.address, initialTime, bt);
   (oracle as any).__blockTime = bt;
+  (oracle as any).__initialTime = initialTime;
 
   return oracle;
 }
 
 export async function createAndInitOracle(owner: SignerWithAddress, rate = 2, blockTime?: number, daysAgo = 6) {
   const oracle = await createOracle(owner, daysAgo, blockTime);
-  // We a constant rate over the last week, expires tonight midnight
-  await setOracleValueRepeat(oracle, rate, 7);
+  // Push a constant rate covering the last week, valid until at
+  // least tonight midnight NY (ie, 00:00 tomorrow).  We cannot
+  // just push 7 entries:
+  // blocks are fixed-length in millis, so when the week spans a
+  // DST transition the wall-clock span can be 1hr longer than
+  // 7 * blockTime and the last hour before midnight is uncovered.
+  const initialTime = (oracle as any).__initialTime;
+  const target = DateTime
+    .now()
+    .set({hour:0, minute:0, second:0, millisecond:0})
+    .plus({days: 1})
+    .toMillis();
+  // setOracleValueRepeat takes its duration in days (and does
+  // its own conversion to block count), so express the target
+  // span as a fractional number of days.
+  const daysToCover = (target - initialTime) / Duration.fromObject({day: 1}).as("milliseconds");
+  await setOracleValueRepeat(oracle, rate, daysToCover);
   return oracle;
 }
 
