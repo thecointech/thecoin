@@ -54,7 +54,7 @@
     "@thecointech/tx-etransfer": "^0.6.7",
     "@thecointech/utilities": "^0.6.7",
     "@tsoa/runtime": "6.6.0",
-    "axios": "1.13.5",
+    "axios": "1.21.0",
     "cors": "^2.8.5",
     "express": "^4.22.0",
     "googleapis": "^129.0.0",
