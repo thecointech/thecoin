@@ -1,34 +1,27 @@
 import webpack, { type Configuration } from 'webpack';
-import { getSigner } from '@thecointech/signers';
 import { getEnvVars } from '@thecointech/setenv';
 
-// Now, we can use top-level await to fetch our addresses directly
-// (this allows us to correctly inject addresses even for dynamic environments like dev:live)
-async function getAddresses() {
-  const brokerCad = await getSigner("BrokerCAD");
-  const xferAsst = await getSigner("BrokerTransferAssistant");
-  return {
-    'process.env.WALLET_BrokerCAD_ADDRESS': JSON.stringify(await brokerCad.getAddress()),
-    'process.env.WALLET_BrokerTransferAssistant_ADDRESS': JSON.stringify(await xferAsst.getAddress()),
-  }
-}
+// These addresses come from the .env files for the current CONFIG_NAME.
+// They are intentionally NOT resolved through getSigner: a production
+// build must never need access to the BrokerCAD private key just to
+// learn its address.
+const required = [
+  'WALLET_BrokerCAD_ADDRESS',
+  'WALLET_BrokerTransferAssistant_ADDRESS',
+] as const;
 
+const env = getEnvVars();
+const missing = required.filter(k => !env[k]);
+if (missing.length) {
+  throw new Error(`Missing required wallet addresses in env (CONFIG_NAME=${process.env.CONFIG_NAME}): ${missing.join(', ')}`);
+}
 
 export const signerConfig: Configuration = {
   plugins: [
     new webpack.DefinePlugin(
-      // In some configurations (eg dev/devlive) we do not have
-      // static addresses defined.  In these situations, fetch
-      // the live signer and get it's address directly.
-      // We can't do this every time because a production address
-      // may not always exist
-      {
-        ...(getEnvVars().WALLET_BrokerCAD_ADDRESS
-          ? {}
-          : await getAddresses()
-        ),
-      }
+      Object.fromEntries(
+        required.map(k => [`process.env.${k}`, JSON.stringify(env[k])])
+      )
     ),
   ]
 }
-

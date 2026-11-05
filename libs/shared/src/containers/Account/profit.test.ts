@@ -4,17 +4,12 @@ import { toHuman } from "@thecointech/utilities/Conversion";
 import { getSimpleTransactions, SimpleRates, getExampleTransactions, ExampleRates } from "./profit.data.test";
 
 // hardcode broker/xferAssist address
-const broker = "broker";
-const assist = "assist";
-
-beforeEach(() => {
-  // override variables so fiatChange etc works
-  process.env.WALLET_BrokerCAD_ADDRESS = broker;
-  process.env.WALLET_BrokerTransferAssistant_ADDRESS = assist;
-})
+const broker = process.env.WALLET_BrokerCAD_ADDRESS!;
+const assist = process.env.WALLET_BrokerTransferAssistant_ADDRESS!;
+const client = "0x0034567890abcdef1234567890abcdef12345678";
 
 it("Calculate simple profit correctly", () => {
-  const simple = getSimpleTransactions(broker);
+  const simple = getSimpleTransactions(broker, client);
   const change = fiatChange(simple[0], SimpleRates);
   const hchange = toHuman(change);
   expect(hchange).toBe(5);
@@ -39,7 +34,7 @@ it("Calculate simple profit correctly", () => {
 const roundDecimalPlaces = (val: number) => Math.round(val * 100) / 100;
 it('calculate real profit correctly', () => {
 
-  const txs = getExampleTransactions(broker, assist);
+  const txs = getExampleTransactions(broker, assist, client);
   const rates = ExampleRates.sort((a, b) => a.validTill - b.validTill);
 
   const {balance} = txs[0];

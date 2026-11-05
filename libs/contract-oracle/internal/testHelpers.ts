@@ -17,14 +17,42 @@ export async function createOracle(owner: SignerWithAddress, daysAgo = 6, blockT
   const bt = blockTime ?? Duration.fromObject({day: 1}).as("milliseconds");
   await oracle.initialize(owner.address, initialTime, bt);
   (oracle as any).__blockTime = bt;
+  (oracle as any).__initialTime = initialTime;
 
   return oracle;
 }
 
 export async function createAndInitOracle(owner: SignerWithAddress, rate = 2, blockTime?: number, daysAgo = 6) {
   const oracle = await createOracle(owner, daysAgo, blockTime);
-  // We a constant rate over the last week, expires tonight midnight
-  await setOracleValueRepeat(oracle, rate, 7);
+  // Push a constant rate covering the last week, valid until at
+  // least tonight midnight NY (ie, 00:00 tomorrow).  We cannot
+  // just push 7 entries:
+  // blocks are fixed-length in millis, so when the week spans a
+  // DST transition the wall-clock span can be 1hr longer than
+  // 7 * blockTime and the last hour before midnight is uncovered.
+  const initialTime = (oracle as any).__initialTime;
+  const target = DateTime
+    .now()
+    .set({hour:0, minute:0, second:0, millisecond:0})
+    .plus({days: 1})
+    .toMillis();
+  // setOracleValueRepeat takes its duration in days (and does
+  // its own conversion to block count), so express the target
+  // span as a fractional number of days.
+  const dayInMs = Duration.fromObject({day: 1}).as("milliseconds");
+  const daysToCover = (target - initialTime) / dayInMs;
+  // bulkUpdate rejects pushes whose validity would extend more
+  // than one block past the current chain time, so when blockTime
+  // is shorter than the span remaining until midnight the target
+  // is unreachable in a single update.  Limit the span to what
+  // the contract will accept; coverage still reaches the target
+  // whenever blockTime permits.
+  const bt = (oracle as any).__blockTime;
+  // (the -1ms margin ensures rounding inside setOracleValueRepeat
+  // cannot push the count back over maxEntries)
+  const maxEntries = Math.floor((Number(await oracle.msNow()) + bt - initialTime) / bt);
+  const daysAllowed = (maxEntries * bt - 1) / dayInMs;
+  await setOracleValueRepeat(oracle, rate, Math.min(daysToCover, daysAllowed));
   return oracle;
 }
 

@@ -3,15 +3,16 @@ import { Transaction } from "@thecointech/tx-blockchain";
 import { DateTime } from "luxon";
 import Decimal from 'decimal.js-light';
 
-export const getExampleTransactions = (broker: string, assist: string) : Transaction[] => [
+const random = "0x1234567890abcdef1234567890abcdef12345678";
+export const getExampleTransactions = (broker: string, assist: string, client: string) : Transaction[] => [
   {
     "txHash": "0xc6ae1c594780a475c15f21413a9417e84a1b1bedbe93e3a528a1f9b04b80da07",
     "date": DateTime.fromISO("2019-08-29T14:01:15.000Z"),
     "timestamp": 1567094475000,
     "change": 473200151,
     "value": new Decimal(473200151),
-    "from": "random",
-    "to": "client",
+    "from": random,
+    "to": client,
     "balance": 730012295, // FIX ME
     "counterPartyAddress": "FIXME",
     "completed": DateTime.fromSQL("2019-09-01"),
@@ -22,7 +23,7 @@ export const getExampleTransactions = (broker: string, assist: string) : Transac
     "timestamp": 1556762381000,
     "change": -20000,
     "value": new Decimal(20000),
-    "from": "client",
+    "from": client,
     "to": assist,
     "balance": 256812144,
     "counterPartyAddress": "FIXME",
@@ -34,7 +35,7 @@ export const getExampleTransactions = (broker: string, assist: string) : Transac
     "timestamp": 1556762381000,
     "change": -2541359,
     "value": new Decimal(2541359),
-    "from": "client",
+    "from": client,
     "to": broker,
     "balance": 256832144,
     "counterPartyAddress": "FIXME",
@@ -46,7 +47,7 @@ export const getExampleTransactions = (broker: string, assist: string) : Transac
     "timestamp": 1556762098000,
     "change": -20000,
     "value": new Decimal(20000),
-    "from": "client",
+    "from": client,
     "to": assist,
     "balance": 259373503,
     "counterPartyAddress": "FIXME",
@@ -58,7 +59,7 @@ export const getExampleTransactions = (broker: string, assist: string) : Transac
     "timestamp": 1556762098000,
     "change": -2541359,
     "value": new Decimal(2541359),
-    "from": "client",
+    "from": client,
     "to": broker,
     "balance": 259393503,
     "counterPartyAddress": "FIXME",
@@ -71,7 +72,7 @@ export const getExampleTransactions = (broker: string, assist: string) : Transac
     "change": 261934862,
     "value": new Decimal(261934862),
     "from": broker,
-    "to": "client",
+    "to": client,
     "balance": 261934862,
     "counterPartyAddress": "FIXME",
     "completed": DateTime.fromSQL("2019-09-01"),
@@ -94,14 +95,14 @@ export const ExampleRates: FXRate[] = [
 
 
 
-export const getSimpleTransactions = (broker: string): Transaction[] => [
+export const getSimpleTransactions = (broker: string, client: string): Transaction[] => [
   {
     date: DateTime.fromObject({ year: 2018, month: 1 }),
     timestamp: 1514764800000,
     change: 50000,
     value: new Decimal(50000),
     from: broker,
-    to: "client",
+    to: client,
     balance: 50000, // Deposit: $5
     counterPartyAddress: "FIXME",
     completed: DateTime.fromSQL("2019-09-01"),
@@ -112,8 +113,8 @@ export const getSimpleTransactions = (broker: string): Transaction[] => [
     timestamp: 1517443200000,
     change: 50000,
     value: new Decimal(50000),
-    from: "broker",
-    to: "client",
+    from: broker,
+    to: client,
     balance: 100000, // Deposit: $10
     counterPartyAddress: "FIXME",
     completed: DateTime.fromSQL("2019-09-01"),
@@ -124,7 +125,7 @@ export const getSimpleTransactions = (broker: string): Transaction[] => [
     timestamp: 1519948800000,
     change: -25000,
     value: new Decimal(25000),
-    from: "client",
+    from: client,
     to: broker,
     balance: 75000,
     counterPartyAddress: "FIXME",
@@ -136,7 +137,7 @@ export const getSimpleTransactions = (broker: string): Transaction[] => [
     timestamp: 1522540800000,
     change: -25000,
     value: new Decimal(25000),
-    from: "client",
+    from: client,
     to: broker,
     balance: 50000,
     counterPartyAddress: "FIXME",

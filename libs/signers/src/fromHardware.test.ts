@@ -2,6 +2,7 @@ import { jest } from '@jest/globals';
 import { getEnvVars } from '@thecointech/setenv';
 import { loadHardware } from './fromHardware';
 import { describe, IsManualRun} from '@thecointech/jestutils';
+import { NormalizeAddress } from '@thecointech/utilities/Address';
 
 jest.setTimeout(5 * 60 * 1000);
 
@@ -11,7 +12,7 @@ describe("Hardware connection", () => {
     process.env.WALLET_Owner_ADDRESS = prod.WALLET_Owner_ADDRESS;
     const signer = await loadHardware("Owner");
     const address = await signer.getAddress();
-    expect(address).toMatch(prod.WALLET_Owner_ADDRESS);
+    expect(NormalizeAddress(address)).toEqual(prod.WALLET_Owner_ADDRESS!);
 
     const signed = await signer.signMessage("test");
     expect(signed).toBeTruthy();;

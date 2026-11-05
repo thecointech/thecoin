@@ -1,4 +1,5 @@
 import { getSigner } from "@thecointech/signers";
+import { AddressMatches } from "@thecointech/utilities/Address";
 import { DateTime } from "luxon";
 import { GetPluginsApi, GetBillPaymentsApi, GetStatusApi } from '@thecointech/apis/broker';
 import { ContractCore } from '@thecointech/contract-core';
@@ -34,7 +35,7 @@ const monthsToRun = 100;
 const tcCore = await ContractCore.get();
 const signer = await getSigner("TestDemoAccount");
 const testAddress = await signer.getAddress();
-if (testAddress != process.env.WALLET_TestDemoAccount_ADDRESS) {
+if (!AddressMatches(testAddress, process.env.WALLET_TestDemoAccount_ADDRESS)) {
   throw new Error("Invalid demo account address!");
 }
 const brokerAddress = process.env.WALLET_BrokerCAD_ADDRESS!;

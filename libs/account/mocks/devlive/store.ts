@@ -6,7 +6,6 @@ import { AccountState, buildNewAccount, getAccountName } from '@/state';
 import * as Browser from '@/store';
 import type { AccountMap } from '@/map';
 import { Wallet } from 'ethers';
-import { DateTime } from 'luxon';
 
 let _devWallets: AccountMap = {};
 let _initial = null as string|null;
@@ -34,7 +33,9 @@ const addRemoteAccount = async (name: AccountName, active: boolean) => {
 }
 
 const addLocalAccount = async (name: string) => {
-  const signer = Wallet.createRandom();
+  // Constant phrase for persistence.  This allows other apps (harvester) to load this account
+  // and then view changes back in the webpage.
+  const signer = Wallet.fromPhrase("sing hole north sorry glow frame tomorrow tiger purity excite album squirrel");
   const encrypted = await signer.encrypt("test");
   const address = NormalizeAddress(signer.address);
   // We should allow building accounts with encrypted signers

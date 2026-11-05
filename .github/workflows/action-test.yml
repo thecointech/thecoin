@@ -53,6 +53,9 @@ jobs:
     #   run: |
     #     yarn add sharp --force
 
+    - name: Initialize Hardhat configuration
+      run: yarn workspace @thecointech/contract-tools hardhat --config ../contract-oracle/hardhat.config.cts vars list
+
     - name: Run tests
       run: yarn test --ci
       env:
