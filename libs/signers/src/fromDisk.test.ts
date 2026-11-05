@@ -3,6 +3,7 @@ import { loadFromDisk } from './fromDisk';
 import { describe } from '@thecointech/jestutils';
 import { getEnvVars } from '@thecointech/setenv';
 import { ifSecret } from '@thecointech/secrets/jestutils';
+import { NormalizeAddress } from '@thecointech/utilities/Address';
 
 jest.setTimeout(5 * 60 * 1000);
 
@@ -12,7 +13,7 @@ describe("Encrypted json wallet", () => {
     const signer = await loadFromDisk("Minter");
     const address = await signer.getAddress();
     const env = getEnvVars("prodtest");
-    expect(address).toEqual(env.WALLET_Minter_ADDRESS);
+    expect(NormalizeAddress(address)).toEqual(env.WALLET_Minter_ADDRESS!);
 
     const signed = await signer.signMessage("test");
     expect(signed).toBeTruthy();;

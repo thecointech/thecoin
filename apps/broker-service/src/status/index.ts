@@ -1,4 +1,4 @@
-import { getSigner } from '@thecointech/signers';
+import { NormalizeAddress } from '@thecointech/utilities/Address';
 import constant from './constant.json' with { type: "json" }
 
 type Status = {
@@ -13,11 +13,8 @@ export async function current() : Promise<Status> {
 }
 
 export async function getBrokerCADAddress() {
-  if (process.env.WALLET_BrokerCAD_ADDRESS) {
-    return process.env.WALLET_BrokerCAD_ADDRESS;
+  if (!process.env.WALLET_BrokerCAD_ADDRESS) {
+    throw new Error("WALLET_BrokerCAD_ADDRESS not set");
   }
-
-  // In dev, we can simply load the BrokerCAD to get it's address
-  const brokerCad = await getSigner('BrokerCAD');
-  return brokerCad.getAddress();
+  return NormalizeAddress(process.env.WALLET_BrokerCAD_ADDRESS);
 }

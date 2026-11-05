@@ -18,7 +18,11 @@ contract SpxCadOracle is AggregatorV3Interface, OwnableUpgradeable, AccessContro
 
   // OracleUpdater.  This is the only address allowed
   // to update the oracle price.
-  bytes32 public constant UPDATER_ROLE = DEFAULT_ADMIN_ROLE;
+  bytes32 public constant UPDATER_ROLE = keccak256("UPDATER_ROLE");
+
+  // We allow updates to happen from this many millis prior to expiry.
+  // This prevents updates happening into the future
+  int public constant UPDATE_WINDOW = 2 * 60 * 1000;
 
   // We store a single multiplier that converts from THE => CAD (ie, TC to Fiat)
   // for each 3-hour block since inception.
@@ -51,6 +55,7 @@ contract SpxCadOracle is AggregatorV3Interface, OwnableUpgradeable, AccessContro
   function initialize(address updater, int initialTimestamp, int blockTime) public initializer {
     __Ownable_init();
     __AccessControl_init();
+    _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
     _setupRole(UPDATER_ROLE, updater);
 
     INITIAL_TIMESTAMP = initialTimestamp;
@@ -103,9 +108,7 @@ contract SpxCadOracle is AggregatorV3Interface, OwnableUpgradeable, AccessContro
     int offset = getOffset(millis);
     // Only update the value if our current value is near expiry
     int currentExpires = offset + INITIAL_TIMESTAMP + (int(rates.length) * BLOCK_TIME);
-    // We allow updates to happen only after 2 min prior to expiry
-    // This is to prevent multiple updates from happening
-    require((currentExpires - 120) < int(millis), "Cannot set new value before prior expires");
+    require((currentExpires - UPDATE_WINDOW) < int(millis), "Cannot set new value before prior expires");
 
     rates.push(newValue);
   }
